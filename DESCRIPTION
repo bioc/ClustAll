@@ -1,14 +1,17 @@
 Package: ClustAll
 Type: Package
-Title: ClustAll
-Version: 0.1.0
-Author: Sara Palomino-Echeverría <spalomie@navarra.es>, Asier Ortega-Legarreta <aortegal@navarra.es>
+Title: ClustAll: Data driven strategy in order to find hidden subgroups
+        of patients with complex diseases
+Version: 1.0
+Author: Asier Ortega-Legarreta <aortegal@navarra.es>, Sara Palomino-Echeverría <spalomie@navarra.es>
 Maintainer: Asier Ortega Legarreta <aortegal@navarra.es>
-Depends:
-Imports:
-Suggests:
-VignetteBuilder:
+Imports: FactoMineR, bigstatsr, clValid, clusteval, corrplot, doSNOW,
+        parallel, foreach, dplyr, fpc, mice, modeest, flock, networkD3,
+        methods
 Description: Data driven strategy in order to find hidden subgroups of patients with complex diseases
 License: GPL-2
 Encoding: UTF-8
-LazyData: true
+RoxygenNote: 7.2.3
+NeedsCompilation: no
+Packaged: 2023-08-10 12:55:36 UTC; asier.ortega
+
