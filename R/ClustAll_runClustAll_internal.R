@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 # runClustAll_internal functions definition ------------------------------------
 # These functions are not meant to be invoked directly by the user.
 # See the createClusteAll function instead.

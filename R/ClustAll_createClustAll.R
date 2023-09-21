@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 # createClustAll ---------------------------------------------------------------
 #' @import mice
 #' @title Creates ClustAllObject and perform imputations to deal with missing values and c

@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 # ClustAllObject_Methods_internal functions definition -------------------------
 # These functions are not meant to be invoked directly by the user.
 # See the ClustAllObject_Methods functions instead.

@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 # setClassUnion includes defined new classes -----------------------------------
 #' @import mice
 setClassUnion("midsOrNULL", c("mids", "NULL"))

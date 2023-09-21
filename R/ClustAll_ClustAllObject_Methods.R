@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 # ClustAllObject_Methods--------------------------------------------------------
 #' @import corrplot
 #' @import dplyr
