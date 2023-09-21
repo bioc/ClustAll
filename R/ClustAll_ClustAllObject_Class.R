@@ -1,3 +1,12 @@
+# setClassUnion includes defined new classes -----------------------------------
+#' @import mice
+setClassUnion("midsOrNULL", c("mids", "NULL"))
+setClassUnion("midsOrNA", c("mids", "missing", "NULL"))
+setClassUnion("listOrNULL", c("list", "NULL", "missing"))
+setClassUnion("numericOrNA", c("numeric", "missing", "NULL"))
+setClassUnion("logicalOrNA", c("logical", "missing", "NULL"))
+setClassUnion("matrixOrNULL", c("matrix", "NULL"))
+
 # ClustAllObject Class ---------------------------------------------------------
 #' @title ClustAllObject
 #' @aliases ClustAllObject-class
@@ -25,28 +34,27 @@ setClass(
 # ClustAllObject constructor
 #' constuctor for \code{\link{ClustAllObject-class}}
 #' @title initializeClustAllObject
-#' @export
 setMethod(
-  f="initialize", 
+  f="initialize",
   signature="ClustAllObject",
   function(.Object,
            data,
            dataImputed,
-           nImputation=0,
+           nImputation,
            processed,
            summary_clusters,
            JACCARD_DISTANCE_F) {
     .Object@data <- data
-    if (nImputation == 0) {
-      dataImputed <- NULL
-    }
+    # if (nImputation == 0) {
+    #   dataImputed <- NULL
+    # }
     .Object@dataImputed <- dataImputed
     .Object@nImputation <- nImputation
     .Object@processed <- FALSE
     .Object@summary_clusters <- NULL
     .Object@JACCARD_DISTANCE_F <- NULL
     validObject(.Object)
-    
+
     return(.Object)
   }
 )
@@ -57,21 +65,17 @@ setMethod(
 
 #' @title Retrieve the initial data from ClustAllObject
 #' @aliases showData,ClustAllObject-method
-#' @description 
+#' @description
 #' Generic function to retrieve the initial data used for \code{\link{createClustAll}} from a \code{\link{ClustAllObject-class}} object
 #' @usage showData(Object)
 #' @param Object \code{\link{ClustAllObject-class}} object
-#' 
+#'
 #' @return The Data Frame with the initial data
-#' 
+#'
 #' @seealso \code{\link{createClustAll}}, \code{\link{ClustAllObject-class}}, \code{\link{runClustAll}}
-#' 
+#'
 #' @examples
-#' MISSING EXAMPLES
-#' data("data_use")
-#' object <- createClustAll(data_use, nImputation = 5)
-#' 
-#' showData(object)
+#' # MISSING EXAMPLES
 #' @export
 setGeneric(
   name="showData",
@@ -83,7 +87,7 @@ setMethod(
   signature=signature(
     Object="ClustAllObject"),
   definition=function(Object) {
-    
+
     return(Object@data)
   }
 )
@@ -91,21 +95,17 @@ setMethod(
 
 #' @title Retrieve the imputed data from ClustAllObject
 #' @aliases showDataImputed,ClustAllObject-method
-#' @description 
+#' @description
 #' Generic function to retrieve the imputed data obtained in \code{\link{createClustAll}} from a \code{\link{ClustAllObject-class}} object
 #' @usage showDataImputed(Object)
 #' @param Object \code{\link{ClustAllObject-class}} object
-#' 
+#'
 #' @return Mids class object with the imputed data or NULL value if no imputations have been made
-#' 
+#'
 #' @seealso \code{\link{createClustAll}}, \code{\link{ClustAllObject-class}}, \code{\link{runClustAll}}
-#' 
+#'
 #' @examples
-#' MISSING EXAMPLES
-#' data("data_use")
-#' object <- createClustAll(data_use, nImputation = 5)
-#' 
-#' showDataImputed(object)
+#' # MISSING EXAMPLES
 #' @export
 setGeneric(
   name="showDataImputed",
@@ -117,7 +117,7 @@ setMethod(
   signature=signature(
     Object="ClustAllObject"),
   definition=function(Object) {
-    
+
     return(Object@dataImputed)
   }
 )
@@ -125,21 +125,17 @@ setMethod(
 
 #' @title Retrieve the number of imputations made for the imputation step from ClustAllObject
 #' @aliases showNumberImputations,ClustAllObject-method
-#' @description 
+#' @description
 #' Generic function to retrieve the number of imputations in \code{\link{createClustAll}} from a \code{\link{ClustAllObject-class}} object
 #' @usage showNumberImputations(Object)
 #' @param Object \code{\link{ClustAllObject-class}} object
-#' 
+#'
 #' @return Numeric vector giving the number of imputations. 0 in the case of no imputations
-#' 
+#'
 #' @seealso \code{\link{createClustAll}}, \code{\link{ClustAllObject-class}}, \code{\link{runClustAll}}
-#' 
+#'
 #' @examples
-#' MISSING EXAMPLES
-#' data("data_use")
-#' object <- createClustAll(data_use, nImputation = 5)
-#' 
-#' showNumberImputations(object)
+#' # MISSING EXAMPLES
 #' @export
 setGeneric(
   name="showNumberImputations",
@@ -151,7 +147,7 @@ setMethod(
   signature=signature(
     Object="ClustAllObject"),
   definition=function(Object) {
-    
+
     return(Object@nImputation)
   }
 )
@@ -159,22 +155,17 @@ setMethod(
 
 #' @title Retrieve the list with matrieces for different cluster methods from ClustAllObject
 #' @aliases showSummaryClusters,ClustAllObject-method
-#' @description 
+#' @description
 #' Generic function to retrieve the list with matrieces for different cluster methods results of \code{\link{runClustAll}} from a \code{\link{ClustAllObject-class}} object
 #' @usage showSummaryClusters(Object)
 #' @param Object \code{\link{ClustAllObject-class}} object
-#' 
+#'
 #' @return List of matrices with all the clustering methods or NULL value if runClustAll method have not been runned
-#' 
+#'
 #' @seealso \code{\link{runClustAll}}, \code{\link{ClustAllObject-class}}
-#' 
+#'
 #' @examples
-#' MISSING EXAMPLES
-#' data("data_use")
-#' object <- createClustAll(data_use, nImputation = 5)
-#' object2 <- runClustAll(object, threads = 8)
-#' 
-#' showSummaryClusters(object2)
+#' # MISSING EXAMPLES
 #' @export
 setGeneric(
   name="showSummaryClusters",
@@ -186,7 +177,7 @@ setMethod(
   signature=signature(
     Object="ClustAllObject"),
   definition=function(Object) {
-    
+
     return(Object@summary_clusters)
   }
 )
@@ -194,22 +185,17 @@ setMethod(
 
 #' @title Retrieve the matrix with Jaccard distances from ClustAllObject
 #' @aliases showJaccardDistances,ClustAllObject-method
-#' @description 
+#' @description
 #' Generic function to retrieve the matrix with Jaccard distances results of \code{\link{runClustAll}} from a \code{\link{ClustAllObject-class}} object
 #' @usage showJaccardDistances(Object)
 #' @param Object \code{\link{ClustAllObject-class}} object
-#' 
+#'
 #' @return Matrix with Jaccard distances or NULL value if runClustAll method have not been runned
-#' 
+#'
 #' @seealso \code{\link{runClustAll}}, \code{\link{ClustAllObject-class}}
-#' 
+#'
 #' @examples
-#' MISSING EXAMPLES
-#' data("data_use")
-#' object <- createClustAll(data_use, nImputation = 5)
-#' object2 <- runClustAll(object, threads = 8)
-#' 
-#' showJaccardDistances(object2)
+#' # MISSING EXAMPLES
 #' @export
 setGeneric(
   name="showJaccardDistances",
@@ -221,7 +207,7 @@ setMethod(
   signature=signature(
     Object="ClustAllObject"),
   definition=function(Object) {
-    
+
     return(Object@JACCARD_DISTANCE_F)
   }
 )
@@ -229,23 +215,17 @@ setMethod(
 
 #' @title Retrieve logical value if runClustAll have been runned from ClustAllObject
 #' @aliases isProcessed,ClustAllObject-method
-#' @description 
+#' @description
 #' Generic function to retrieve the logical value if \code{\link{runClustAll}} have been runned from a \code{\link{ClustAllObject-class}} object
 #' @usage isProcessed(Object)
 #' @param Object \code{\link{ClustAllObject-class}} object
-#' 
+#'
 #' @return TRUE if runClustAll have been runned. Otherwise FALSE
-#' 
+#'
 #' @seealso \code{\link{runClustAll}}, \code{\link{ClustAllObject-class}}
-#' 
+#'
 #' @examples
-#' MISSING EXAMPLES
-#' data("data_use")
-#' object <- createClustAll(data_use, nImputation = 5)
-#' object2 <- runClustAll(object, threads = 8)
-#' 
-#' isProcessed(object)
-#' isProcessed(object2)
+#' # MISSING EXAMPLES
 #' @export
 setGeneric(
   name="isProcessed",
@@ -257,7 +237,7 @@ setMethod(
   signature=signature(
     Object="ClustAllObject"),
   definition=function(Object) {
-    
+
     return(Object@processed)
   }
 )
