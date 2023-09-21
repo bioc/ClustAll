@@ -45,6 +45,9 @@ setMethod(
            summary_clusters,
            JACCARD_DISTANCE_F) {
     .Object@data <- data
+    # if (nImputation == 0) {
+    #   dataImputed <- NULL
+    # }
     .Object@dataImputed <- dataImputed
     .Object@nImputation <- nImputation
     .Object@processed <- FALSE
