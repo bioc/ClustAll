@@ -8,6 +8,7 @@
   .Object,
   data,
   dataImputed,
+  dataValidation,
   nImputation,
   processed,
   summary_clusters,

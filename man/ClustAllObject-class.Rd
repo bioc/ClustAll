@@ -14,6 +14,8 @@ Stores the using data, imputations and results of the ClustAll pipeline.
 
 \item{\code{dataImputed}}{midsOrNULL. Mids object from mice package that stores imputed data in case imputations have been made. Otherwise NULL value}
 
+\item{\code{dataValidation}}{numericOrNA. Numeric vector of the TRUE labels}
+
 \item{\code{nImputation}}{Numeric giving the number of imputations}
 
 \item{\code{processed}}{Logical value if the ClustAll pipeline have been runned}

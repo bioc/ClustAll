@@ -12,6 +12,8 @@ plotSANKEY(Object,
 \item{Object}{\code{\link{ClustAllObject-class}} object}
 
 \item{clusters}{Character vector with the names of two clusters. Check resStratification to obtain cluster names.}
+
+\item{validationData}{Logical value to use validation data to compare with the selected stratification}
 }
 \value{
 plot
