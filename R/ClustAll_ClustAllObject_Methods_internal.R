@@ -118,4 +118,19 @@ checkCluster <- function(cluster, lCluster) {
     stop()
   }
 }
+
+
+# This function obtains the metadata of every stratification from the JACCARD matrix
+obtain_metadata <- function(m) {
+  names <- rownames(m)
+  split_names <- strsplit(names, "_")
+  names_clustering <- sapply(split_names, function(x) x[2])
+  names_depth <- sapply(split_names, function(x) as.numeric(x[3]))
+  names_distance <- ifelse(names_clustering %in% c("a", "b"), "Correlation", "Gower")
+  names_clusteringmeth <- ifelse(names_clustering %in% c("a", "c"), "k-means", "k-medoids")
+
+
+  return(data.frame("Distance"=names_distance, "Clustering"=names_clusteringmeth,
+                    "Depth"=names_depth))
+}
 # END OF ClustAll_ClustAllObject_Methods_internal.R

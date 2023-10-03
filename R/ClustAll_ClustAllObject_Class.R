@@ -7,6 +7,8 @@ setClassUnion("numericOrNA", c("numeric", "missing", "NULL"))
 setClassUnion("characterOrNA", c("character", "missing", "NULL"))
 setClassUnion("logicalOrNA", c("logical", "missing", "NULL"))
 setClassUnion("matrixOrNULL", c("matrix", "NULL"))
+setClassUnion("numericOrCharacter", c("numeric", "character"))
+
 
 # ClustAllObject Class ---------------------------------------------------------
 #' @title ClustAllObject
@@ -271,6 +273,51 @@ setMethod(
   definition=function(Object) {
 
     return(Object@dataValidation)
+  }
+)
+
+
+#' @title Add the validation data into the ClustAllObject
+#' @aliases addValidationData,ClustAllObject-method
+#' @description
+#' Generic function to add validation data to the \code{\link{ClustAllObject-class}} object
+#' @usage addValidationData(Object, dataValidation)
+#' @param Object \code{\link{ClustAllObject-class}} object
+#' @param dataValidation numeric vector with the validation data
+#'
+#' @return \code{\link{ClustAllObject-class}} object
+#'
+#' @seealso \code{\link{ClustAllObject-class}}
+#'
+#' @examples
+#' # MISSING EXAMPLES
+#' @export
+setGeneric(
+  name="addValidationData",
+  def=function(Object, dataValidation){standardGeneric("addValidationData")}
+)
+
+setMethod(
+  f="addValidationData",
+  signature=signature(
+    Object="ClustAllObject",
+    dataValidation="numericOrCharacter"),
+  definition=function(Object, dataValidation) {
+
+    if (!is.null(Object@dataValidation)) {
+      message("WARNING! The object already have validation data. Rewriting the validation data...")
+    }
+
+    dataValidation <- checkVectorIntroduced(dataValidation)
+
+    if (length(dataValidation) != nrow(Object@data)) {
+      message("The length of the data and introduced validation data are different. Make sure you are introducing it correcly.")
+      stop()
+    }
+
+    Object@dataValidation <- dataValidation
+
+    return(Object)
   }
 )
 # END OF ClustAll_ClustAllObject_Class.R

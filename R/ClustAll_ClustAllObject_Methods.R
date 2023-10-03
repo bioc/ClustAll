@@ -36,7 +36,7 @@ setMethod(
     Object="ClustAllObject",
     paint="logicalOrNA",
     cluster_similarity="numericOrNA"),
-  definition=function(Object, paint="TRUE", cluster_similarity=0.7) {
+  definition=function(Object, paint=TRUE, cluster_similarity=0.7) {
 
     if (isProcessed(Object) == FALSE) {
       message("The object is not processed. You need to run runClustAll. Note that the number of cores to use can be specified.")
@@ -45,15 +45,37 @@ setMethod(
 
     maxgo <- max(Object@JACCARD_DISTANCE_F[Object@JACCARD_DISTANCE_F < 1])
     ordergo <- hclust(1 - as.dist(Object@JACCARD_DISTANCE_F))$order
+    m <- Object@JACCARD_DISTANCE_F[ordergo, ordergo]
+    robust_stratification <- obtain_metadata(m)
+    res <- resStratification(Object, population = 1e-9, all = T, cluster_similarity)
+    full_length <- ncol(Object@JACCARD_DISTANCE_F)
 
     # This plot contains the robust stratifications
-    resPlot <- corrplot(Object@JACCARD_DISTANCE_F[ordergo, ordergo], is.corr=F,
-                        method="shade", main="", order="original", tl.col="black",
-                        tl.srt=65, cl.pos="b", cl.length=4, sig.level = 0.7)
+    # resPlot <- corrplot(Object@JACCARD_DISTANCE_F[ordergo, ordergo], is.corr=F,
+    #                     method="shade", main="", order="original", tl.col="black",
+    #                     tl.srt=65, cl.pos="b", cl.length=4, sig.level = 0.7)
+
+    # This plot contains the robust stratifications
+    ra <- rowAnnotation(
+      Distance=robust_stratification[,"Distance"],
+      Clustering=robust_stratification[,"Clustering"],
+      Depth=robust_stratification[,"Depth"],
+      col = list(Distance=structure(names=c("Correlation","Gower"),c("#CCCCFF","blue4") ),
+                 Clustering=structure(names=c("k-means", "k-medoids"), c("sandybrown", "tomato3") ),
+                 Depth=colorRamp2(c(1,round(max(robust_stratification[, "Depth"])/2),
+                                    max(robust_stratification[, "Depth"])),
+                                  c("darkcyan", "#F7DCCA", "#C75F97"))))
+
+    hp <- Heatmap(as.matrix(m), name="hp", cluster_columns = FALSE, cluster_rows = FALSE,
+                  left_annotation=  ra, bottom_annotation = NULL)
+
+    if (is.null(res)) {
+      paint <- FALSE
+    }
 
     if (paint == TRUE) {
-      res <- resStratification(Object, population = 1e-9, all = T, cluster_similarity)
-
+      draw(hp)
+      ngroup <- 0
       paint_names <- c()
       for (i in 1:length(res)) {
           paint_names <- c(paint_names, res[[i]][[1]][1])
@@ -61,11 +83,24 @@ setMethod(
       }
 
       for (z in seq(from=1, to=length(paint_names), by=2)) {
-        resPlot <- resPlot %>% corrRect(name = c(paint_names[z], paint_names[z+1]), lwd = 4, col="black")
+        # resPlot <- resPlot %>% corrRect(name = c(paint_names[z], paint_names[z+1]), lwd = 4, col="black")
+        ngroup <- ngroup + 1
+        index <- which(rownames(m) %in% c(paint_names[z], paint_names[z+1]))
+        start <- index[1] - 1
+        finish <- index[2]
+        decorate_heatmap_body("hp", row_slice = 1, column_slice = 1, {
+          # grid.text(paste0("Group ", ngroup), unit(start/full_length, "npc"),
+          #           unit(1-start/full_length+0.001*full_length, "npc"))
+          grid.rect(unit(start/full_length, "npc"), unit(1-start/full_length, "npc"), # top left
+                    width = (finish-start)/full_length,
+                    height = (finish-start)/full_length,
+                    gp = gpar(lwd = 2.5, lty = 2.5, fill=FALSE), just = c("left", "top"), draw = T
+          )
+        })
       }
+    } else {
+      return(hp)
     }
-
-    return(resPlot)
   }
 )
 
@@ -122,29 +157,35 @@ setMethod(
     # obtain the definitive clusters
     definitive_clusters <- obtainDefCluster(Object@JACCARD_DISTANCE_F[ordergo, ordergo], cluster_similarity)
 
-    # chose the representative cluster with minimum population in each cluster. As default 0.05 (5%)
-    res <- chooseClusters(definitive_clusters, Object@summary_clusters, population, all)
-    stratificationRep <- list()
+    if (length(definitive_clusters) > 0) {
+      # chose the representative cluster with minimum population in each cluster. As default 0.05 (5%)
+      res <- chooseClusters(definitive_clusters, Object@summary_clusters, population, all)
+      stratificationRep <- list()
 
-    if (all == TRUE) {
-      for (i in 1:length(res)) {
-        stratificationRep[[i]] <- list()
+      if (all == TRUE) {
+        for (i in 1:length(res)) {
+          stratificationRep[[i]] <- list()
 
-        for (j in 1:length(res[[i]])) {
+          for (j in 1:length(res[[i]])) {
 
-          stratificationRep[[i]][[j]] <- c(res[[i]][j], table(Object@summary_clusters[[res[[i]][j]]]))
-          names(stratificationRep)[[i]] <- paste("Cluster_", i)
+            stratificationRep[[i]][[j]] <- c(res[[i]][j], table(Object@summary_clusters[[res[[i]][j]]]))
+            names(stratificationRep)[[i]] <- paste("Cluster_", i)
+          }
+        }
+
+      } else {
+        for(i in 1:(length(res))) {
+          stratificationRep[[i]] <- list(table(Object@summary_clusters[[res[[i]]]]))
+          names(stratificationRep)[i] <- res[[i]]
         }
       }
 
-    } else {
-      for(i in 1:(length(res))) {
-        stratificationRep[[i]] <- list(table(Object@summary_clusters[[res[[i]]]]))
-        names(stratificationRep)[i] <- res[[i]]
-      }
-    }
+      return(stratificationRep)
 
-    return(stratificationRep)
+    } else {
+      message(paste0("There are no robust groups of stratification for the selected parameters. Stratification_similarity: ", cluster_similarity, "."))
+      return(NULL)
+    }
   }
 )
 
@@ -235,7 +276,7 @@ setMethod(
   signature=signature(
     Object="ClustAllObject",
     clusters="character",
-    validationData="logical"),
+    validationData="logicalOrNA"),
   definition=function(Object, clusters, validationData=FALSE) {
     if (isProcessed(Object) == FALSE) {
       message("The object is not processed. You need to run runClustAll. Note that the number of cores to use can be specified.")
@@ -243,7 +284,10 @@ setMethod(
     }
 
     if (validationData) {
-      if (length(clusters) != 1) {
+      if (is.null(Object@dataValidation)) {
+        message("The ClustALL Object does not contain validation data. Please create a new object or modidy the object wi the validation data. \nFor that check addValidationData method.")
+        stop()
+      } else if (length(clusters) != 1) {
         message("More than one stratifications have been selected. Only the first one will be use to plot with the validation data.")
         clusters <- clusters[1]
       }
@@ -330,8 +374,13 @@ setMethod(
   f="validateStratification",
   signature=signature(
     Object="ClustAllObject",
-    clusterName="character"),
+    clusterName="characterOrNA"),
   definition=function(Object, clusterName) {
+
+    if (is.null(Object@dataValidation)) {
+      message("The ClustALL Object does not contain validation data. Please create a new object or add the validation data. \nFor that check addValidationData method.")
+      stop()
+    }
 
     if (isProcessed(Object) == FALSE) {
       message("The object is not processed. You need to run runClustAll. Note that the number of cores to use can be specified.")

@@ -9,12 +9,34 @@ checkDataIntroduced <- function(data) {
   if (any(sapply(data, is.character))) {
     message("\nWARNING!")
     message("The dataset contains character values. Assuming they are categorical variables, transforming the categorical variables into numerical variables.")
-    message("Before continuing, check that the transformation has been carried out correctly.\n")
+    message("Before continuing, check that the transformation has been processed correctly.\n")
     must_convert_variables <- which(sapply(data, is.character))
 
-    data_new <- data
-    data_new[, must_convert_variables] <- sapply(data_new[, must_convert_variables], function(x) as.numeric(as.factor(x)))
+    if (length(must_convert_variables) == 1) {
+      data_new <- data
+      data_new[, must_convert_variables] <- as.numeric(as.factor(data_new[, must_convert_variables]))
+    } else {
+      data_new <- data
+      data_new[, must_convert_variables] <- sapply(data_new[, must_convert_variables], function(x) as.numeric(as.factor(x)))
+    }
 
+  } else {
+    data_new <- data
+  }
+
+  return(data_new)
+}
+
+# This functions checks if the vector introduced contains character vectors.
+# In that case, it transforms them into numerical values assuming they are categorical values.
+checkVectorIntroduced <- function(data) {
+  if (any(sapply(data, is.character))) {
+    message("\nWARNING!")
+    message("The vector contains character values. Assuming they are categorical variables, transforming the categorical variables into numerical variables.")
+    message("Before continuing, check that the transformation has been processed correctly.\n")
+
+    data_new <- data
+    data_new <- as.numeric(as.factor(data_new))
 
   } else {
     data_new <- data

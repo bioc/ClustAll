@@ -56,7 +56,7 @@ obtainDataPCA <- function(impData, variables_clust, possible_heights, heights_cu
   if (length(variables_use)==1) {
     data_PCA <- impData[,variables_use]
 
-  }else{
+  } else {
     data_PCA <- generatePCA_derived(data=impData[,variables_use],
                                     variability=50, maxvar=3)
   }
