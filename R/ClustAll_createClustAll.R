@@ -1,16 +1,18 @@
 # createClustAll ---------------------------------------------------------------
 #' @import mice
-#' @title Creates ClustAllObject and perform imputations to deal with missing values and c
+#' @title Creates ClustAllObject and perform imputations to deal with missing values
 #' @aliases createClustAll,ClustAllObject-method,missOrNumeric,midsOrNA
 #' @description
 #' This method creates the ClustAllObject  and perform the imputations if the dataset contains missing values. The next step would be \code{\link{runClustAll}}
 #' @usage createClustAll(data,
 #'        nImputation=NULL,
-#'        dataImputed=NULL)
+#'        dataImputed=NULL,
+#'        colValidation=NULL)
 #'
 #' @param data Data Frame of the using data. It may contain missing (NA) values.
-#' @param nImputation Numeric vector giving the number of imptations that want to be performed if data contains NAs.
+#' @param nImputation Numeric value giving the number of imptations that want to be performed if data contains NAs.
 #' @param dataImputed mids object created with \link[mice]{mice}. The data used for the imputation to create mids object and the data using must be the same.
+#' @param colValidation Character value givint the validation column of data.
 #'
 #' @return An object of class \code{\link{ClustAllObject-class}}
 #'
@@ -52,6 +54,7 @@ setMethod(
     if (is.null(nImputation)) {nImputation <- 0}
     data <- checkDataIntroduced(data)
     nImputation <- validnImputation(nImputation, imputedNull)
+
     if (!is.null(colValidation)) {
       checkColumn(data, colValidation)
       dataValidation <- data[, colValidation]
@@ -73,6 +76,7 @@ setMethod(
     }
     clustAllObj <- new("ClustAllObject", data=data, dataImputed=dataImputed, nImputation=nImputation, dataValidation)
     message("\nClustALL object created successfully. You may use runClustAll.\n")
+
     return(clustAllObj)
   }
 )

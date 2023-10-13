@@ -11,7 +11,7 @@ plotSANKEY(Object,
 \arguments{
 \item{Object}{\code{\link{ClustAllObject-class}} object}
 
-\item{clusters}{Character vector with the names of two clusters. Check resStratification to obtain cluster names.}
+\item{clusters}{Character vector with the names of two clusters. Check resStratification to obtain stratification names.}
 
 \item{validationData}{Logical value to use validation data to compare with the selected stratification}
 }
@@ -26,7 +26,7 @@ data("BreastCancerWisconsin", package = "ClustAll")
 wdbc <- wdbc[,-c(1,2)]
 obj_noNA <- createClustAll(data = wdbc)
 obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
-resStratification(Object = obj_noNA1, population = 0.05, cluster_similarity = 0.88, all = F)
+resStratification(Object = obj_noNA1, population = 0.05, stratification_similarity = 0.88, all = F)
 plotSANKEY(Object = obj_noNA1, clusters = c("cuts_c_3","cuts_a_9"))
 plotSANKEY(Object = obj_noNA1, clusters = c("cuts_c_3","cuts_b_13"))
 

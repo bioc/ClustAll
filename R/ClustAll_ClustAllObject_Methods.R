@@ -1,17 +1,20 @@
 # ClustAllObject_Methods--------------------------------------------------------
-#' @import corrplot
-#' @import dplyr
+#' @import ComplexHeatmap
+#' @import circlize
+#' @import RColorBrewer
+#' @import ggplot2
+#' @import grid
 #' @title Plots correlation Jaccard Distances from ClustAllObject
 #' @aliases plotJACCARD,ClustAllObject-method
 #' @description
 #' This function plots the correlation Jaccard Distances
 #' @usage plotJACCARD(Object,
 #'        paint=TRUE,
-#'        cluster_similarity=0.7)
+#'        stratification_similarity=0.7)
 #'
 #' @param Object \code{\link{ClustAllObject-class}} object
 #' @param paint Logical vector to paint the different group of clusters in the plot
-#' @param cluster_similarity the minimum values to consider two groups similar in Jaccard distances. As default 0.7.
+#' @param stratification_similarity the minimum values to consider two groups similar in Jaccard distances. As default 0.7.
 #'
 #' @return plot
 #'
@@ -22,12 +25,12 @@
 #' wdbc <- wdbc[,-c(1,2)]
 #' obj_noNA <- createClustAll(data = wdbc)
 #' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
-#' plotJACCARD(obj_noNA1, paint = TRUE, cluster_similarity = 0.88)
+#' plotJACCARD(obj_noNA1, paint = TRUE, stratification_similarity = 0.88)
 #'
 #' @export
 setGeneric(
   name="plotJACCARD",
-  def=function(Object, paint=TRUE, cluster_similarity=0.7){standardGeneric("plotJACCARD")}
+  def=function(Object, paint=TRUE, stratification_similarity=0.7){standardGeneric("plotJACCARD")}
 )
 
 setMethod(
@@ -35,8 +38,8 @@ setMethod(
   signature=signature(
     Object="ClustAllObject",
     paint="logicalOrNA",
-    cluster_similarity="numericOrNA"),
-  definition=function(Object, paint=TRUE, cluster_similarity=0.7) {
+    stratification_similarity="numericOrNA"),
+  definition=function(Object, paint=TRUE, stratification_similarity=0.7) {
 
     if (isProcessed(Object) == FALSE) {
       message("The object is not processed. You need to run runClustAll. Note that the number of cores to use can be specified.")
@@ -47,15 +50,17 @@ setMethod(
     ordergo <- hclust(1 - as.dist(Object@JACCARD_DISTANCE_F))$order
     m <- Object@JACCARD_DISTANCE_F[ordergo, ordergo]
     robust_stratification <- obtain_metadata(m)
-    res <- resStratification(Object, population = 1e-9, all = T, cluster_similarity)
+    res <- resStratification(Object, population=1e-9, all=TRUE, stratification_similarity)
     full_length <- ncol(Object@JACCARD_DISTANCE_F)
 
     # This plot contains the robust stratifications
-    # resPlot <- corrplot(Object@JACCARD_DISTANCE_F[ordergo, ordergo], is.corr=F,
-    #                     method="shade", main="", order="original", tl.col="black",
-    #                     tl.srt=65, cl.pos="b", cl.length=4, sig.level = 0.7)
-
-    # This plot contains the robust stratifications
+    # col_fun <- colorRampPalette(brewer.pal(9,"Blues"))(25)
+    col_fun <- colorRamp2(c(0, 1), colors = colorRampPalette(brewer.pal(9,"Blues"))(25),
+                          breaks=seq(0, 1, length.out = 25))
+    legend <- Legend(title="JACCARD index", legend_width = unit(10, "cm"),
+                     direction = "horizontal", at=c(0, 1), title_position="topcenter")
+    legend <- HeatmapAnnotation(JACCARD_index = seq(0, 1, length.out = ncol(m)), col = list(lg = col_fun),
+                                 annotation_name_side = "right")
     ra <- rowAnnotation(
       Distance=robust_stratification[,"Distance"],
       Clustering=robust_stratification[,"Clustering"],
@@ -66,8 +71,13 @@ setMethod(
                                     max(robust_stratification[, "Depth"])),
                                   c("darkcyan", "#F7DCCA", "#C75F97"))))
 
-    hp <- Heatmap(as.matrix(m), name="hp", cluster_columns = FALSE, cluster_rows = FALSE,
-                  left_annotation=  ra, bottom_annotation = NULL)
+    hp <- Heatmap(as.matrix(m), name="hp", cluster_columns=FALSE, cluster_rows=FALSE,
+                  left_annotation=ra, col=col_fun, bottom_annotation = NULL,
+                  show_column_names = F,
+                  heatmap_legend_param = list(
+                    direction = "vertical", title="JACCARD index", at=c(0, 1),
+                    legend_width = unit(10, "cm")
+                  ))
 
     if (is.null(res)) {
       paint <- FALSE
@@ -83,18 +93,15 @@ setMethod(
       }
 
       for (z in seq(from=1, to=length(paint_names), by=2)) {
-        # resPlot <- resPlot %>% corrRect(name = c(paint_names[z], paint_names[z+1]), lwd = 4, col="black")
         ngroup <- ngroup + 1
         index <- which(rownames(m) %in% c(paint_names[z], paint_names[z+1]))
         start <- index[1] - 1
         finish <- index[2]
         decorate_heatmap_body("hp", row_slice = 1, column_slice = 1, {
-          # grid.text(paste0("Group ", ngroup), unit(start/full_length, "npc"),
-          #           unit(1-start/full_length+0.001*full_length, "npc"))
           grid.rect(unit(start/full_length, "npc"), unit(1-start/full_length, "npc"), # top left
                     width = (finish-start)/full_length,
                     height = (finish-start)/full_length,
-                    gp = gpar(lwd = 2.5, lty = 2.5, fill=FALSE), just = c("left", "top"), draw = T
+                    gp = gpar(lwd = 2.5, lty = 2.5, fill=FALSE, col="red"), just = c("left", "top"), draw = T
           )
         })
       }
@@ -109,16 +116,16 @@ setMethod(
 #' @title Show stratification representatives from ClustAllObject
 #' @aliases resStratification,ClustAllObject-method
 #' @description
-#' This function returns the stratifications representatives by filtering those clusters with a minimum percentage of the population. Either returns all the robust cluster or the representative one of each group of cluster
+#' This function returns the stratifications representatives by filtering those clusters with a minimum percentage of the population. Either returns all the robust stratification or the representative one of each group of stratification
 #' @usage resStratification(Object,
 #'        population=0.05,
 #'        all=FALSE,
-#'        cluster_similarity=0.7)
+#'        stratification_similarity=0.7)
 #'
 #' @param Object \code{\link{ClustAllObject-class}} object
-#' @param population Numeric vector giving the minimum amount of population that a cluster must have to be considered representative
-#' @param all Logical vector to return all the representative clusters per group of clusters. If it is FALSE, only the centroid cluster of every group of clusters is returned
-#' @param cluster_similarity the minimum values to consider two groups similar in Jaccard distances. As default 0.7.
+#' @param population Numeric vector giving the minimum amount of population that a stratification must have to be considered representative
+#' @param all Logical vector to return all the representative clusters per group of clusters. If it is FALSE, only the centroid stratification of every group of clusters is returned
+#' @param stratification_similarity the minimum values to consider two groups similar in Jaccard distances. As default 0.7.
 
 #' @return list
 #'
@@ -129,12 +136,12 @@ setMethod(
 #' wdbc <- wdbc[,-c(1,2)]
 #' obj_noNA <- createClustAll(data = wdbc)
 #' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
-#' resStratification(Object = obj_noNA1, population = 0.05, cluster_similarity = 0.88, all = F)
+#' resStratification(Object = obj_noNA1, population = 0.05, stratification_similarity = 0.88, all = F)
 #'
 #' @export
 setGeneric(
   name="resStratification",
-  def=function(Object, population=0.05, all=FALSE, cluster_similarity=0.7){standardGeneric("resStratification")}
+  def=function(Object, population=0.05, all=FALSE, stratification_similarity=0.7){standardGeneric("resStratification")}
 )
 
 setMethod(
@@ -143,8 +150,8 @@ setMethod(
     Object="ClustAllObject",
     population="numericOrNA",
     all="logicalOrNA",
-    cluster_similarity="numericOrNA"),
-  definition=function(Object, population=0.05, all=FALSE, cluster_similarity=0.7) {
+    stratification_similarity="numericOrNA"),
+  definition=function(Object, population=0.05, all=FALSE, stratification_similarity=0.7) {
 
     if (isProcessed(Object) == FALSE) {
       message("The object is not processed. You need to run runClustAll. Note that the number of cores to use can be specified.")
@@ -155,10 +162,10 @@ setMethod(
     ordergo <- hclust(1 - as.dist(Object@JACCARD_DISTANCE_F))$order
 
     # obtain the definitive clusters
-    definitive_clusters <- obtainDefCluster(Object@JACCARD_DISTANCE_F[ordergo, ordergo], cluster_similarity)
+    definitive_clusters <- obtainDefCluster(Object@JACCARD_DISTANCE_F[ordergo, ordergo], stratification_similarity)
 
     if (length(definitive_clusters) > 0) {
-      # chose the representative cluster with minimum population in each cluster. As default 0.05 (5%)
+      # chose the representative stratification with minimum population in each stratification As default 0.05 (5%)
       res <- chooseClusters(definitive_clusters, Object@summary_clusters, population, all)
       stratificationRep <- list()
 
@@ -183,7 +190,7 @@ setMethod(
       return(stratificationRep)
 
     } else {
-      message(paste0("There are no robust groups of stratification for the selected parameters. Stratification_similarity: ", cluster_similarity, "."))
+      message(paste0("There are no robust groups of stratification for the selected parameters. Stratification_similarity: ", stratification_similarity, "."))
       return(NULL)
     }
   }
@@ -193,12 +200,12 @@ setMethod(
 #' @title cluster2data
 #' @aliases cluster2data,ClustAllObject-method
 #' @description
-#' Returns the data frame of the original data using which the clustering of the selected cluster(s) are included as varibles. The representative cluster names can be obtained using the method \code{\link{resStratification}}
+#' Returns the data frame of the original data using which the clustering of the selected stratification(s) are included as varibles. The representative stratification names can be obtained using the method \code{\link{resStratification}}
 #' @usage cluster2data(Object,
 #'        clusterName)
 #'
 #' @param Object \code{\link{ClustAllObject-class}} object
-#' @param clusterName Character vector with one or more cluster names
+#' @param clusterName Character vector with one or more stratification names
 #'
 #' @return data.frame
 #'
@@ -209,7 +216,7 @@ setMethod(
 #' wdbc <- wdbc[,-c(1,2)]
 #' obj_noNA <- createClustAll(data = wdbc)
 #' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
-#' resStratification(Object = obj_noNA1, population = 0.05, cluster_similarity = 0.88, all = F)
+#' resStratification(Object = obj_noNA1, population = 0.05, stratification_similarity = 0.88, all = F)
 #' df <- cluster2data(Object = obj_noNA1, clusterName = c("cuts_c_3","cuts_a_9","cuts_b_13"))
 #' @export
 setGeneric(
@@ -249,7 +256,7 @@ setMethod(
 #'                   clusters)
 #'
 #' @param Object \code{\link{ClustAllObject-class}} object
-#' @param clusters Character vector with the names of two clusters. Check resStratification to obtain cluster names.
+#' @param clusters Character vector with the names of two clusters. Check resStratification to obtain stratification names.
 #' @param validationData Logical value to use validation data to compare with the selected stratification
 #'
 #' @return plot
@@ -261,14 +268,14 @@ setMethod(
 #' wdbc <- wdbc[,-c(1,2)]
 #' obj_noNA <- createClustAll(data = wdbc)
 #' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
-#' resStratification(Object = obj_noNA1, population = 0.05, cluster_similarity = 0.88, all = F)
+#' resStratification(Object = obj_noNA1, population = 0.05, stratification_similarity = 0.88, all = F)
 #' plotSANKEY(Object = obj_noNA1, clusters = c("cuts_c_3","cuts_a_9"))
 #' plotSANKEY(Object = obj_noNA1, clusters = c("cuts_c_3","cuts_b_13"))
 #'
 #' @export
 setGeneric(
   name="plotSANKEY",
-  def=function(Object, clusters, validationData){standardGeneric("plotSANKEY")}
+  def=function(Object, clusters, validationData=FALSE){standardGeneric("plotSANKEY")}
 )
 
 setMethod(
@@ -346,12 +353,12 @@ setMethod(
 #' @title validateStratification
 #' @aliases validateStratification,ClustAllObject-method
 #' @description
-#' Returns the sensitivity and specifity of the selected stratification calculated using the validation data. The representative cluster names can be obtained using the method \code{\link{resStratification}}
+#' Returns the sensitivity and specifity of the selected stratification calculated using the validation data. The representative stratification names can be obtained using the method \code{\link{resStratification}}
 #' @usage cluster2data(Object,
-#'        clusterName)
+#'        stratificationName)
 #'
 #' @param Object \code{\link{ClustAllObject-class}} object
-#' @param clusterName Character vector with the name a stratification. Check resStratification to obtain cluster names.
+#' @param stratificationName Character vector with the name a stratification. Check resStratification to obtain stratification names.
 #'
 #' @return numeric
 #'
@@ -363,19 +370,19 @@ setMethod(
 #' wdbc <- wdbc[,-c(1)] # delete patients IDs
 #' obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
 #' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
-#' resStratification(Object = obj_noNA1, population = 0.05, cluster_similarity = 0.88, all = F)
+#' resStratification(Object = obj_noNA1, population = 0.05, stratification_similarity = 0.88, all = F)
 #' @export
 setGeneric(
   name="validateStratification",
-  def=function(Object, clusterName){standardGeneric("validateStratification")}
+  def=function(Object, stratificationName){standardGeneric("validateStratification")}
 )
 
 setMethod(
   f="validateStratification",
   signature=signature(
     Object="ClustAllObject",
-    clusterName="characterOrNA"),
-  definition=function(Object, clusterName) {
+    stratificationName="characterOrNA"),
+  definition=function(Object, stratificationName) {
 
     if (is.null(Object@dataValidation)) {
       message("The ClustALL Object does not contain validation data. Please create a new object or add the validation data. \nFor that check addValidationData method.")
@@ -387,15 +394,15 @@ setMethod(
       stop()
     }
 
-    checkCluster(clusterName, Object@summary_clusters)
+    checkCluster(stratificationName, Object@summary_clusters)
 
-    if (length(clusterName) != 1) {
+    if (length(stratificationName) != 1) {
       message("More than one stratification have been detected. Only the first one will be use")
-      clusterName <- clusterName[1]
+      stratificationName <- stratificationName[1]
     }
 
-    df <- cluster2data(Object, clusterName)
-    res <- table(df[,clusterName], Object@dataValidation)
+    df <- cluster2data(Object, stratificationName)
+    res <- table(df[,stratificationName], Object@dataValidation)
     sensitivity <- res[3]/(res[3]+res[4])
     specifity <- res[2]/(res[2]+res[1])
     showRes <- c(sensitivity, specifity)

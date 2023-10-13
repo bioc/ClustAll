@@ -3,18 +3,21 @@
 \name{createClustAll}
 \alias{createClustAll}
 \alias{createClustAll,ClustAllObject-method,missOrNumeric,midsOrNA}
-\title{Creates ClustAllObject and perform imputations to deal with missing values and c}
+\title{Creates ClustAllObject and perform imputations to deal with missing values}
 \usage{
 createClustAll(data,
        nImputation=NULL,
-       dataImputed=NULL)
+       dataImputed=NULL,
+       colValidation=NULL)
 }
 \arguments{
 \item{data}{Data Frame of the using data. It may contain missing (NA) values.}
 
-\item{nImputation}{Numeric vector giving the number of imptations that want to be performed if data contains NAs.}
+\item{nImputation}{Numeric value giving the number of imptations that want to be performed if data contains NAs.}
 
 \item{dataImputed}{mids object created with \link[mice]{mice}. The data used for the imputation to create mids object and the data using must be the same.}
+
+\item{colValidation}{Character value givint the validation column of data.}
 }
 \value{
 An object of class \code{\link{ClustAllObject-class}}

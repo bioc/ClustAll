@@ -6,18 +6,18 @@
 \title{validateStratification}
 \usage{
 cluster2data(Object,
-       clusterName)
+       stratificationName)
 }
 \arguments{
 \item{Object}{\code{\link{ClustAllObject-class}} object}
 
-\item{clusterName}{Character vector with the name a stratification. Check resStratification to obtain cluster names.}
+\item{stratificationName}{Character vector with the name a stratification. Check resStratification to obtain stratification names.}
 }
 \value{
 numeric
 }
 \description{
-Returns the sensitivity and specifity of the selected stratification calculated using the validation data. The representative cluster names can be obtained using the method \code{\link{resStratification}}
+Returns the sensitivity and specifity of the selected stratification calculated using the validation data. The representative stratification names can be obtained using the method \code{\link{resStratification}}
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")
@@ -25,7 +25,7 @@ wdbc$Diagnosis <- as.numeric(as.factor(wdbc$Diagnosis))
 wdbc <- wdbc[,-c(1)] # delete patients IDs
 obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
 obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
-resStratification(Object = obj_noNA1, population = 0.05, cluster_similarity = 0.88, all = F)
+resStratification(Object = obj_noNA1, population = 0.05, stratification_similarity = 0.88, all = F)
 }
 \seealso{
 \code{\link{resStratification}},\code{\link{plotJACCARD}},\code{\link{ClustAllObject-class}}

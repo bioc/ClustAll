@@ -11,20 +11,20 @@ cluster2data(Object,
 \arguments{
 \item{Object}{\code{\link{ClustAllObject-class}} object}
 
-\item{clusterName}{Character vector with one or more cluster names}
+\item{clusterName}{Character vector with one or more stratification names}
 }
 \value{
 data.frame
 }
 \description{
-Returns the data frame of the original data using which the clustering of the selected cluster(s) are included as varibles. The representative cluster names can be obtained using the method \code{\link{resStratification}}
+Returns the data frame of the original data using which the clustering of the selected stratification(s) are included as varibles. The representative stratification names can be obtained using the method \code{\link{resStratification}}
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")
 wdbc <- wdbc[,-c(1,2)]
 obj_noNA <- createClustAll(data = wdbc)
 obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
-resStratification(Object = obj_noNA1, population = 0.05, cluster_similarity = 0.88, all = F)
+resStratification(Object = obj_noNA1, population = 0.05, stratification_similarity = 0.88, all = F)
 df <- cluster2data(Object = obj_noNA1, clusterName = c("cuts_c_3","cuts_a_9","cuts_b_13"))
 }
 \seealso{

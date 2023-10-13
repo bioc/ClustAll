@@ -8,29 +8,29 @@
 resStratification(Object,
        population=0.05,
        all=FALSE,
-       cluster_similarity=0.7)
+       stratification_similarity=0.7)
 }
 \arguments{
 \item{Object}{\code{\link{ClustAllObject-class}} object}
 
-\item{population}{Numeric vector giving the minimum amount of population that a cluster must have to be considered representative}
+\item{population}{Numeric vector giving the minimum amount of population that a stratification must have to be considered representative}
 
-\item{all}{Logical vector to return all the representative clusters per group of clusters. If it is FALSE, only the centroid cluster of every group of clusters is returned}
+\item{all}{Logical vector to return all the representative clusters per group of clusters. If it is FALSE, only the centroid stratification of every group of clusters is returned}
 
-\item{cluster_similarity}{the minimum values to consider two groups similar in Jaccard distances. As default 0.7.}
+\item{stratification_similarity}{the minimum values to consider two groups similar in Jaccard distances. As default 0.7.}
 }
 \value{
 list
 }
 \description{
-This function returns the stratifications representatives by filtering those clusters with a minimum percentage of the population. Either returns all the robust cluster or the representative one of each group of cluster
+This function returns the stratifications representatives by filtering those clusters with a minimum percentage of the population. Either returns all the robust stratification or the representative one of each group of stratification
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")
 wdbc <- wdbc[,-c(1,2)]
 obj_noNA <- createClustAll(data = wdbc)
 obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
-resStratification(Object = obj_noNA1, population = 0.05, cluster_similarity = 0.88, all = F)
+resStratification(Object = obj_noNA1, population = 0.05, stratification_similarity = 0.88, all = F)
 
 }
 \seealso{

@@ -7,14 +7,14 @@
 \usage{
 plotJACCARD(Object,
        paint=TRUE,
-       cluster_similarity=0.7)
+       stratification_similarity=0.7)
 }
 \arguments{
 \item{Object}{\code{\link{ClustAllObject-class}} object}
 
 \item{paint}{Logical vector to paint the different group of clusters in the plot}
 
-\item{cluster_similarity}{the minimum values to consider two groups similar in Jaccard distances. As default 0.7.}
+\item{stratification_similarity}{the minimum values to consider two groups similar in Jaccard distances. As default 0.7.}
 }
 \value{
 plot
@@ -27,7 +27,7 @@ data("BreastCancerWisconsin", package = "ClustAll")
 wdbc <- wdbc[,-c(1,2)]
 obj_noNA <- createClustAll(data = wdbc)
 obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
-plotJACCARD(obj_noNA1, paint = TRUE, cluster_similarity = 0.88)
+plotJACCARD(obj_noNA1, paint = TRUE, stratification_similarity = 0.88)
 
 }
 \seealso{
