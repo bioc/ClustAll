@@ -61,11 +61,11 @@ obtainDataPCA <- function(impData, variables_clust, possible_heights, heights_cu
                                     variability=50, maxvar=3)
   }
 
-  if (length(groups_go)>1) {
+  if (length(groups_go) > 1) {
     for (h in 2:length(groups_go)) {
 
       variables_use <- names(treego[treego==groups_go[h]])
-      if (length(variables_use)==1) {
+      if (length(variables_use) == 1) {
         data_PCA <- cbind(data_PCA,impData[,variables_use])
 
       } else {
@@ -137,10 +137,10 @@ obtainSummaryCluster <- function(summary_clusters_a, summary_clusters_b,
   nclust_d <- as.data.frame(summary_clusters_d[which(apply(summary_clusters_d[], 1, sum)>0),])
 
   # put all the clusters together
-  summary_n_clust <- c(apply(nclust_a, 1, function(x) median(x, na.rm=T)),
-                       apply(nclust_b, 1, function(x) median(x, na.rm=T)),
-                       apply(nclust_c, 1, function(x) median(x, na.rm=T)),
-                       apply(nclust_d, 1, function(x) median(x, na.rm=T)))
+  summary_n_clust <- c(apply(nclust_a, 1, function(x) median(x, na.rm=TRUE)),
+                       apply(nclust_b, 1, function(x) median(x, na.rm=TRUE)),
+                       apply(nclust_c, 1, function(x) median(x, na.rm=TRUE)),
+                       apply(nclust_d, 1, function(x) median(x, na.rm=TRUE)))
 
   return(summary_n_clust)
 }

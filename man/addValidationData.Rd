@@ -19,7 +19,11 @@ addValidationData(Object, dataValidation)
 Generic function to add validation data to the \code{\link{ClustAllObject-class}} object
 }
 \examples{
-# MISSING EXAMPLES
+data("BreastCancerWisconsin", package = "ClustAll")
+wdbc$Diagnosis <- as.numeric(as.factor(wdbc$Diagnosis))
+wdbc <- wdbc[,-c(1)] # delete patients IDs
+obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
+obj_noNA1 <- addValidationData(Object = obj_noNA, dataValidation = wdbc$Diagnosis)
 }
 \seealso{
 \code{\link{ClustAllObject-class}}

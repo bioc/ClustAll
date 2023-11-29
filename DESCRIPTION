@@ -2,16 +2,25 @@ Package: ClustAll
 Type: Package
 Title: ClustAll: Data driven strategy in order to find hidden subgroups
         of patients with complex diseases
-Version: 1.0
-Author: Asier Ortega-Legarreta <aortegal@navarra.es>, Sara Palomino-Echeverría <spalomie@navarra.es>
-Maintainer: Asier Ortega Legarreta <aortegal@navarra.es>
-Imports: FactoMineR, bigstatsr, clValid, clusteval, corrplot, doSNOW,
+Version: 1.0.0
+Authors@R: c(person("Asier", "Ortega-Legarreta", role = c("aut","cre"),  
+           email = "aortegal@navarra.es"),
+           person("Sara", "Palomino-Echeverria", role = c("aut"),  
+           email = "spalomie@navarra.es"))
+Imports: FactoMineR, bigstatsr, clValid, clusteval, doSNOW,
         parallel, foreach, dplyr, fpc, mice, modeest, flock, networkD3,
-        methods
-Description: Data driven strategy in order to find hidden subgroups of patients with complex diseases
+        methods, ComplexHeatmap, RColorBrewer, circlize, ggplot2, grid,
+        stats, utils
+Suggests: knitr
+Description: Data driven strategy in order to find hidden subgroups of patients with complex diseases.  
+            ClustALL also facilitates the unsupervised identification of multiple and robust stratifications.
+            ClustALL, able to overcome the limitations of previously available stratification methods. 
 License: GPL-2
 Encoding: UTF-8
+biocViews: Software, StatisticalMethod, Clustering, DimensionReduction,
+           PrincipalComponent
 RoxygenNote: 7.2.3
+VignetteBuilder: knitr
+git_url: https://github.com/TranslationalBioinformaticsUnit/ClustAll
 NeedsCompilation: no
 Packaged: 2023-08-10 12:55:36 UTC; asier.ortega
-

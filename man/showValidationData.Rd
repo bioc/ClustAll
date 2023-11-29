@@ -17,7 +17,12 @@ numeric vector if true labels have been added. Otherwise NULL
 Generic function to retrieve numeric vector if it has been added with the true labels from a \code{\link{ClustAllObject-class}} object
 }
 \examples{
-# MISSING EXAMPLES
+data("BreastCancerWisconsin", package = "ClustAll")
+wdbc$Diagnosis <- as.numeric(as.factor(wdbc$Diagnosis))
+wdbc <- wdbc[,-c(1)] # delete patients IDs
+obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
+obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
+showValidationData(obj_noNA1)
 }
 \seealso{
 \code{\link{ClustAllObject-class}}

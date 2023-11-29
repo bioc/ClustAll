@@ -57,8 +57,8 @@ setMethod(
     # col_fun <- colorRampPalette(brewer.pal(9,"Blues"))(25)
     col_fun <- colorRamp2(c(0, 1), colors = colorRampPalette(brewer.pal(9,"Blues"))(25),
                           breaks=seq(0, 1, length.out = 25))
-    legend <- Legend(title="JACCARD index", legend_width = unit(10, "cm"),
-                     direction = "horizontal", at=c(0, 1), title_position="topcenter")
+    # legend <- Legend(title="JACCARD index", legend_width = unit(10, "cm"),
+    #                  direction = "horizontal", at=c(0, 1), title_position="topcenter")
     legend <- HeatmapAnnotation(JACCARD_index = seq(0, 1, length.out = ncol(m)), col = list(lg = col_fun),
                                  annotation_name_side = "right")
     ra <- rowAnnotation(
@@ -66,14 +66,14 @@ setMethod(
       Clustering=robust_stratification[,"Clustering"],
       Depth=robust_stratification[,"Depth"],
       col = list(Distance=structure(names=c("Correlation","Gower"),c("#CCCCFF","blue4") ),
-                 Clustering=structure(names=c("k-means", "k-medoids"), c("sandybrown", "tomato3") ),
+                 Clustering=structure(names=c("Hierachical", "k-means", "k-medoids"), c("forestgreen", "sandybrown", "tomato3") ),
                  Depth=colorRamp2(c(1,round(max(robust_stratification[, "Depth"])/2),
                                     max(robust_stratification[, "Depth"])),
                                   c("darkcyan", "#F7DCCA", "#C75F97"))))
 
     hp <- Heatmap(as.matrix(m), name="hp", cluster_columns=FALSE, cluster_rows=FALSE,
                   left_annotation=ra, col=col_fun, bottom_annotation = NULL,
-                  show_column_names = F,
+                  show_column_names = FALSE,
                   heatmap_legend_param = list(
                     direction = "vertical", title="JACCARD index", at=c(0, 1),
                     legend_width = unit(10, "cm")
@@ -101,7 +101,7 @@ setMethod(
           grid.rect(unit(start/full_length, "npc"), unit(1-start/full_length, "npc"), # top left
                     width = (finish-start)/full_length,
                     height = (finish-start)/full_length,
-                    gp = gpar(lwd = 2.5, lty = 2.5, fill=FALSE, col="red"), just = c("left", "top"), draw = T
+                    gp = gpar(lwd = 2.5, lty = 2.5, fill=FALSE, col="red"), just = c("left", "top"), draw = TRUE
           )
         })
       }
@@ -136,7 +136,7 @@ setMethod(
 #' wdbc <- wdbc[,-c(1,2)]
 #' obj_noNA <- createClustAll(data = wdbc)
 #' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
-#' resStratification(Object = obj_noNA1, population = 0.05, stratification_similarity = 0.88, all = F)
+#' resStratification(Object = obj_noNA1, population = 0.05, stratification_similarity = 0.88, all = FALSE)
 #'
 #' @export
 setGeneric(
@@ -216,7 +216,7 @@ setMethod(
 #' wdbc <- wdbc[,-c(1,2)]
 #' obj_noNA <- createClustAll(data = wdbc)
 #' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
-#' resStratification(Object = obj_noNA1, population = 0.05, stratification_similarity = 0.88, all = F)
+#' resStratification(Object = obj_noNA1, population = 0.05, stratification_similarity = 0.88, all = FALSE)
 #' df <- cluster2data(Object = obj_noNA1, clusterName = c("cuts_c_3","cuts_a_9","cuts_b_13"))
 #' @export
 setGeneric(
@@ -268,7 +268,7 @@ setMethod(
 #' wdbc <- wdbc[,-c(1,2)]
 #' obj_noNA <- createClustAll(data = wdbc)
 #' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
-#' resStratification(Object = obj_noNA1, population = 0.05, stratification_similarity = 0.88, all = F)
+#' resStratification(Object = obj_noNA1, population = 0.05, stratification_similarity = 0.88, all = FALSE)
 #' plotSANKEY(Object = obj_noNA1, clusters = c("cuts_c_3","cuts_a_9"))
 #' plotSANKEY(Object = obj_noNA1, clusters = c("cuts_c_3","cuts_b_13"))
 #'
@@ -370,7 +370,7 @@ setMethod(
 #' wdbc <- wdbc[,-c(1)] # delete patients IDs
 #' obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
 #' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
-#' resStratification(Object = obj_noNA1, population = 0.05, stratification_similarity = 0.88, all = F)
+#' resStratification(Object = obj_noNA1, population = 0.05, stratification_similarity = 0.88, all = FALSE)
 #' @export
 setGeneric(
   name="validateStratification",

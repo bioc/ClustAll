@@ -67,7 +67,7 @@ setMethod(
     if (nImputation == 0 & is.null(dataImputed)) {
       dataImputed <- NULL
     } else if (is.null(dataImputed)) {
-      message("Running default multiple imputation method. For manual imputation or more information visit <INCLUIR HELP O ALGO>") #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      message("Running default multiple imputation method. For manual imputation or more information check mice package")
       dataImputed <- mice(data, m=nImputation, maxit=5, seed=1234)
     } else if (!is.null(dataImputed)) {
       if (validDataImputed(data, dataImputed)) { # check the imputed data is valid

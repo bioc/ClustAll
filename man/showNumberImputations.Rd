@@ -17,7 +17,11 @@ Numeric vector giving the number of imputations. 0 in the case of no imputations
 Generic function to retrieve the number of imputations in \code{\link{createClustAll}} from a \code{\link{ClustAllObject-class}} object
 }
 \examples{
-# MISSING EXAMPLES
+data("BreastCancerWisconsin", package = "ClustAll")
+wdbc$Diagnosis <- as.numeric(as.factor(wdbc$Diagnosis))
+wdbc <- wdbc[,-c(1)] # delete patients IDs
+obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
+showNumberImputations(obj_noNA)
 }
 \seealso{
 \code{\link{createClustAll}}, \code{\link{ClustAllObject-class}}, \code{\link{runClustAll}}

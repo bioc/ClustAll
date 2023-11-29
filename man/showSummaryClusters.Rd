@@ -11,13 +11,17 @@ showSummaryClusters(Object)
 \item{Object}{\code{\link{ClustAllObject-class}} object}
 }
 \value{
-List of matrices with all the clustering methods or NULL value if runClustAll method have not been runned
+List of matrices with all the clustering methods or NULL if runClustAll method have not been runned
 }
 \description{
 Generic function to retrieve the list with matrieces for different cluster methods results of \code{\link{runClustAll}} from a \code{\link{ClustAllObject-class}} object
 }
 \examples{
-# MISSING EXAMPLES
+data("BreastCancerWisconsin", package = "ClustAll")
+wdbc$Diagnosis <- as.numeric(as.factor(wdbc$Diagnosis))
+wdbc <- wdbc[,-c(1)] # delete patients IDs
+obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
+showSummaryClusters(obj_noNA)
 }
 \seealso{
 \code{\link{runClustAll}}, \code{\link{ClustAllObject-class}}

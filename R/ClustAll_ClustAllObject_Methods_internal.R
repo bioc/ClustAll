@@ -58,7 +58,7 @@ obtainDefCluster <- function(mat_using, cluster_similarity=0.7){
 
 
 # This function filter the definitive cluster based on population and returns those clusters
-chooseClusters <- function(definitive_clusters, summary_clusters, population=0.05, all=T) {
+chooseClusters <- function(definitive_clusters, summary_clusters, population=0.05, all=TRUE) {
 
   if (0 > population | population >= 1) {
     message("Not a valid value for population. Should introduce a value from 0 to 1.")
@@ -127,7 +127,10 @@ obtain_metadata <- function(m) {
   names_clustering <- sapply(split_names, function(x) x[2])
   names_depth <- sapply(split_names, function(x) as.numeric(x[3]))
   names_distance <- ifelse(names_clustering %in% c("a", "b"), "Correlation", "Gower")
-  names_clusteringmeth <- ifelse(names_clustering %in% c("a", "c"), "k-means", "k-medoids")
+  names_clusteringmeth <- names_clustering
+  names_clusteringmeth[which(names_clusteringmeth %in% c("a", "c"))] <- "Hierachical"
+  names_clusteringmeth[which(names_clusteringmeth == "b")] <- "k-means"
+  names_clusteringmeth[which(names_clusteringmeth == "d")] <- "k-medoids"
 
 
   return(data.frame("Distance"=names_distance, "Clustering"=names_clusteringmeth,

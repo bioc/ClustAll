@@ -15,12 +15,12 @@ setClassUnion("numericOrCharacter", c("numeric", "character"))
 #' @aliases ClustAllObject-class
 #' @description Stores the using data, imputations and results of the ClustAll pipeline.
 #' @slot data Data Frame of the using data
-#' @slot dataImputed midsOrNULL. Mids object from mice package that stores imputed data in case imputations have been made. Otherwise NULL value
+#' @slot dataImputed midsOrNULL. Mids object from mice package that stores imputed data in case imputations have been made. Otherwise NULL
 #' @slot dataValidation numericOrNA. Numeric vector of the TRUE labels
 #' @slot nImputation Numeric giving the number of imputations
-#' @slot processed Logical value if the ClustAll pipeline have been runned
-#' @slot summary_clusters listOrNULL. List of matrices of the clustering methods in case ClustAll pipeline have been runned. Othrwise NULL value
-#' @slot JACCARD_DISTANCE_F matrixOrNULL. Matrix containing the robust values of Jaccard distances if the ClustAll pipeline have been runned. Otherwise NULL value
+#' @slot processed Logical if the ClustAll pipeline have been runned
+#' @slot summary_clusters listOrNULL. List of matrices of the clustering methods in case ClustAll pipeline have been runned. Othrwise NULL
+#' @slot JACCARD_DISTANCE_F matrixOrNULL. Matrix containing the robust values of Jaccard distances if the ClustAll pipeline have been runned. Otherwise NULL
 #' @export
 setClass(
   Class="ClustAllObject",
@@ -79,7 +79,11 @@ setMethod(
 #' @seealso \code{\link{createClustAll}}, \code{\link{ClustAllObject-class}}, \code{\link{runClustAll}}
 #'
 #' @examples
-#' # MISSING EXAMPLES
+#' data("BreastCancerWisconsin", package = "ClustAll")
+#' wdbc$Diagnosis <- as.numeric(as.factor(wdbc$Diagnosis))
+#' wdbc <- wdbc[,-c(1)] # delete patients IDs
+#' obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
+#' showData(obj_noNA)
 #' @export
 setGeneric(
   name="showData",
@@ -104,12 +108,16 @@ setMethod(
 #' @usage showDataImputed(Object)
 #' @param Object \code{\link{ClustAllObject-class}} object
 #'
-#' @return Mids class object with the imputed data or NULL value if no imputations have been made
+#' @return Mids class object with the imputed data or NULL if no imputations have been made
 #'
 #' @seealso \code{\link{createClustAll}}, \code{\link{ClustAllObject-class}}, \code{\link{runClustAll}}
 #'
 #' @examples
-#' # MISSING EXAMPLES
+#' data("BreastCancerWisconsin", package = "ClustAll")
+#' wdbc$Diagnosis <- as.numeric(as.factor(wdbc$Diagnosis))
+#' wdbc <- wdbc[,-c(1)] # delete patients IDs
+#' obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
+#' showDataImputed(obj_noNA)
 #' @export
 setGeneric(
   name="showDataImputed",
@@ -139,7 +147,11 @@ setMethod(
 #' @seealso \code{\link{createClustAll}}, \code{\link{ClustAllObject-class}}, \code{\link{runClustAll}}
 #'
 #' @examples
-#' # MISSING EXAMPLES
+#' data("BreastCancerWisconsin", package = "ClustAll")
+#' wdbc$Diagnosis <- as.numeric(as.factor(wdbc$Diagnosis))
+#' wdbc <- wdbc[,-c(1)] # delete patients IDs
+#' obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
+#' showNumberImputations(obj_noNA)
 #' @export
 setGeneric(
   name="showNumberImputations",
@@ -164,12 +176,16 @@ setMethod(
 #' @usage showSummaryClusters(Object)
 #' @param Object \code{\link{ClustAllObject-class}} object
 #'
-#' @return List of matrices with all the clustering methods or NULL value if runClustAll method have not been runned
+#' @return List of matrices with all the clustering methods or NULL if runClustAll method have not been runned
 #'
 #' @seealso \code{\link{runClustAll}}, \code{\link{ClustAllObject-class}}
 #'
 #' @examples
-#' # MISSING EXAMPLES
+#' data("BreastCancerWisconsin", package = "ClustAll")
+#' wdbc$Diagnosis <- as.numeric(as.factor(wdbc$Diagnosis))
+#' wdbc <- wdbc[,-c(1)] # delete patients IDs
+#' obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
+#' showSummaryClusters(obj_noNA)
 #' @export
 setGeneric(
   name="showSummaryClusters",
@@ -194,12 +210,17 @@ setMethod(
 #' @usage showJaccardDistances(Object)
 #' @param Object \code{\link{ClustAllObject-class}} object
 #'
-#' @return Matrix with Jaccard distances or NULL value if runClustAll method have not been runned
+#' @return Matrix with Jaccard distances or NULL if runClustAll method have not been runned
 #'
 #' @seealso \code{\link{runClustAll}}, \code{\link{ClustAllObject-class}}
 #'
 #' @examples
-#' # MISSING EXAMPLES
+#' data("BreastCancerWisconsin", package = "ClustAll")
+#' wdbc$Diagnosis <- as.numeric(as.factor(wdbc$Diagnosis))
+#' wdbc <- wdbc[,-c(1)] # delete patients IDs
+#' obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
+#' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
+#' showJaccardDistances(obj_noNA1)
 #' @export
 setGeneric(
   name="showJaccardDistances",
@@ -217,10 +238,10 @@ setMethod(
 )
 
 
-#' @title Retrieve logical value if runClustAll have been runned from ClustAllObject
+#' @title Retrieve logical if runClustAll have been runned from ClustAllObject
 #' @aliases isProcessed,ClustAllObject-method
 #' @description
-#' Generic function to retrieve the logical value if \code{\link{runClustAll}} have been runned from a \code{\link{ClustAllObject-class}} object
+#' Generic function to retrieve the logical if \code{\link{runClustAll}} have been runned from a \code{\link{ClustAllObject-class}} object
 #' @usage isProcessed(Object)
 #' @param Object \code{\link{ClustAllObject-class}} object
 #'
@@ -229,7 +250,12 @@ setMethod(
 #' @seealso \code{\link{runClustAll}}, \code{\link{ClustAllObject-class}}
 #'
 #' @examples
-#' # MISSING EXAMPLES
+#' data("BreastCancerWisconsin", package = "ClustAll")
+#' wdbc$Diagnosis <- as.numeric(as.factor(wdbc$Diagnosis))
+#' wdbc <- wdbc[,-c(1)] # delete patients IDs
+#' obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
+#' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
+#' isProcessed(obj_noNA1)
 #' @export
 setGeneric(
   name="isProcessed",
@@ -259,7 +285,12 @@ setMethod(
 #' @seealso \code{\link{ClustAllObject-class}}
 #'
 #' @examples
-#' # MISSING EXAMPLES
+#' data("BreastCancerWisconsin", package = "ClustAll")
+#' wdbc$Diagnosis <- as.numeric(as.factor(wdbc$Diagnosis))
+#' wdbc <- wdbc[,-c(1)] # delete patients IDs
+#' obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
+#' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
+#' showValidationData(obj_noNA1)
 #' @export
 setGeneric(
   name="showValidationData",
@@ -290,7 +321,11 @@ setMethod(
 #' @seealso \code{\link{ClustAllObject-class}}
 #'
 #' @examples
-#' # MISSING EXAMPLES
+#' data("BreastCancerWisconsin", package = "ClustAll")
+#' wdbc$Diagnosis <- as.numeric(as.factor(wdbc$Diagnosis))
+#' wdbc <- wdbc[,-c(1)] # delete patients IDs
+#' obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
+#' obj_noNA1 <- addValidationData(Object = obj_noNA, dataValidation = wdbc$Diagnosis)
 #' @export
 setGeneric(
   name="addValidationData",
@@ -320,4 +355,13 @@ setMethod(
     return(Object)
   }
 )
+
+#' @name mids-class
+#' @rdname mids-class
+#' @aliases mids-class mids
+#' @author Stef van Buuren, Karin Groothuis-Oudshoorn, 2000
+#' @references van Buuren S and Groothuis-Oudshoorn K (2011). \code{mice}:
+#' Multivariate Imputation by Chained Equations in \code{R}. \emph{Journal of
+#' Statistical Software}, \bold{45}(3), 1-67.
+NULL
 # END OF ClustAll_ClustAllObject_Class.R

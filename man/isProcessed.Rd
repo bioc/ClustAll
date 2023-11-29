@@ -3,7 +3,7 @@
 \name{isProcessed}
 \alias{isProcessed}
 \alias{isProcessed,ClustAllObject-method}
-\title{Retrieve logical value if runClustAll have been runned from ClustAllObject}
+\title{Retrieve logical if runClustAll have been runned from ClustAllObject}
 \usage{
 isProcessed(Object)
 }
@@ -14,10 +14,15 @@ isProcessed(Object)
 TRUE if runClustAll have been runned. Otherwise FALSE
 }
 \description{
-Generic function to retrieve the logical value if \code{\link{runClustAll}} have been runned from a \code{\link{ClustAllObject-class}} object
+Generic function to retrieve the logical if \code{\link{runClustAll}} have been runned from a \code{\link{ClustAllObject-class}} object
 }
 \examples{
-# MISSING EXAMPLES
+data("BreastCancerWisconsin", package = "ClustAll")
+wdbc$Diagnosis <- as.numeric(as.factor(wdbc$Diagnosis))
+wdbc <- wdbc[,-c(1)] # delete patients IDs
+obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
+obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
+isProcessed(obj_noNA1)
 }
 \seealso{
 \code{\link{runClustAll}}, \code{\link{ClustAllObject-class}}

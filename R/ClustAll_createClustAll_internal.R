@@ -94,9 +94,9 @@ validnImputation <- function(nImputation, imputedNull) {
     stop()
   } else if (nImputation %% 1 != 0) { # check is not float value
     message("Decimal number included, instead the decimal value will be rounded.")
-    nImputation <- round(nImputation, digits=0)
+    nImputation <- round(nImputation, digits = 0)
   } else if (is.null(nImputation) & imputedNull == TRUE) {
-    nImputation = 0
+    nImputation <- 0
   }
 
   return(nImputation)
@@ -113,7 +113,7 @@ validData <- function(data, nImputation, dataImputed) {
     message("The dataset does NOT contain NA values. The imputation process will not be applied.")
     return(TRUE)
 
-  } else if (anyNA(data) == FALSE  & is.null(dataImputed) == FALSE) {
+  } else if (anyNA(data) == FALSE  & !is.null(dataImputed)) {
     message("The dataset does NOT contain NA values. The imputed data introduced will not be used.")
     return(TRUE)
 
@@ -135,14 +135,14 @@ validDataImputed <- function(data, dataImputed) {
     }
 
   } else {
-    message("You must introduce mice::mice function output. An object of class mice. For more information visit <INCLUDE HELP>") #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    message("You must introduce mice::mice function output. An object of class mice. For more information visit mice package")
     stop()
   }
 }
 
 
 checkColumn <- function(data, colValidation) {
-  if (class(colValidation) != "character") {
+  if (!is(colValidation, "character")) {
     message("Please make sure to introduce the name of the valdiation column.")
     stop()
   }
@@ -152,3 +152,4 @@ checkColumn <- function(data, colValidation) {
   }
 }
 # END OF ClustAll_createClustAll_internal.R
+is

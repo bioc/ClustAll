@@ -30,7 +30,7 @@ data("BreastCancerWisconsin", package = "ClustAll")
 wdbc <- wdbc[,-c(1,2)]
 obj_noNA <- createClustAll(data = wdbc)
 obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
-resStratification(Object = obj_noNA1, population = 0.05, stratification_similarity = 0.88, all = F)
+resStratification(Object = obj_noNA1, population = 0.05, stratification_similarity = 0.88, all = FALSE)
 
 }
 \seealso{

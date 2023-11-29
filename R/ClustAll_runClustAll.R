@@ -100,7 +100,7 @@ setMethod(
 
     if (threads > detectCores()) {
       message("A greater number of cores than detected have been included as argument.")
-      message(paste("The maximum number of cores will be used: "), detectCores(), ".")
+      message(paste0("The maximum number of cores will be used: "), detectCores(), ".")
       threads <- detectCores()
     }
 
@@ -153,7 +153,7 @@ setMethod(
                                                       validation="internal",maxitems=nrow(data_PCA_scaled),metric="correlation")
           oS_kmeans <- as.numeric(mlv(optimalScores(data_PCA.clValid_internal_kmeans)[,3], method = "mfv"))
 
-          if (length(oS_kmeans)>1) {
+          if (length(oS_kmeans) > 1) {
             oS_kmeans <- median(oS_kmeans) # choose the median
           }
 
@@ -163,7 +163,7 @@ setMethod(
           for (t in 1:as.numeric(oS_kmeans)) { # for every k
             induse <- as.numeric(names(kmeans_res_c[kmeans_res_c==t]))
 
-            locked = flock::lock(lock) # synchronization between processes
+            locked <- flock::lock(lock) # synchronization between processes
             summary_matrices_a[[heights_cut]][induse, induse] <- summary_matrices_a[[heights_cut]][induse, induse] + 1
             flock::unlock(locked)
           }
@@ -185,7 +185,7 @@ setMethod(
 
           for (t in 1:oS_hclust) {
             induse <- as.numeric(names(hclust_res_c[hclust_res_c==t]))
-            locked = flock::lock(lock) # synchronization between processes
+            locked <- flock::lock(lock) # synchronization between processes
             summary_matrices_b[[heights_cut]][induse, induse] <- summary_matrices_b[[heights_cut]][induse, induse] + 1 # add result
             flock::unlock(locked)
           }
@@ -218,7 +218,7 @@ setMethod(
           for (t in 1:summary_clusters_c[heights_cut, impgo]) {
             induse <- as.numeric(names(pam_res_c[pam_res_c==t]))
 
-            locked = flock::lock(lock) # synchronization between processes
+            locked <- flock::lock(lock) # synchronization between processes
             summary_matrices_c[[heights_cut]][induse, induse] <- summary_matrices_c[[heights_cut]][induse, induse] + 1
             flock::unlock(locked)
           }
@@ -233,7 +233,7 @@ setMethod(
           for (t in 1:summary_clusters_d[heights_cut, impgo])  {
             induse <- as.numeric(names(hclustgow_res_c[hclustgow_res_c==t]))
 
-            locked = flock::lock(lock) # synchronization between processes
+            locked <- flock::lock(lock) # synchronization between processes
             summary_matrices_d[[heights_cut]][induse, induse] <- summary_matrices_d[[heights_cut]][induse, induse] + 1
             flock::unlock(locked)
           }
@@ -284,7 +284,7 @@ setMethod(
                                                       validation="internal",maxitems=nrow(data_PCA_scaled),metric="correlation")
           oS_kmeans <- as.numeric(mlv(optimalScores(data_PCA.clValid_internal_kmeans)[,3], method = "mfv"))
 
-          if (length(oS_kmeans)>1) {
+          if (length(oS_kmeans) > 1) {
             oS_kmeans <- median(oS_kmeans) # choose the median
           }
 
@@ -294,7 +294,7 @@ setMethod(
           for (t in 1:as.numeric(oS_kmeans)) { # for every k
             induse <- as.numeric(names(kmeans_res_c[kmeans_res_c==t]))
 
-            locked = flock::lock(lock) # synchronization between processes
+            locked <- flock::lock(lock) # synchronization between processes
             summary_matrices_a[[heights_cut]][induse, induse] <- summary_matrices_a[[heights_cut]][induse, induse] + 1
             flock::unlock(locked)
           }
@@ -316,7 +316,7 @@ setMethod(
 
           for (t in 1:oS_hclust) {
             induse <- as.numeric(names(hclust_res_c[hclust_res_c==t]))
-            locked = flock::lock(lock) # synchronization between processes
+            locked <- flock::lock(lock) # synchronization between processes
             summary_matrices_b[[heights_cut]][induse, induse] <- summary_matrices_b[[heights_cut]][induse, induse] + 1 # add result
             flock::unlock(locked)
           }
@@ -349,7 +349,7 @@ setMethod(
           for (t in 1:summary_clusters_c[heights_cut, impgo]) {
             induse <- as.numeric(names(pam_res_c[pam_res_c==t]))
 
-            locked = flock::lock(lock) # synchronization between processes
+            locked <- flock::lock(lock) # synchronization between processes
             summary_matrices_c[[heights_cut]][induse, induse] <- summary_matrices_c[[heights_cut]][induse, induse] + 1
             flock::unlock(locked)
           }
@@ -364,7 +364,7 @@ setMethod(
           for (t in 1:summary_clusters_d[heights_cut, impgo])  {
             induse <- as.numeric(names(hclustgow_res_c[hclustgow_res_c==t]))
 
-            locked = flock::lock(lock) # synchronization between processes
+            locked <- flock::lock(lock) # synchronization between processes
             summary_matrices_d[[heights_cut]][induse, induse] <- summary_matrices_d[[heights_cut]][induse, induse] + 1
             flock::unlock(locked)
           }
@@ -386,10 +386,10 @@ setMethod(
     }
 
     # renaming the matrices
-    names(summary_matrices_a) <- paste("cuts_a_",1:length(summary_matrices_a), sep="")
-    names(summary_matrices_b) <- paste("cuts_b_",1:length(summary_matrices_b), sep="")
-    names(summary_matrices_c) <- paste("cuts_c_",1:length(summary_matrices_c), sep="")
-    names(summary_matrices_d) <- paste("cuts_d_",1:length(summary_matrices_d), sep="")
+    names(summary_matrices_a) <- paste0("cuts_a_",1:length(summary_matrices_a), sep="")
+    names(summary_matrices_b) <- paste0("cuts_b_",1:length(summary_matrices_b), sep="")
+    names(summary_matrices_c) <- paste0("cuts_c_",1:length(summary_matrices_c), sep="")
+    names(summary_matrices_d) <- paste0("cuts_d_",1:length(summary_matrices_d), sep="")
 
     summary_matrices_MEASURES <- c(summary_matrices_a, summary_matrices_b,
                                    summary_matrices_c, summary_matrices_d)
@@ -397,7 +397,7 @@ setMethod(
     # remove those matrices with only 0s
     tmp <- lapply(summary_matrices_MEASURES, function(x) as.matrix(x[]))
     if (length(which(lapply(tmp, sum)==0)) > 0) {
-      summary_matrices_MEASURES = summary_matrices_MEASURES[-which(lapply(summary_matrices_MEASURES, function(x) sum(x[]))==0)]
+      summary_matrices_MEASURES <- summary_matrices_MEASURES[-which(lapply(summary_matrices_MEASURES, function(x) sum(x[]))==0)]
     }
 
 

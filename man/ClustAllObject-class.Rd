@@ -12,16 +12,16 @@ Stores the using data, imputations and results of the ClustAll pipeline.
 \describe{
 \item{\code{data}}{Data Frame of the using data}
 
-\item{\code{dataImputed}}{midsOrNULL. Mids object from mice package that stores imputed data in case imputations have been made. Otherwise NULL value}
+\item{\code{dataImputed}}{midsOrNULL. Mids object from mice package that stores imputed data in case imputations have been made. Otherwise NULL}
 
 \item{\code{dataValidation}}{numericOrNA. Numeric vector of the TRUE labels}
 
 \item{\code{nImputation}}{Numeric giving the number of imputations}
 
-\item{\code{processed}}{Logical value if the ClustAll pipeline have been runned}
+\item{\code{processed}}{Logical if the ClustAll pipeline have been runned}
 
-\item{\code{summary_clusters}}{listOrNULL. List of matrices of the clustering methods in case ClustAll pipeline have been runned. Othrwise NULL value}
+\item{\code{summary_clusters}}{listOrNULL. List of matrices of the clustering methods in case ClustAll pipeline have been runned. Othrwise NULL}
 
-\item{\code{JACCARD_DISTANCE_F}}{matrixOrNULL. Matrix containing the robust values of Jaccard distances if the ClustAll pipeline have been runned. Otherwise NULL value}
+\item{\code{JACCARD_DISTANCE_F}}{matrixOrNULL. Matrix containing the robust values of Jaccard distances if the ClustAll pipeline have been runned. Otherwise NULL}
 }}
 

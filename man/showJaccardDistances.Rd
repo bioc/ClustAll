@@ -11,13 +11,18 @@ showJaccardDistances(Object)
 \item{Object}{\code{\link{ClustAllObject-class}} object}
 }
 \value{
-Matrix with Jaccard distances or NULL value if runClustAll method have not been runned
+Matrix with Jaccard distances or NULL if runClustAll method have not been runned
 }
 \description{
 Generic function to retrieve the matrix with Jaccard distances results of \code{\link{runClustAll}} from a \code{\link{ClustAllObject-class}} object
 }
 \examples{
-# MISSING EXAMPLES
+data("BreastCancerWisconsin", package = "ClustAll")
+wdbc$Diagnosis <- as.numeric(as.factor(wdbc$Diagnosis))
+wdbc <- wdbc[,-c(1)] # delete patients IDs
+obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
+obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
+showJaccardDistances(obj_noNA1)
 }
 \seealso{
 \code{\link{runClustAll}}, \code{\link{ClustAllObject-class}}

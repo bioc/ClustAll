@@ -25,7 +25,7 @@ wdbc$Diagnosis <- as.numeric(as.factor(wdbc$Diagnosis))
 wdbc <- wdbc[,-c(1)] # delete patients IDs
 obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
 obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
-resStratification(Object = obj_noNA1, population = 0.05, stratification_similarity = 0.88, all = F)
+resStratification(Object = obj_noNA1, population = 0.05, stratification_similarity = 0.88, all = FALSE)
 }
 \seealso{
 \code{\link{resStratification}},\code{\link{plotJACCARD}},\code{\link{ClustAllObject-class}}

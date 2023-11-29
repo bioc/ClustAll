@@ -1,0 +1,209 @@
+---
+title: "ClustALL Package"
+output:
+  html_document: default
+  pdf_document: default
+vignette: >
+    %% \VignetteIndexEntry{ClustALL User's Guide}
+    %% \VignetteEngine{knitr::rmarkdown}
+date: "2023-08-22"
+---
+
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+# 0. Intro
+ClustALL is an R package originilly developed for patient stratification in complex diseases.  
+
+ClustAll is the tool of choice to address stratification problems. It consists of centroid-based (k-means, k-medoids) and distribution-based (h-clust) clustering algorithms. Furthermore, the package:   
+- Allows to work with data with missing values, mixed data and correlated variables.  
+- Provides more than a single stratification solution, unlike other packages.  
+- It is population-based robust: ClustALL performs a population-based robustness analysis for each stratification using bootstrapping. This analysis ensures that combinations associated with non-robust stratifications are excluded.  
+- It is parameter-based robust: The selection of representative stratifications enables the preservation of those stratifications that demonstrate parameter-based robustness: consistency even when various parameters, like distance metrics or clustering methods, are altered.  
+
+
+In addition, the package offers functions to:  
+- Validate the output using the true labels.  
+
+
+
+# 1. Setup
+First, install the ClustAll package if not already installed.
+```{r setup}
+library(ClustAll)
+```
+
+If an error is raised, you may install some dependencies first
+```{r}
+# install.packages(c('FactoMineR', 'bigstatsr', 'clValid', 'doSNOW', 'fpc', 'modeest', 'flock'))
+```
+
+# 2. Examples on how to use ClustAll on Public Data Sts.
+
+## 2.0 Breast Cancer Wisconsin (Diagnostic)
+
+Input data for this example can be found on doi: 10.24432/C5DW2B
+
+Features are computed from a digitized image of a fine needle aspirate (FNA) of a breast mass. They describe characteristics of the cell nuclei present in the image. From 569 patients.  
+
+This dataset contains **30 variables** (10x3), which consist of ten real-valued features are computed for each cell nucleus:
+
+	a) radius (mean of distances from center to points on the perimeter)
+	b) texture (standard deviation of gray-scale values)
+	c) perimeter
+	d) area
+	e) smoothness (local variation in radius lengths)
+	f) compactness (perimeter^2 / area - 1.0)
+	g) concavity (severity of concave portions of the contour)
+	h) concave points (number of concave portions of the contour)
+	i) symmetry 
+	j) fractal dimension ("coastline approximation" - 1)
+
+in addition to the patient ID and the Diagnose (Diagnosis (M = malignant, B = benign)).
+
+### 2.1. Loading and preparing data
+
+```{r}
+data("BreastCancerWisconsin", package = "ClustAll") # load example data
+data_use <- subset(wdbc,select=-ID) # remove patients ID 
+str(data_use)
+```
+
+#### a) **Workflow with no missing values**
+##### **createClustAll**
+This function creates creates the class ClustAllObject. It is an S4 object designed to apply the ClustALL algorithm and keep the essential results.  
+<br>
+The usage and arguments are as follows:  
+*data_use* - Data Frame of the using data. It may contain missing values (NA).  
+*nImputation* - Numeric vector giving the number of imptations that want to be performed if data contains NAs.  
+*dataImputed* - mids object created with mice R package. The data used for the imputation to create mids object and data_use using must be the same.  
+
+**There are 3 possible scenarios:**  
+- The data **does not contain NAs**. nImputation & dataImputed are not needed.  
+- The data **contains NAs** and the **imputations are made automatically** (all parameters are imputed based on the res of parameters). nImputations is needed.  
+- The data **contains NAs** and the **imputations are made manually**. dataImputed is needed.  
+
+To keep it simple we going to work in the scenario without imputations.  
+
+```{r}
+obj_noNA <- createClustAll(data = data_use, colValidation = "Diagnosis",
+                           nImputation = NULL, dataImputed = NULL)
+```
+
+<br>
+
+##### **runClustAll method**
+This method runs the ClustALL algorithm.  
+<br>
+The usage and arguments are as follows:  
+*Object* - ClustAllObject-class object  
+*threads* - Numeric vector giving the number of cores to use (for parallel computing).  
+*simplify* - Logical value. If it is true only 1 of every 4 heights of the dendogram are taken into account
+```{r, results=FALSE}
+obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8, simplify = FALSE)
+obj_noNA1simplify <- runClustAll(Object = obj_noNA, threads = 8, simplify = TRUE)
+
+tNOsimplify <- system.time(runClustAll(Object = obj_noNA, threads = 8, simplify = FALSE))
+tYESsimplify <- system.time(runClustAll(Object = obj_noNA, threads = 8, simplify = TRUE))
+```
+
+
+```{r}
+print(tNOsimplify)
+print(tYESsimplify)
+```
+
+Once we run the ClustALL algorithm, we can explore the results.  
+
+<br>
+
+##### **plotJACCARD**
+
+This method plots the correlation Jaccard Distances from the obtained stratifications.  
+<br>
+The usage and arguments are as follows:  
+*Object* - ClustAllObject-class object  
+*paint* - Logical vector to paint the different group of clusters in the plot  
+*stratification_similarity* - The minimum values to consider two stratification similar in Jaccard distances to be considered in the same group. As default 0.7  
+```{r, results=FALSE, warning=FALSE}
+plotJACCARD(Object = obj_noNA1, stratification_similarity =  0.7)
+plotJACCARD(Object = obj_noNA1, stratification_similarity = 0.6)
+plotJACCARD(Object = obj_noNA1, stratification_similarity = 0.9)
+plotJACCARD(Object = obj_noNA1, stratification_similarity = 0.88)
+plotJACCARD(Object = obj_noNA1simplify, stratification_similarity = 0.88)
+```
+
+<br>
+
+##### **resStratification**
+This method returns the stratifications representatives by filtering those clusters with a minimum percentage of the population. Either returns all the robust cluster or the representative one of each group of cluster.  
+<br>
+The usage and arguments are as follows:  
+*Object* - ClustAllObject-class object  
+*population* - Numeric vector giving the minimum amount of population that a cluster must have to be considered representative  
+*stratification_similarity* - The minimum values to consider two stratification similar in Jaccard distances to be considered in the same group. As default 0.7  
+*all* - Logical vector to return all the representative clusters per group of clusters. If it is FALSE, only the centroid cluster of every group of clusters is returned as representative  
+```{r}
+resStratification(Object = obj_noNA1, population = 0.05, stratification_similarity = 0.88, all = FALSE)
+```
+
+<br>
+
+##### **plotSANKEY**
+This function plots the Sankey diagram of two selected clusters in order to compare them. 
+<br>
+The usage and arguments are as follows:  
+*Object* - ClustAllObject-class object  
+*clusters* - Character vector with the names of two clusters. Check resStratification to obtain cluster names  
+
+```{r}
+plotSANKEY(Object = obj_noNA1, clusters = c("cuts_c_3","cuts_a_9"), validationData = FALSE)
+plotSANKEY(Object = obj_noNA1, clusters = c("cuts_c_3","cuts_b_13"), validationData = FALSE)
+plotSANKEY(Object = obj_noNA1, clusters = "cuts_c_3", validationData = TRUE)
+plotSANKEY(Object = obj_noNA1, clusters = "cuts_b_13", validationData = TRUE)
+```
+
+<br>
+
+##### **cluster2data**
+Returns the data frame of the original data using which the clustering of the selected cluster(s) are included as varibles  
+<br>
+The usage and arguments are as follows:  
+*Object* - ClustAllObject-class object   
+*clusterName* - Character vector with one or more cluster names  
+
+```{r}
+df <- cluster2data(Object = obj_noNA1, clusterName = c("cuts_c_3","cuts_a_9","cuts_b_13"))
+```
+
+<br>
+
+##### **Validation**
+Now we validate the results obtained with the three (representative) stratifications with the labels.
+
+```{r}
+# STRATIFICATION 1
+validateStratification(obj_noNA1, "cuts_a_9")
+```
+
+```{r}
+# STRATIFICATION 2
+validateStratification(obj_noNA1, "cuts_b_13")
+```
+
+```{r}
+# STRATIFICATION 3
+validateStratification(obj_noNA1, "cuts_c_3")
+```
+
+
+Session Info
+```{r}
+sessionInfo()
+```
