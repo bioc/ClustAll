@@ -3,7 +3,7 @@
 \name{showValidationData}
 \alias{showValidationData}
 \alias{showValidationData,ClustAllObject-method}
-\title{Retrieve the numeric vector of validation data from ClustAllObject}
+\title{Retrieve the original data labelling from ClustAllObject}
 \usage{
 showValidationData(Object)
 }
@@ -14,7 +14,8 @@ showValidationData(Object)
 numeric vector if true labels have been added. Otherwise NULL
 }
 \description{
-Generic function to retrieve numeric vector if it has been added with the true labels from a \code{\link{ClustAllObject-class}} object
+Generic function to retrieve numeric vector if it has been added with the
+true labels from a \code{\link{ClustAllObject-class}} object
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")

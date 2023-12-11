@@ -3,7 +3,9 @@
 \name{showSummaryClusters}
 \alias{showSummaryClusters}
 \alias{showSummaryClusters,ClustAllObject-method}
-\title{Retrieve the list with matrieces for different cluster methods from ClustAllObject}
+\title{Retrieve the resulting stratifications for each combination of
+clusterings method (distance + clustering algorithm) and depth from
+ClustAllObject}
 \usage{
 showSummaryClusters(Object)
 }
@@ -11,10 +13,15 @@ showSummaryClusters(Object)
 \item{Object}{\code{\link{ClustAllObject-class}} object}
 }
 \value{
-List of matrices with all the clustering methods or NULL if runClustAll method have not been runned
+List with the resulting stratifications for each combination of
+clusterings method (distance + clustering algorithm) and depth methods or
+NULL if runClustAll method has not been executed yet.
 }
 \description{
-Generic function to retrieve the list with matrieces for different cluster methods results of \code{\link{runClustAll}} from a \code{\link{ClustAllObject-class}} object
+Generic function to retrieve the resulting stratifications for each
+combination of clusterings method (distance + clustering algorithm) and
+depth of \code{\link{runClustAll}} from a \code{\link{ClustAllObject-class}}
+object
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")

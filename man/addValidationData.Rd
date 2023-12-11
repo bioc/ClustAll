@@ -16,7 +16,8 @@ addValidationData(Object, dataValidation)
 \code{\link{ClustAllObject-class}} object
 }
 \description{
-Generic function to add validation data to the \code{\link{ClustAllObject-class}} object
+Generic function to add validation data to the
+\code{\link{ClustAllObject-class}} object
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")

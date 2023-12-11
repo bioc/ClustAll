@@ -5,23 +5,34 @@
 \alias{ClustAllObject-class}
 \title{ClustAllObject}
 \description{
-Stores the using data, imputations and results of the ClustAll pipeline.
+Stores the original data used, the imputed datasets and the
+results of the ClustAll pipeline.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{data}}{Data Frame of the using data}
+\item{\code{data}}{Data Frame of the data used. Maybe modified from the input
+data.}
 
-\item{\code{dataImputed}}{midsOrNULL. Mids object from mice package that stores imputed data in case imputations have been made. Otherwise NULL}
+\item{\code{dataOriginal}}{Data Frame of the original data introduced.}
 
-\item{\code{dataValidation}}{numericOrNA. Numeric vector of the TRUE labels}
+\item{\code{dataImputed}}{midsOrNULL. Mids object derived from the
+mice package that stores the imputed data, in case
+imputation was applied. Otherwise NULL.}
 
-\item{\code{nImputation}}{Numeric giving the number of imputations}
+\item{\code{dataValidation}}{labelling numericOrNA. Original data labelling.}
 
-\item{\code{processed}}{Logical if the ClustAll pipeline have been runned}
+\item{\code{nImputation}}{Number of multiple imputations to be applied.}
 
-\item{\code{summary_clusters}}{listOrNULL. List of matrices of the clustering methods in case ClustAll pipeline have been runned. Othrwise NULL}
+\item{\code{processed}}{Logical if the ClustAll pipeline has been executed previously}
 
-\item{\code{JACCARD_DISTANCE_F}}{matrixOrNULL. Matrix containing the robust values of Jaccard distances if the ClustAll pipeline have been runned. Otherwise NULL}
+\item{\code{summary_clusters}}{listOrNULL. List with the resulting stratifications
+for each combination of clustering methods (distance + clustering algorithm)
+and depth, in case ClustAll pipeline has been executed previously.
+Otherwise NULL.}
+
+\item{\code{JACCARD_DISTANCE_F}}{matrixOrNULL. Matrix containing the Jaccard
+distances derived from the robust populations stratifications if ClustAll
+pipeline has been executed previously. Otherwise NULL.}
 }}
 

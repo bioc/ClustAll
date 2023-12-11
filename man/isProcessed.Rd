@@ -2,8 +2,10 @@
 % Please edit documentation in R/ClustAll_ClustAllObject_Class.R
 \name{isProcessed}
 \alias{isProcessed}
-\alias{isProcessed,ClustAllObject-method}
-\title{Retrieve logical if runClustAll have been runned from ClustAllObject}
+\alias{isProcessed,}
+\alias{ClustAllObject-method}
+\title{Retrieve logical if runClustAll has been executed considering
+ClustAllObject as input}
 \usage{
 isProcessed(Object)
 }
@@ -11,10 +13,11 @@ isProcessed(Object)
 \item{Object}{\code{\link{ClustAllObject-class}} object}
 }
 \value{
-TRUE if runClustAll have been runned. Otherwise FALSE
+TRUE if runClustAll has been already executed. Otherwise FALSE
 }
 \description{
-Generic function to retrieve the logical if \code{\link{runClustAll}} have been runned from a \code{\link{ClustAllObject-class}} object
+Generic function to retrieve the logical if \code{\link{runClustAll}} have
+been runned from a \code{\link{ClustAllObject-class}} object
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")

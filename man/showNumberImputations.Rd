@@ -3,7 +3,8 @@
 \name{showNumberImputations}
 \alias{showNumberImputations}
 \alias{showNumberImputations,ClustAllObject-method}
-\title{Retrieve the number of imputations made for the imputation step from ClustAllObject}
+\title{Retrieve the number of imputations applied at the imputation step from
+ClustAllObject}
 \usage{
 showNumberImputations(Object)
 }
@@ -11,10 +12,12 @@ showNumberImputations(Object)
 \item{Object}{\code{\link{ClustAllObject-class}} object}
 }
 \value{
-Numeric vector giving the number of imputations. 0 in the case of no imputations
+Numeric vector that contains the number of imputations. 0 in the
+case of no imputations were required
 }
 \description{
-Generic function to retrieve the number of imputations in \code{\link{createClustAll}} from a \code{\link{ClustAllObject-class}} object
+Generic function to retrieve the number of imputations in
+\code{\link{createClustAll}} from a \code{\link{ClustAllObject-class}} object
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")
@@ -24,5 +27,6 @@ obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
 showNumberImputations(obj_noNA)
 }
 \seealso{
-\code{\link{createClustAll}}, \code{\link{ClustAllObject-class}}, \code{\link{runClustAll}}
+\code{\link{createClustAll}}, \code{\link{ClustAllObject-class}},
+\code{\link{runClustAll}}
 }

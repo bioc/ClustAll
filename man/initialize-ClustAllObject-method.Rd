@@ -7,6 +7,7 @@
 \S4method{initialize}{ClustAllObject}(
   .Object,
   data,
+  dataOriginal,
   dataImputed,
   dataValidation,
   nImputation,
@@ -14,6 +15,9 @@
   summary_clusters,
   JACCARD_DISTANCE_F
 )
+}
+\value{
+An object of class \code{\link{ClustAllObject-class}}
 }
 \description{
 constuctor for \code{\link{ClustAllObject-class}}

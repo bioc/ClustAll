@@ -1,10 +1,11 @@
 Package: ClustAll
 Type: Package
-Title: ClustAll: Data driven strategy in order to find hidden subgroups
-        of patients with complex diseases
-Version: 1.0.0
+Title:  ClustAll: Data driven strategy to find groups
+        of patients within complex diseases
+Version: 0.99.0
 Authors@R: c(person("Asier", "Ortega-Legarreta", role = c("aut","cre"),  
-           email = "aortegal@navarra.es"),
+           email = "aortegal@navarra.es", 
+           comment = c(ORCID = "0009-0000-3563-5362")),
            person("Sara", "Palomino-Echeverria", role = c("aut"),  
            email = "spalomie@navarra.es"))
 Imports: FactoMineR, bigstatsr, clValid, clusteval, doSNOW,
@@ -12,9 +13,12 @@ Imports: FactoMineR, bigstatsr, clValid, clusteval, doSNOW,
         methods, ComplexHeatmap, RColorBrewer, circlize, ggplot2, grid,
         stats, utils
 Suggests: knitr
-Description: Data driven strategy in order to find hidden subgroups of patients with complex diseases.  
-            ClustALL also facilitates the unsupervised identification of multiple and robust stratifications.
-            ClustALL, able to overcome the limitations of previously available stratification methods. 
+Description: Data driven strategy to find hidden groups of patients with complex
+        diseases using clinical data. ClustAll facilitates the unsupervised 
+        identification of multiple robust stratifications. ClustAll, is able to 
+        overcome the most common limitations found when dealing with clinical 
+        data (missing values, correlated data, mixed data types). 
+Depends: R (>= 4.2.0)
 License: GPL-2
 Encoding: UTF-8
 biocViews: Software, StatisticalMethod, Clustering, DimensionReduction,

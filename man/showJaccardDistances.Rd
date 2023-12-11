@@ -3,7 +3,8 @@
 \name{showJaccardDistances}
 \alias{showJaccardDistances}
 \alias{showJaccardDistances,ClustAllObject-method}
-\title{Retrieve the matrix with Jaccard distances from ClustAllObject}
+\title{Retrieve the matrix with the Jaccard distances derived from the robust
+populations stratifications in ClustAllObject}
 \usage{
 showJaccardDistances(Object)
 }
@@ -11,10 +12,14 @@ showJaccardDistances(Object)
 \item{Object}{\code{\link{ClustAllObject-class}} object}
 }
 \value{
-Matrix with Jaccard distances or NULL if runClustAll method have not been runned
+Matrix containing the Jaccard distances derived from the robust
+populations stratifications or NULL if runClustAll method has not been
+executed yet
 }
 \description{
-Generic function to retrieve the matrix with Jaccard distances results of \code{\link{runClustAll}} from a \code{\link{ClustAllObject-class}} object
+Generic function to retrieve the matrix with the Jaccard distances derived
+from the robust populations stratifications in\code{\link{runClustAll}} from
+a \code{\link{ClustAllObject-class}} object
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")

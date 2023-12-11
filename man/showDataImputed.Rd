@@ -11,10 +11,12 @@ showDataImputed(Object)
 \item{Object}{\code{\link{ClustAllObject-class}} object}
 }
 \value{
-Mids class object with the imputed data or NULL if no imputations have been made
+Mids class object with the imputed data or NULL if imputation was
+not required
 }
 \description{
-Generic function to retrieve the imputed data obtained in \code{\link{createClustAll}} from a \code{\link{ClustAllObject-class}} object
+Generic function to retrieve the imputed data obtained in
+\code{\link{createClustAll}} from a \code{\link{ClustAllObject-class}} object
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")
@@ -24,5 +26,6 @@ obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
 showDataImputed(obj_noNA)
 }
 \seealso{
-\code{\link{createClustAll}}, \code{\link{ClustAllObject-class}}, \code{\link{runClustAll}}
+\code{\link{createClustAll}}, \code{\link{ClustAllObject-class}},
+\code{\link{runClustAll}}
 }

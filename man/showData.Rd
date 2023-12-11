@@ -14,7 +14,8 @@ showData(Object)
 The Data Frame with the initial data
 }
 \description{
-Generic function to retrieve the initial data used for \code{\link{createClustAll}} from a \code{\link{ClustAllObject-class}} object
+Generic function to retrieve the initial data used for
+\code{\link{createClustAll}} from a \code{\link{ClustAllObject-class}} object
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")
@@ -24,5 +25,6 @@ obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
 showData(obj_noNA)
 }
 \seealso{
-\code{\link{createClustAll}}, \code{\link{ClustAllObject-class}}, \code{\link{runClustAll}}
+\code{\link{createClustAll}}, \code{\link{ClustAllObject-class}},
+\code{\link{runClustAll}}
 }

@@ -3,24 +3,28 @@
 \name{plotJACCARD}
 \alias{plotJACCARD}
 \alias{plotJACCARD,ClustAllObject-method}
-\title{Plots correlation Jaccard Distances from ClustAllObject}
+\title{Correlation matrix heatmap showing the Jaccard distance between
+robust stratifications in the ClustAllObject}
 \usage{
 plotJACCARD(Object,
-       paint=TRUE,
-       stratification_similarity=0.7)
+                   paint=TRUE,
+                   stratification_similarity=0.7)
 }
 \arguments{
 \item{Object}{\code{\link{ClustAllObject-class}} object}
 
-\item{paint}{Logical vector to paint the different group of clusters in the plot}
+\item{paint}{Logical vector with the annotation for the different
+stratifications}
 
-\item{stratification_similarity}{the minimum values to consider two groups similar in Jaccard distances. As default 0.7.}
+\item{stratification_similarity}{The minimum Jaccard Distance value to
+consider two stratifications similar. Default is 0.7.}
 }
 \value{
 plot
 }
 \description{
-This function plots the correlation Jaccard Distances
+This function plots the correlation matrix heatmap showing the Jaccard
+Distance between robust stratifications
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")
@@ -31,5 +35,6 @@ plotJACCARD(obj_noNA1, paint = TRUE, stratification_similarity = 0.88)
 
 }
 \seealso{
-\code{\link{resStratification}},\code{\link{cluster2data}},\code{\link{ClustAllObject-class}}
+\code{\link{resStratification}},\code{\link{cluster2data}},
+\code{\link{ClustAllObject-class}}
 }

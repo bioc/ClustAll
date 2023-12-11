@@ -3,7 +3,8 @@
 \name{plotSANKEY}
 \alias{plotSANKEY}
 \alias{plotSANKEY,ClustAllObject-method}
-\title{Plots Sankey diagram from two selected groups from ClustAllObject}
+\title{Plots Sankey Diagram showing the cluster distribution and shifts
+between a pair of stratifications derived from ClustAllObject}
 \usage{
 plotSANKEY(Object,
                   clusters)
@@ -11,26 +12,31 @@ plotSANKEY(Object,
 \arguments{
 \item{Object}{\code{\link{ClustAllObject-class}} object}
 
-\item{clusters}{Character vector with the names of two clusters. Check resStratification to obtain stratification names.}
+\item{clusters}{Character vector with the names of a pair of stratifications.
+Check resStratification to obtain the stratification names.}
 
-\item{validationData}{Logical value to use validation data to compare with the selected stratification}
+\item{validationData}{Logical value to use original labelling data to compare
+with the ClustALL selected stratification.}
 }
 \value{
 plot
 }
 \description{
-This function plots the Sankey diagram of two selected clusters
+This function plots the Sankey Diagram with the cluster distribution and
+shifts between a pair of stratifications
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")
 wdbc <- wdbc[,-c(1,2)]
 obj_noNA <- createClustAll(data = wdbc)
 obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
-resStratification(Object = obj_noNA1, population = 0.05, stratification_similarity = 0.88, all = FALSE)
+resStratification(Object = obj_noNA1, population = 0.05,
+                  stratification_similarity = 0.88, all = FALSE)
 plotSANKEY(Object = obj_noNA1, clusters = c("cuts_c_3","cuts_a_9"))
 plotSANKEY(Object = obj_noNA1, clusters = c("cuts_c_3","cuts_b_13"))
 
 }
 \seealso{
-\code{\link{resStratification}},\code{\link{cluster2data}},\code{\link{ClustAllObject-class}}
+\code{\link{resStratification}},\code{\link{cluster2data}},
+\code{\link{ClustAllObject-class}}
 }

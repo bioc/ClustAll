@@ -3,29 +3,34 @@
 \name{runClustAll}
 \alias{runClustAll}
 \alias{runClustAll,ClustAllObject-method,numericOrNA}
-\title{ClustAll: pipeline a data driven strategy in order to find hidden subgroups.}
+\title{ClustAll: Data driven strategy to find hidden subgroups of patients within
+complex diseases using clinical data}
 \usage{
 runClustAll(Object,
-       threads=1)
+                   threads=1,
+                   simplify=FALSE)
 }
 \arguments{
 \item{Object}{\code{\link{ClustAllObject-class}} object}
 
-\item{threads}{Numeric vector giving the number of cores to use}
+\item{threads}{Numeric vector that indicates the number of cores to use}
+
+\item{simplify}{if TRUE computes one out of four depths of the dendrogram}
 }
 \value{
 An object of class \code{\link{ClustAllObject-class}}
 }
 \description{
-This method runs the ClustALL algorithm
+This method runs the ClustAll pipeline
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")
 wdbc <- wdbc[,-c(1,2)]
 obj_noNA <- createClustAll(data = wdbc)
-obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
+obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8, simplify=TRUE)
 
 }
 \seealso{
-\code{\link{resStratification}},\code{\link{plotJACCARD}},\code{\link{cluster2data}},\code{\link{ClustAllObject-class}}
+\code{\link{resStratification}},\code{\link{plotJACCARD}},
+\code{\link{cluster2data}},\code{\link{ClustAllObject-class}}
 }
