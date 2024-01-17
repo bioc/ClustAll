@@ -169,4 +169,59 @@ printLogo <- function() {
     message("   / /___ / // /_/ /(__  )/ /_ / ___ | / /___ / /___   ")
     message("  /_____//_/ |__,_//____/ |__//_/  |_|/_____//_____/   ")
 }
+
+
+#' The following code has been adapted from the clusteval v0.1 package created
+#' by John A. Ramey.
+#' \url{https://cran.r-project.org/src/contrib/Archive/clusteval/}
+#' @author John A. Ramey
+#' @import Rcpp
+#' @useDynLib ClustAll
+cluster_similarity_adapt <- function(labels1, labels2,
+                                     similarity = c("jaccard", "rand"),
+                                     method = "independence") {
+  similarity <- match.arg(similarity)
+  method <- match.arg(method)
+
+  # Currently, we ignore the `method` argument and only use the similarity
+  # statistics derived under an independence assumption.
+  switch(similarity,
+         jaccard = jaccard_indep(labels1, labels2),
+         rand = rand_indep(labels1, labels2))
+}
+
+jaccard_indep <- function(labels1, labels2) {
+  com_table <- comembership_table(labels1, labels2)
+  jaccard_out <- with(com_table, n_11 / (n_11 + n_10 + n_01))
+
+  # In the case where 'labels1' and 'labels2' contain all singletons,the Jaccard
+  # coefficient results in the expression 0 / 0, which yields a NaN value in R.
+  # We define such cases as 0.
+  if (is.nan(jaccard_out)) {
+    warning("The two clusterings contain all singletons -- returning 0.")
+    jaccard_out <- 0
+  }
+  jaccard_out
+}
+
+rand_indep <- function(labels1, labels2) {
+  com_table <- comembership_table(labels1, labels2)
+  with(com_table, (n_11 + n_00) / (n_11 + n_10 + n_01 + n_00))
+}
+
+#' @references Tibshirani, R. and  Walther, G. (2005). Cluster Validation by
+#' Prediction Strength. Journal of Computational and Graphical Statistics, 14,3,
+#' 511-528. \url{http://amstat.tandfonline.com/doi/abs/10.1198/106186005X59243}.
+comembership_table <- function(labels1, labels2) {
+  if (length(labels1) != length(labels2)) {
+    stop("The two vectors of cluster labels must be of equal length.");
+  }
+
+  .Call("rcpp_comembership_table", labels1, labels2, PACKAGE = "ClustAll")
+}
+
+comembership <- function(labels) {
+  .Call("rcpp_comembership", labels, PACKAGE = "ClustAll")
+}
+
 # END OF ClustAll_runClustAll_internal.R

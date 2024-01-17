@@ -1,6 +1,6 @@
 Package: ClustAll
 Type: Package
-Title:  ClustAll: Data driven strategy to find groups
+Title: ClustAll: Data driven strategy to find groups
         of patients within complex diseases
 Version: 0.99.0
 Authors@R: c(person("Asier", "Ortega-Legarreta", role = c("aut","cre"),  
@@ -8,10 +8,10 @@ Authors@R: c(person("Asier", "Ortega-Legarreta", role = c("aut","cre"),
            comment = c(ORCID = "0009-0000-3563-5362")),
            person("Sara", "Palomino-Echeverria", role = c("aut"),  
            email = "spalomie@navarra.es"))
-Imports: FactoMineR, bigstatsr, clValid, clusteval, doSNOW,
-        parallel, foreach, dplyr, fpc, mice, modeest, flock, networkD3,
-        methods, ComplexHeatmap, RColorBrewer, circlize, ggplot2, grid,
-        stats, utils
+Imports: FactoMineR, bigstatsr, clValid, doSNOW, parallel, foreach, dplyr, 
+        fpc, mice, modeest, flock, networkD3, methods, ComplexHeatmap, 
+        RColorBrewer, circlize, ggplot2, grid, stats, utils, Rcpp
+LinkingTo: Rcpp
 Suggests: knitr
 Description: Data driven strategy to find hidden groups of patients with complex
         diseases using clinical data. ClustAll facilitates the unsupervised 
@@ -23,7 +23,7 @@ License: GPL-2
 Encoding: UTF-8
 biocViews: Software, StatisticalMethod, Clustering, DimensionReduction,
            PrincipalComponent
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.0
 VignetteBuilder: knitr
 git_url: https://github.com/TranslationalBioinformaticsUnit/ClustAll
 NeedsCompilation: no

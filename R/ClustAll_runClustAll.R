@@ -491,9 +491,9 @@ setMethod(
         # clustered together.
         for(i in seq_len(nrow(JACCARD_DISTANCE))) {
             for(j in seq_len(nrow(JACCARD_DISTANCE))) {
-                JACCARD_DISTANCE[i,j] <- cluster_similarity(summary_clusters[[i]],
-                                                            summary_clusters[[j]],
-                                                            similarity="jaccard")
+                JACCARD_DISTANCE[i,j] <- cluster_similarity_adapt(summary_clusters[[i]],
+                                                                  summary_clusters[[j]],
+                                                                  similarity="jaccard")
             }
         }
 
