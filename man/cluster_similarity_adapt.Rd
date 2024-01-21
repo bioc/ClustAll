@@ -3,8 +3,8 @@
 \name{cluster_similarity_adapt}
 \alias{cluster_similarity_adapt}
 \title{The following code has been adapted from the clusteval v0.1 package created
-by John A. Ramey.
-\url{https://cran.r-project.org/src/contrib/Archive/clusteval/}}
+by John A. Ramey. https://cran.r-project.org/src/contrib/Archive/clusteval
+Also the rcpp_comembership and rcpp_comembership functions in C.}
 \usage{
 cluster_similarity_adapt(
   labels1,
@@ -13,11 +13,11 @@ cluster_similarity_adapt(
   method = "independence"
 )
 }
+\value{
+similarity value
+}
 \description{
 The following code has been adapted from the clusteval v0.1 package created
-by John A. Ramey.
-\url{https://cran.r-project.org/src/contrib/Archive/clusteval/}
-}
-\author{
-John A. Ramey
+by John A. Ramey. https://cran.r-project.org/src/contrib/Archive/clusteval
+Also the rcpp_comembership and rcpp_comembership functions in C.
 }

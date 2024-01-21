@@ -9,7 +9,6 @@
 #' @import clValid
 #' @import doSNOW
 #' @import foreach
-#' @import clusteval
 #' @import flock
 #' @importFrom parallel detectCores makeCluster stopCluster
 #' @importFrom methods is new validObject

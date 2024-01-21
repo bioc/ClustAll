@@ -172,11 +172,11 @@ printLogo <- function() {
 
 
 #' The following code has been adapted from the clusteval v0.1 package created
-#' by John A. Ramey.
-#' \url{https://cran.r-project.org/src/contrib/Archive/clusteval/}
-#' @author John A. Ramey
-#' @import Rcpp
+#' by John A. Ramey. https://cran.r-project.org/src/contrib/Archive/clusteval
+#' Also the rcpp_comembership and rcpp_comembership functions in C.
 #' @useDynLib ClustAll
+#' @import Rcpp
+#' @return similarity value
 cluster_similarity_adapt <- function(labels1, labels2,
                                      similarity = c("jaccard", "rand"),
                                      method = "independence") {

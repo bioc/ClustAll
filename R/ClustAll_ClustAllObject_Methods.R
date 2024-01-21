@@ -127,7 +127,6 @@ setMethod(
 )
 
 
-#' @import clusteval
 #' @title Show the stratification representatives from the ClustAllObject
 #' @aliases resStratification,ClustAllObject-method
 #' @description
