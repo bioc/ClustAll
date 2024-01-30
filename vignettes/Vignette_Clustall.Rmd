@@ -54,7 +54,7 @@ In addition, the package offers functions to:\
 between clusters if two candidate stratifications are compared.
 
 
-![](img/workflow.jpg)
+![](img/workflow.png)
 
 # Setup
 
