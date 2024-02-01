@@ -481,6 +481,19 @@ setMethod(
         # Jaccard Distance
         JACCARD_DISTANCE <- matrix(NA, length(summary_matrices_MEASURES),
                                         length(summary_matrices_MEASURES))
+
+        message("")
+        message("\nCalculating correlation distance matrix of the statifications...\n")
+        pb <- txtProgressBar(max=nimp, style=3)
+        progress <- function(n) setTxtProgressBar(pb, n)
+        opts <- list(progress=progress)
+
+        # Register the parallel backend
+        cl <- makeCluster(threads)
+        registerDoSNOW(cl)
+
+        # Create the matrix
+        JACCARD_DISTANCE <- matrix(NA, length(summary_matrices_MEASURES), length(summary_matrices_MEASURES))
         rownames(JACCARD_DISTANCE) <- names(summary_matrices_MEASURES)
         colnames(JACCARD_DISTANCE) <- rownames(JACCARD_DISTANCE)
 
@@ -488,14 +501,31 @@ setMethod(
         # in comemberships of the observations.
         # The comembership is defined as the pairs of observations that are
         # clustered together.
-        for(i in seq_len(nrow(JACCARD_DISTANCE))) {
-            for(j in seq_len(nrow(JACCARD_DISTANCE))) {
-                JACCARD_DISTANCE[i,j] <- cluster_similarity_adapt(summary_clusters[[i]],
-                                                                  summary_clusters[[j]],
-                                                                  similarity="jaccard")
-            }
+        JACCARD_DISTANCE <- foreach(i = 1:nrow(JACCARD_DISTANCE), .combine = 'rbind', .options.snow=opts) %dopar% {
+          result_row <- numeric(nrow(JACCARD_DISTANCE))
+          for (j in i:nrow(JACCARD_DISTANCE)) {
+            result_row[j] <- cluster_similarity_adapt(summary_clusters[[i]],
+                                                      summary_clusters[[j]],
+                                                      similarity = "jaccard")
+          }
+          result_row
         }
 
+        # Stop the parallel backend
+        stopCluster(cl)
+
+        # Convert the result to a matrix
+        JACCARD_DISTANCE <- as.matrix(JACCARD_DISTANCE)
+
+        # Copy the upper triangle to the lower triangle
+        JACCARD_DISTANCE[lower.tri(JACCARD_DISTANCE)] <- t(JACCARD_DISTANCE)[lower.tri(JACCARD_DISTANCE)]
+
+        # Optionally, set the diagonal to 1
+        diag(JACCARD_DISTANCE) <- 1
+
+        rownames(JACCARD_DISTANCE) <- names(summary_matrices_MEASURES)
+        colnames(JACCARD_DISTANCE) <- rownames(JACCARD_DISTANCE)
+        #-----------------------------------------------------------------------
         message("")
         message("\nFiltering non-robust statifications...\n")
 

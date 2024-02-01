@@ -10,8 +10,7 @@ Authors@R: c(person("Asier", "Ortega-Legarreta", role = c("aut","cre"),
            email = "spalomie@navarra.es"))
 Imports: FactoMineR, bigstatsr, clValid, doSNOW, parallel, foreach, dplyr, 
         fpc, mice, modeest, flock, networkD3, methods, ComplexHeatmap, 
-        RColorBrewer, circlize, ggplot2, grid, stats, utils, Rcpp
-LinkingTo: Rcpp
+        RColorBrewer, circlize, ggplot2, grid, stats, utils
 Suggests: knitr
 Description: Data driven strategy to find hidden groups of patients with complex
         diseases using clinical data. ClustAll facilitates the unsupervised 

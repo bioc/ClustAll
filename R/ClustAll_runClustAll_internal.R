@@ -171,12 +171,10 @@ printLogo <- function() {
 }
 
 
-#' The following code has been adapted from the clusteval v0.1 package created
-#' by John A. Ramey. https://cran.r-project.org/src/contrib/Archive/clusteval
-#' Also the rcpp_comembership and rcpp_comembership functions in C.
-#' @useDynLib ClustAll
-#' @import Rcpp
-#' @return similarity value
+# The following code has been adapted from the clusteval v0.1 package created
+# by John A. Ramey. https://cran.r-project.org/src/contrib/Archive/clusteval
+# Also the rcpp_comembership and rcpp_comembership functions in C have been
+# adapted to R
 cluster_similarity_adapt <- function(labels1, labels2,
                                      similarity = c("jaccard", "rand"),
                                      method = "independence") {
@@ -184,7 +182,7 @@ cluster_similarity_adapt <- function(labels1, labels2,
   method <- match.arg(method)
 
   # Currently, we ignore the `method` argument and only use the similarity
-  # statistics derived under an independence assumption.
+  # statistics derived under an independence assumption
   switch(similarity,
          jaccard = jaccard_indep(labels1, labels2),
          rand = rand_indep(labels1, labels2))
@@ -195,8 +193,8 @@ jaccard_indep <- function(labels1, labels2) {
   jaccard_out <- with(com_table, n_11 / (n_11 + n_10 + n_01))
 
   # In the case where 'labels1' and 'labels2' contain all singletons,the Jaccard
-  # coefficient results in the expression 0 / 0, which yields a NaN value in R.
-  # We define such cases as 0.
+  # coefficient results in the expression 0 / 0, which yields a NaN value in R
+  # We define such cases as 0
   if (is.nan(jaccard_out)) {
     warning("The two clusterings contain all singletons -- returning 0.")
     jaccard_out <- 0
@@ -211,17 +209,74 @@ rand_indep <- function(labels1, labels2) {
 
 #' @references Tibshirani, R. and  Walther, G. (2005). Cluster Validation by
 #' Prediction Strength. Journal of Computational and Graphical Statistics, 14,3,
-#' 511-528. \url{http://amstat.tandfonline.com/doi/abs/10.1198/106186005X59243}.
-comembership_table <- function(labels1, labels2) {
-  if (length(labels1) != length(labels2)) {
-    stop("The two vectors of cluster labels must be of equal length.");
+#' 511-528. \url{http://amstat.tandfonline.com/doi/abs/10.1198/106186005X59243}
+comembership <- function(labels) {
+  n <- length(labels)
+
+  # The comembership vector is of length "n choose 2"
+  comembership <- numeric(n * (n - 1) / 2)
+
+  # The comembership index
+  idx_comembership <- 1
+
+  # Traverse through all pairs of observations to identify comemberships
+  for (i in 1:(n - 1)) {
+    for (j in (i + 1):n) {
+      if (labels[i] == labels[j]) {
+        comembership[idx_comembership] <- 1
+      }
+      idx_comembership <- idx_comembership + 1
+    }
   }
 
-  .Call("rcpp_comembership_table", labels1, labels2, PACKAGE = "ClustAll")
+  return(comembership)
 }
 
-comembership <- function(labels) {
-  .Call("rcpp_comembership", labels, PACKAGE = "ClustAll")
+comembership_table <- function(labels1, labels2) {
+  n1 <- length(labels1)
+  n2 <- length(labels2)
+
+  if (n1 != n2) {
+    stop("The two vectors of cluster labels must be of equal length.")
+  }
+
+  # The counts of comembership pairs
+  # n_11: the number of comemberships in both partitions
+  # n_10: the number of comemberships in clustering 1 but not in clustering 2
+  # n_01: the number of comemberships in clustering 2 but not in clustering 1
+  # n_00: the number of non-comemberships in both partitions
+  n_11 <- 0
+  n_10 <- 0
+  n_01 <- 0
+  n_00 <- 0
+
+  # Flags that indicate if the current pair of cluster labels in clusterings 1
+  # and 2 are comemberships
+  comembership1 <- FALSE
+  comembership2 <- FALSE
+
+  # Traverse through all pairs of observations to identify comemberships
+  for (i in 1:(n1 - 1)) {
+    for (j in (i + 1):n1) {
+      # If either of the clusterings have a comembership, set the comembership
+      # flag as true.
+      comembership1 <- labels1[i] == labels1[j]
+      comembership2 <- labels2[i] == labels2[j]
+
+      if (comembership1 && comembership2) {
+        n_11 <- n_11 + 1
+      } else if (comembership1 && !comembership2) {
+        n_10 <- n_10 + 1
+      } else if (!comembership1 && comembership2) {
+        n_01 <- n_01 + 1
+      } else {  # if (!comembership1 && !comembership2)
+        n_00 <- n_00 + 1
+      }
+    }
+  }
+
+  # Returns a list that contains the 2x2 contingency table results
+  return(list(n_11 = n_11, n_10 = n_10, n_01 = n_01, n_00 = n_00))
 }
 
 # END OF ClustAll_runClustAll_internal.R

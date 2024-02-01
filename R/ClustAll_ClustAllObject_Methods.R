@@ -464,7 +464,7 @@ setMethod(
         sensitivity <- res[3]/(res[3]+res[4])
         specifity <- res[2]/(res[2]+res[1])
         showRes <- c(sensitivity, specifity)
-        names(showRes) <- c("sensitivity", "specifity")
+        names(showRes) <- c("sensitivity", "specificity")
 
         return(showRes)
     }

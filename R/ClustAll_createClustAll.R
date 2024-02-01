@@ -1,5 +1,4 @@
 # createClustAll ---------------------------------------------------------------
-#' @import mice
 #' @title Creates ClustAllObject and perform imputations to deal with missing
 #' values
 #' @aliases createClustAll,ClustAllObject-method,missOrNumeric,midsOrNA
@@ -50,7 +49,7 @@ setMethod(
     signature=signature(
         data="data.frame",
         nImputation="numericOrNA",
-        dataImputed="midsOrNA",
+        dataImputed="ANY",
         colValidation="characterOrNA"),
     definition=function(data, nImputation=NULL,
                         dataImputed=NULL, colValidation=NULL) {

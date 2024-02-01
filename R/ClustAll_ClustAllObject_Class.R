@@ -1,7 +1,4 @@
 # setClassUnion includes the new classes defined -------------------------------
-#' @import mice
-setClassUnion("midsOrNULL", c("mids", "NULL"))
-setClassUnion("midsOrNA", c("mids", "missing", "NULL"))
 setClassUnion("listOrNULL", c("list", "NULL", "missing"))
 setClassUnion("numericOrNA", c("numeric", "missing", "NULL"))
 setClassUnion("characterOrNA", c("character", "missing", "NULL"))
@@ -18,7 +15,7 @@ setClassUnion("numericOrCharacter", c("numeric", "character"))
 #' @slot data Data Frame of the data used. Maybe modified from the input
 #' data.
 #' @slot dataOriginal Data Frame of the original data introduced.
-#' @slot dataImputed midsOrNULL. Mids object derived from the
+#' @slot dataImputed  Mids object derived from the
 #' mice package that stores the imputed data, in case
 #' imputation was applied. Otherwise NULL.
 #' @slot dataValidation labelling numericOrNA. Original data labelling.
@@ -37,7 +34,7 @@ setClass(
     slots=list(
         data="data.frame",
         dataOriginal="data.frame",
-        dataImputed="midsOrNULL",
+        dataImputed="ANY",
         dataValidation="numericOrNA",
         nImputation ="numeric",
         processed="logical",
