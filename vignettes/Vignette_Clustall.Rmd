@@ -437,7 +437,7 @@ data("BreastCancerWisconsinMISSING", package = "ClustAll")
 data_use_NA <- wdbcNA
 colSums(is.na(data_use_NA)) # dataset present NAs
 
-obj_NA <- createClustAll(data_use_NA, nImputation = 2,  
+obj_NA <- createClustAll(data_use_NA, nImputation = 5,  
                          colValidation = "Diagnosis") 
 
 # The rest of the pipeline follows as a)
@@ -445,41 +445,25 @@ obj_NA <- createClustAll(data_use_NA, nImputation = 2,
 
 #### 3.2.2 Execute the ClustAll algorithm
 
-```{r, results=FALSE}
+```{r, eval=FALSE}
 obj_NA1 <- runClustAll(obj_NA, threads = 8) 
-```
 
-#### 3.3.3 Represent the Jaccard Distance between population-robust stratifications
-
-```{r, results=FALSE, warning=FALSE}
+# Represent the Jaccard Distance between population-robust stratifications
 plotJACCARD(Object = obj_NA1, stratification_similarity = 0.88)
-```
 
-#### 3.3.4 Retrieve stratification representatives
-
-```{r}
+# Retrieve stratification representatives
 resStratification(Object = obj_NA1, population = 0.05, 
                   stratification_similarity = 0.88, all = FALSE)
-```
-
-#### 3.2.5 Generate Sankey diagrams comparing pairs of stratifications, or a stratification with true labels
-
-```{r}
+# Generate Sankey diagrams comparing pairs of stratifications, or a stratification with true labels
 plotSANKEY(Object = obj_noNA1, clusters = c("cuts_a_2","cuts_c_8"), validationData = FALSE)
-```
 
-#### 3.2.6 Retrieve the original dataset with the selected ClustAll stratification(s)
-
-```{r}
+# Retrieve the original dataset with the selected ClustAll stratification(s)
 df_NA <- cluster2data(Object = obj_NA1, clusterName = c("cuts_a_2"))
-```
 
-#### 3.2.7 Assess the results the sensitivity and specifity of the selected ClustAll stratifications against true labels (if available)
-
-```{r}
-# STRATIFICATION 1
+# Assess the results the sensitivity and specifity of the selected ClustAll stratifications against true labels (if available)
 validateStratification(obj_noNA1, "cuts_a_9")
 ```
+
 
 ### 3.3 Scenario 3: Dataset with missing values and imputation performed externally
 
