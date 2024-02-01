@@ -1,5 +1,4 @@
 # createClustAll ---------------------------------------------------------------
-#' @import mice
 #' @title Creates ClustAllObject and perform imputations to deal with missing
 #' values
 #' @aliases createClustAll,ClustAllObject-method,missOrNumeric,midsOrNA
@@ -40,54 +39,54 @@
 #'
 #' @export
 setGeneric(
-    name="createClustAll",
-    def=function(data, nImputation=NULL, dataImputed=NULL, colValidation=NULL)
-        {standardGeneric("createClustAll")}
+  name="createClustAll",
+  def=function(data, nImputation=NULL, dataImputed=NULL, colValidation=NULL)
+  {standardGeneric("createClustAll")}
 )
 
 setMethod(
-    f="createClustAll",
-    signature=signature(
-        data="data.frame",
-        nImputation="numericOrNA",
-        dataImputed="midsOrNA",
-        colValidation="characterOrNA"),
-    definition=function(data, nImputation=NULL,
-                        dataImputed=NULL, colValidation=NULL) {
-        dataOriginal <- data
-        if (is.null(dataImputed)) {imputedNull <- TRUE} else {imputedNull <- FALSE}
-        if (is.null(nImputation)) {nImputation <- 0}
-        data <- checkDataIntroduced(data)
-        nImputation <- validnImputation(nImputation, imputedNull)
+  f="createClustAll",
+  signature=signature(
+    data="data.frame",
+    nImputation="numericOrNA",
+    dataImputed="ANY",
+    colValidation="characterOrNA"),
+  definition=function(data, nImputation=NULL,
+                      dataImputed=NULL, colValidation=NULL) {
+    dataOriginal <- data
+    if (is.null(dataImputed)) {imputedNull <- TRUE} else {imputedNull <- FALSE}
+    if (is.null(nImputation)) {nImputation <- 0}
+    data <- checkDataIntroduced(data)
+    nImputation <- validnImputation(nImputation, imputedNull)
 
-        if (!is.null(colValidation)) {
-            checkColumn(data, colValidation)
-            dataValidation <- data[, colValidation]
-            data <- subset(data, select = -which(colnames(data)==colValidation))
-        } else {
-            dataValidation <- NULL
-        }
+    if (!is.null(colValidation)) {
+      checkColumn(data, colValidation)
+      dataValidation <- data[, colValidation]
+      data <- subset(data, select = -which(colnames(data)==colValidation))
+    } else {
+      dataValidation <- NULL
+    }
 
-        if (validData(data, nImputation, dataImputed)) {nImputation <- 0}
-        if (nImputation == 0 & is.null(dataImputed)) {
-            dataImputed <- NULL
-        } else if (is.null(dataImputed)) {
-            message("Running default multiple imputation method.")
-            message("For more information check mice package.")
-            dataImputed <- mice(data, m=nImputation, maxit=5, seed=1234)
-        } else if (!is.null(dataImputed)) {
-            # check the imputed data
-            if (validDataImputed(data=data, dataImputed=dataImputed,
-                                    dataOriginal=dataOriginal)) {
-                nImputation <- dataImputed$m
-            }
-        }
-        clustAllObj <- new("ClustAllObject",data=data,dataOriginal=dataOriginal,
-                            dataImputed=dataImputed, nImputation=nImputation,
-                            dataValidation=dataValidation)
+    if (validData(data, nImputation, dataImputed)) {nImputation <- 0}
+    if (nImputation == 0 & is.null(dataImputed)) {
+      dataImputed <- NULL
+    } else if (is.null(dataImputed)) {
+      message("Running default multiple imputation method.")
+      message("For more information check mice package.")
+      dataImputed <- mice(data, m=nImputation, maxit=5, seed=1234)
+    } else if (!is.null(dataImputed)) {
+      # check the imputed data
+      if (validDataImputed(data=data, dataImputed=dataImputed,
+                           dataOriginal=dataOriginal)) {
+        nImputation <- dataImputed$m
+      }
+    }
+    clustAllObj <- new("ClustAllObject",data=data,dataOriginal=dataOriginal,
+                       dataImputed=dataImputed, nImputation=nImputation,
+                       dataValidation=dataValidation)
     message("\nClustALL object created successfully. You can use runClustAll.")
 
-        return(clustAllObj)
-    }
+    return(clustAllObj)
+  }
 )
 # END OF ClustAll_createClustAll.R

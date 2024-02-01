@@ -16,7 +16,7 @@ data.}
 
 \item{\code{dataOriginal}}{Data Frame of the original data introduced.}
 
-\item{\code{dataImputed}}{midsOrNULL. Mids object derived from the
+\item{\code{dataImputed}}{Mids object derived from the
 mice package that stores the imputed data, in case
 imputation was applied. Otherwise NULL.}
 

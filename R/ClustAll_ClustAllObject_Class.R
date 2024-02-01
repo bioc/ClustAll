@@ -1,7 +1,4 @@
 # setClassUnion includes the new classes defined -------------------------------
-#' @import mice
-setClassUnion("midsOrNULL", c("mids", "NULL"))
-setClassUnion("midsOrNA", c("mids", "missing", "NULL"))
 setClassUnion("listOrNULL", c("list", "NULL", "missing"))
 setClassUnion("numericOrNA", c("numeric", "missing", "NULL"))
 setClassUnion("characterOrNA", c("character", "missing", "NULL"))
@@ -18,7 +15,7 @@ setClassUnion("numericOrCharacter", c("numeric", "character"))
 #' @slot data Data Frame of the data used. Maybe modified from the input
 #' data.
 #' @slot dataOriginal Data Frame of the original data introduced.
-#' @slot dataImputed midsOrNULL. Mids object derived from the
+#' @slot dataImputed  Mids object derived from the
 #' mice package that stores the imputed data, in case
 #' imputation was applied. Otherwise NULL.
 #' @slot dataValidation labelling numericOrNA. Original data labelling.
@@ -33,17 +30,17 @@ setClassUnion("numericOrCharacter", c("numeric", "character"))
 #' pipeline has been executed previously. Otherwise NULL.
 #' @export
 setClass(
-    Class="ClustAllObject",
-    slots=list(
-        data="data.frame",
-        dataOriginal="data.frame",
-        dataImputed="midsOrNULL",
-        dataValidation="numericOrNA",
-        nImputation ="numeric",
-        processed="logical",
-        summary_clusters="listOrNULL",
-        JACCARD_DISTANCE_F="matrixOrNULL"
-        )
+  Class="ClustAllObject",
+  slots=list(
+    data="data.frame",
+    dataOriginal="data.frame",
+    dataImputed="ANY",
+    dataValidation="numericOrNA",
+    nImputation ="numeric",
+    processed="logical",
+    summary_clusters="listOrNULL",
+    JACCARD_DISTANCE_F="matrixOrNULL"
+  )
 )
 
 
@@ -53,29 +50,29 @@ setClass(
 #' @return An object of class \code{\link{ClustAllObject-class}}
 
 setMethod(
-    f="initialize",
-    signature="ClustAllObject",
-    function(.Object,
-            data,
-            dataOriginal,
-            dataImputed,
-            dataValidation,
-            nImputation,
-            processed,
-            summary_clusters,
-            JACCARD_DISTANCE_F) {
-        .Object@data <- data
-        .Object@dataOriginal <- data
-        .Object@dataImputed <- dataImputed
-        .Object@nImputation <- nImputation
-        .Object@dataValidation <- dataValidation
-        .Object@processed <- FALSE
-        .Object@summary_clusters <- NULL
-        .Object@JACCARD_DISTANCE_F <- NULL
-        validObject(.Object)
+  f="initialize",
+  signature="ClustAllObject",
+  function(.Object,
+           data,
+           dataOriginal,
+           dataImputed,
+           dataValidation,
+           nImputation,
+           processed,
+           summary_clusters,
+           JACCARD_DISTANCE_F) {
+    .Object@data <- data
+    .Object@dataOriginal <- data
+    .Object@dataImputed <- dataImputed
+    .Object@nImputation <- nImputation
+    .Object@dataValidation <- dataValidation
+    .Object@processed <- FALSE
+    .Object@summary_clusters <- NULL
+    .Object@JACCARD_DISTANCE_F <- NULL
+    validObject(.Object)
 
-        return(.Object)
-        }
+    return(.Object)
+  }
 )
 
 
@@ -100,18 +97,18 @@ setMethod(
 #' showData(obj_noNA)
 #' @export
 setGeneric(
-    name="showData",
-    def=function(Object){standardGeneric("showData")}
+  name="showData",
+  def=function(Object){standardGeneric("showData")}
 )
 
 setMethod(
-    f="showData",
-    signature=signature(
-        Object="ClustAllObject"),
-    definition=function(Object) {
+  f="showData",
+  signature=signature(
+    Object="ClustAllObject"),
+  definition=function(Object) {
 
-        return(Object@data)
-    }
+    return(Object@data)
+  }
 )
 
 
@@ -134,17 +131,17 @@ setMethod(
 #' showDataImputed(obj_noNA)
 #' @export
 setGeneric(
-    name="showDataImputed",
-    def=function(Object){standardGeneric("showDataImputed")}
+  name="showDataImputed",
+  def=function(Object){standardGeneric("showDataImputed")}
 )
 
 setMethod(
-    f="showDataImputed",
-    signature=signature(
-        Object="ClustAllObject"),
-    definition=function(Object) {
-        return(Object@dataImputed)
-    }
+  f="showDataImputed",
+  signature=signature(
+    Object="ClustAllObject"),
+  definition=function(Object) {
+    return(Object@dataImputed)
+  }
 )
 
 
@@ -168,18 +165,18 @@ setMethod(
 #' showNumberImputations(obj_noNA)
 #' @export
 setGeneric(
-    name="showNumberImputations",
-    def=function(Object){standardGeneric("showNumberImputations")}
+  name="showNumberImputations",
+  def=function(Object){standardGeneric("showNumberImputations")}
 )
 
 setMethod(
-    f="showNumberImputations",
-    signature=signature(
-        Object="ClustAllObject"),
-    definition=function(Object) {
+  f="showNumberImputations",
+  signature=signature(
+    Object="ClustAllObject"),
+  definition=function(Object) {
 
-        return(Object@nImputation)
-    }
+    return(Object@nImputation)
+  }
 )
 
 
@@ -206,17 +203,17 @@ setMethod(
 #' showSummaryClusters(obj_noNA)
 #' @export
 setGeneric(
-    name="showSummaryClusters",
-    def=function(Object){standardGeneric("showSummaryClusters")}
+  name="showSummaryClusters",
+  def=function(Object){standardGeneric("showSummaryClusters")}
 )
 
 setMethod(
-    f="showSummaryClusters",
-    signature=signature(
-        Object="ClustAllObject"),
-    definition=function(Object) {
-        return(Object@summary_clusters)
-    }
+  f="showSummaryClusters",
+  signature=signature(
+    Object="ClustAllObject"),
+  definition=function(Object) {
+    return(Object@summary_clusters)
+  }
 )
 
 
@@ -242,18 +239,18 @@ setMethod(
 #' showJaccardDistances(obj_noNA1)
 #' @export
 setGeneric(
-    name="showJaccardDistances",
-    def=function(Object){standardGeneric("showJaccardDistances")}
+  name="showJaccardDistances",
+  def=function(Object){standardGeneric("showJaccardDistances")}
 )
 
 setMethod(
-    f="showJaccardDistances",
-    signature=signature(
-        Object="ClustAllObject"),
-    definition=function(Object) {
+  f="showJaccardDistances",
+  signature=signature(
+    Object="ClustAllObject"),
+  definition=function(Object) {
 
-        return(Object@JACCARD_DISTANCE_F)
-    }
+    return(Object@JACCARD_DISTANCE_F)
+  }
 )
 
 
@@ -276,18 +273,18 @@ setMethod(
 #' isProcessed(obj_noNA1)
 #' @export
 setGeneric(
-    name="isProcessed",
-    def=function(Object){standardGeneric("isProcessed")}
+  name="isProcessed",
+  def=function(Object){standardGeneric("isProcessed")}
 )
 
 setMethod(
-    f="isProcessed",
-    signature=signature(
-        Object="ClustAllObject"),
-    definition=function(Object) {
+  f="isProcessed",
+  signature=signature(
+    Object="ClustAllObject"),
+  definition=function(Object) {
 
-        return(Object@processed)
-    }
+    return(Object@processed)
+  }
 )
 
 
@@ -309,18 +306,18 @@ setMethod(
 #' showValidationData(obj_noNA1)
 #' @export
 setGeneric(
-    name="showValidationData",
-    def=function(Object){standardGeneric("showValidationData")}
+  name="showValidationData",
+  def=function(Object){standardGeneric("showValidationData")}
 )
 
 setMethod(
-    f="showValidationData",
-    signature=signature(
-        Object="ClustAllObject"),
-    definition=function(Object) {
+  f="showValidationData",
+  signature=signature(
+    Object="ClustAllObject"),
+  definition=function(Object) {
 
-        return(Object@dataValidation)
-    }
+    return(Object@dataValidation)
+  }
 )
 
 
@@ -342,33 +339,33 @@ setMethod(
 #' obj_noNA1 <- addValidationData(Object = obj_noNA, dataValidation = wdbc$Diagnosis)
 #' @export
 setGeneric(
-    name="addValidationData",
-    def=function(Object, dataValidation){standardGeneric("addValidationData")}
+  name="addValidationData",
+  def=function(Object, dataValidation){standardGeneric("addValidationData")}
 )
 
 setMethod(
-    f="addValidationData",
-    signature=signature(
-        Object="ClustAllObject",
-        dataValidation="numericOrCharacter"),
-    definition=function(Object, dataValidation) {
+  f="addValidationData",
+  signature=signature(
+    Object="ClustAllObject",
+    dataValidation="numericOrCharacter"),
+  definition=function(Object, dataValidation) {
 
-        if (!is.null(Object@dataValidation)) {
-            message("The object already has a labelling.")
-            message("Rewriting the labelling data...")
-        }
-
-        dataValidation <- checkVectorIntroduced(dataValidation)
-
-        if (length(dataValidation) != nrow(Object@data)) {
-            message("The introduced data  and the original data labelling have different lenghts.")
-            message("Make sure the introduced data is correct.")
-            stop()
-        }
-
-        Object@dataValidation <- dataValidation
-        return(Object)
+    if (!is.null(Object@dataValidation)) {
+      message("The object already has a labelling.")
+      message("Rewriting the labelling data...")
     }
+
+    dataValidation <- checkVectorIntroduced(dataValidation)
+
+    if (length(dataValidation) != nrow(Object@data)) {
+      message("The introduced data  and the original data labelling have different lenghts.")
+      message("Make sure the introduced data is correct.")
+      stop()
+    }
+
+    Object@dataValidation <- dataValidation
+    return(Object)
+  }
 )
 
 # END OF ClustAll_ClustAllObject_Class.R
