@@ -1,18 +1,15 @@
 ---
-title: "ClustAll-Vignette"
-output:
-  html_document: default
-  pdf_document: default
+title: "ClustALL User's Guide"
+output: html_document
 vignette: >
-    %% \VignetteIndexEntry{ClustALL User's Guide}
-    %% \VignetteEngine{knitr::rmarkdown}
-date: "2024-01-28"
-editor_options: 
-  markdown: 
-    wrap: 72
+  %\VignetteIndexEntry{ClustALL User's Guide}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
 ---
 
+
 ```{r, include = FALSE}
+BiocStyle::markdown()
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -382,7 +379,7 @@ str(obj_noNA)
 
 ```{r, results=FALSE}
 # Considering all the depths of the dendrogram, otherwise set simplify to TRUE
-obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8, simplify = FALSE)
+obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 2, simplify = FALSE)
 ```
 
 #### 3.2.3 Represent the Jaccard Distance between population-robust stratifications
@@ -412,7 +409,7 @@ plotSANKEY(Object = obj_noNA1, clusters = c("cuts_a_9"), validationData = TRUE)
 
 ```{r}
 df <- cluster2data(Object = obj_noNA1, 
-                   clusterName = c("cuts_c_3","cuts_a_9","cuts_b_9"))
+                   stratificationName = c("cuts_c_3","cuts_a_9","cuts_b_9"))
 ```
 
 #### 3.2.7 Assess the results the sensitivity and specifity of the selected ClustAll stratifications against true labels (if available)
@@ -446,7 +443,7 @@ obj_NA <- createClustAll(data_use_NA, nImputation = 2,
 #### 3.2.2 Execute the ClustAll algorithm
 
 ```{r, results=FALSE}
-obj_NA1 <- runClustAll(obj_NA, threads = 8) 
+obj_NA1 <- runClustAll(obj_NA, threads = 2) 
 ```
 
 #### 3.3.3 Represent the Jaccard Distance between population-robust stratifications
@@ -471,7 +468,7 @@ plotSANKEY(Object = obj_noNA1, clusters = c("cuts_a_2","cuts_c_8"), validationDa
 #### 3.2.6 Retrieve the original dataset with the selected ClustAll stratification(s)
 
 ```{r}
-df_NA <- cluster2data(Object = obj_NA1, clusterName = c("cuts_a_2"))
+df_NA <- cluster2data(Object = obj_NA1, stratificationName = c("cuts_a_2"))
 ```
 
 #### 3.2.7 Assess the results the sensitivity and specifity of the selected ClustAll stratifications against true labels (if available)
@@ -507,9 +504,9 @@ obj_imp1 <- createClustAll(data=data_use_NA, dataImputed = imp_data_use,
 
 #### 3.3.3 The rest of the pipeline follows as a)
 
-```{r, results=FALSE, warning=FALSE}
+```{r, results=FALSE, eval=FALSE}
 # The rest of the pipeline follows as a)
-obj_imp1 <- runClustAll(obj_imp1, threads = 8) 
+obj_imp1 <- runClustAll(obj_imp1, threads = 2) 
 
 # Represent the Jaccard Distance between population-robust stratifications
 plotJACCARD(Object = obj_imp1, stratification_similarity = 0.88)
@@ -522,7 +519,7 @@ resStratification(Object = obj_imp1, population = 0.05,
 plotSANKEY(Object = obj_imp1, clusters = c("cuts_c_19","cuts_a_8"), validationData = FALSE)
 
 # Retrieve the original dataset with the selected ClustAll stratification(s)
-df_imp <- cluster2data(Object = obj_imp1, clusterName = c("cuts_a_4"))
+df_imp <- cluster2data(Object = obj_imp1, stratificationName = c("cuts_a_4"))
 
 # Assess the results the sensitivity and specifity of the selected ClustAll stratifications against true labels (if available)
 validateStratification(obj_imp1, "cuts_a_9")

@@ -20,11 +20,12 @@ Generic function to retrieve the number of imputations in
 \code{\link{createClustAll}} from a \code{\link{ClustAllObject-class}} object
 }
 \examples{
+data("BreastCancerWisconsinMISSING", package = "ClustAll")
 data("BreastCancerWisconsin", package = "ClustAll")
-wdbc$Diagnosis <- as.numeric(as.factor(wdbc$Diagnosis))
-wdbc <- wdbc[,-c(1)] # delete patients IDs
-obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
-showNumberImputations(obj_noNA)
+wdbc <- subset(wdbc,select=-ID)
+obj_NA <- createClustAll(data = wdbcNA, colValidation = "Diagnosis",
+                         dataImputed = wdbcMIDS)
+showNumberImputations(obj_NA)
 }
 \seealso{
 \code{\link{createClustAll}}, \code{\link{ClustAllObject-class}},

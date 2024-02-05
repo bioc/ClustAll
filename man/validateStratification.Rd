@@ -2,11 +2,11 @@
 % Please edit documentation in R/ClustAll_ClustAllObject_Methods.R
 \name{validateStratification}
 \alias{validateStratification}
-\alias{validateStratification,ClustAllObject-method}
+\alias{validateStratification,ClustAllObject,characterOrNA-method}
 \title{validateStratification}
 \usage{
-cluster2data(Object,
-       stratificationName)
+validateStratification(Object,
+                              stratificationName)
 }
 \arguments{
 \item{Object}{\code{\link{ClustAllObject-class}} object}
@@ -24,12 +24,18 @@ using the method \code{\link{resStratification}}
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")
-wdbc$Diagnosis <- as.numeric(as.factor(wdbc$Diagnosis))
-wdbc <- wdbc[,-c(1)] # delete patients IDs
-obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
-obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
+label <- as.numeric(as.factor(wdbc$Diagnosis))
+wdbc <- subset(wdbc,select=c(-ID, -Diagnosis))
+wdbc <- wdbc[1:15,1:8]
+label <- label[16:30]
+obj_noNA <- createClustAll(data = wdbc)
+obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 1, simplify = TRUE)
 resStratification(Object = obj_noNA1, population = 0.05,
                   stratification_similarity = 0.88, all = FALSE)
+obj_noNA1 <- addValidationData(Object = obj_noNA1,
+                               dataValidation = label)
+validateStratification(obj_noNA1, "cuts_a_1")
+
 }
 \seealso{
 \code{\link{resStratification}},\code{\link{plotJACCARD}},

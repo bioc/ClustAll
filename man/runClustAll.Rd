@@ -2,7 +2,7 @@
 % Please edit documentation in R/ClustAll_runClustAll.R
 \name{runClustAll}
 \alias{runClustAll}
-\alias{runClustAll,ClustAllObject-method,numericOrNA}
+\alias{runClustAll,ClustAllObject,numericOrNA,logicalOrNA-method}
 \title{ClustAll: Data driven strategy to find hidden subgroups of patients within
 complex diseases using clinical data}
 \usage{
@@ -25,10 +25,10 @@ This method runs the ClustAll pipeline
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")
-wdbc <- wdbc[,-c(1,2)]
+wdbc <- subset(wdbc,select=c(-ID, -Diagnosis))
+wdbc <- wdbc[1:15,1:8]
 obj_noNA <- createClustAll(data = wdbc)
-obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8, simplify=TRUE)
-
+obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 1, simplify = TRUE)
 }
 \seealso{
 \code{\link{resStratification}},\code{\link{plotJACCARD}},

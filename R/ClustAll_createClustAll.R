@@ -1,7 +1,7 @@
 # createClustAll ---------------------------------------------------------------
 #' @title Creates ClustAllObject and perform imputations to deal with missing
 #' values
-#' @aliases createClustAll,ClustAllObject-method,missOrNumeric,midsOrNA
+#' @aliases createClustAll,data.frame,numericOrNA,ANY,characterOrNA-method
 #' @description
 #' This pipeline creates the ClustAllObject and computes the imputations if the
 #' dataset contains missing values. The next step would be
@@ -26,21 +26,21 @@
 #' obj_noNA <- createClustAll(data = wdbc)
 #'
 #' # Scenario 2: data contains NAs and imputed data is provided automatically
-#' data("data_use", package = "ClustAll") # load example data
-#' obj_NA <- createClustAll(data_NA, nImputation = 5)
+#' data("BreastCancerWisconsinMISSING", package = "ClustAll") # load example data
+#' obj_NA <- createClustAll(wdbcNA, nImputation = 5)
 #'
 #' # Scenario 3: data contains NAs and imputed data is provided manually
-#' data("data_use", package = "ClustAll") # load the example data
-#' ini <- mice(data_use, maxit = 0, print = FALSE)
+#' data("BreastCancerWisconsinMISSING", package = "ClustAll") # load the example data
+#' ini <- mice::mice(wdbcNA, maxit = 0, print = FALSE)
 #' pred <- ini$pred # predictor matrix
-#' pred["bmi", c("tobacco", "alcohol", "PEnum")] <- 0 # example of how to remove predictors
-#' imp <- mice(data_use, m=5, pred=pred, maxit=5, seed=1234, print=FALSE)
-#' obj_imp <- createClustAll(data=data_use, dataImputed = imp)
+#' pred["radius1", c("perimeter1", "area1", "smoothness1")] <- 0 # example of how to remove predictors
+#' imp <- mice::mice(wdbcNA, m=5, pred=pred, maxit=5, seed=1234, print=FALSE)
+#' obj_imp <- createClustAll(data=wdbcNA, dataImputed = imp)
 #'
 #' @export
 setGeneric(
   name="createClustAll",
-  def=function(data, nImputation=NULL, dataImputed=NULL, colValidation=NULL)
+  def=function(data=data, nImputation=NULL, dataImputed=NULL, colValidation=NULL)
   {standardGeneric("createClustAll")}
 )
 
@@ -51,7 +51,7 @@ setMethod(
     nImputation="numericOrNA",
     dataImputed="ANY",
     colValidation="characterOrNA"),
-  definition=function(data, nImputation=NULL,
+  definition=function(data=data, nImputation=NULL,
                       dataImputed=NULL, colValidation=NULL) {
     dataOriginal <- data
     if (is.null(dataImputed)) {imputedNull <- TRUE} else {imputedNull <- FALSE}

@@ -2,16 +2,16 @@
 % Please edit documentation in R/ClustAll_ClustAllObject_Methods.R
 \name{cluster2data}
 \alias{cluster2data}
-\alias{cluster2data,ClustAllObject-method}
+\alias{cluster2data,ClustAllObject,character-method}
 \title{cluster2data}
 \usage{
 cluster2data(Object,
-                    clusterName)
+                    stratificationName)
 }
 \arguments{
 \item{Object}{\code{\link{ClustAllObject-class}} object}
 
-\item{clusterName}{Character vector with one or more stratification names}
+\item{stratificationName}{Character vector with one or more stratification names}
 }
 \value{
 data.frame
@@ -23,13 +23,14 @@ be obtained using the method. \code{\link{resStratification}}
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")
-wdbc <- wdbc[,-c(1,2)]
+wdbc <- subset(wdbc,select=c(-ID, -Diagnosis))
+wdbc <- wdbc[1:15,1:8]
 obj_noNA <- createClustAll(data = wdbc)
-obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
+obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 1, simplify = TRUE)
 resStratification(Object = obj_noNA1, population = 0.05,
                   stratification_similarity = 0.88, all = FALSE)
 df <- cluster2data(Object = obj_noNA1,
-                   clusterName = c("cuts_c_3","cuts_a_9","cuts_b_13"))
+                   stratificationName = c("cuts_a_1","cuts_b_5","cuts_a_5"))
 }
 \seealso{
 \code{\link{resStratification}},\code{\link{plotJACCARD}},

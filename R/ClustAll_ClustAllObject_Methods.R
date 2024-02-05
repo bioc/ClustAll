@@ -4,9 +4,10 @@
 #' @import RColorBrewer
 #' @import ggplot2
 #' @import grid
+#' @import grDevices
 #' @title Correlation matrix heatmap showing the Jaccard distance between
 #' robust stratifications in the ClustAllObject
-#' @aliases plotJACCARD,ClustAllObject-method
+#' @aliases plotJACCARD,ClustAllObject,logicalOrNA,numericOrNA-method
 #' @description
 #' This function plots the correlation matrix heatmap showing the Jaccard
 #' Distance between robust stratifications
@@ -26,11 +27,11 @@
 #'
 #' @examples
 #' data("BreastCancerWisconsin", package = "ClustAll")
-#' wdbc <- wdbc[,-c(1,2)]
+#' wdbc <- subset(wdbc,select=c(-ID, -Diagnosis))
+#' wdbc <- wdbc[1:15,1:8]
 #' obj_noNA <- createClustAll(data = wdbc)
-#' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
-#' plotJACCARD(obj_noNA1, paint = TRUE, stratification_similarity = 0.88)
-#'
+#' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 1, simplify = TRUE)
+#' plotJACCARD(obj_noNA1, paint = TRUE, stratification_similarity = 0.9)
 #' @export
 setGeneric(
   name="plotJACCARD",
@@ -62,7 +63,7 @@ setMethod(
 
     # Correlation matrix heatmap with the robust stratifications
     col_fun <- colorRamp2(c(0, 1),
-                          colors = colorRampPalette(brewer.pal(9,"Blues"))(25),
+                          colors = grDevices::colorRampPalette(brewer.pal(9,"Blues"))(25),
                           breaks=seq(0, 1, length.out = 25))
 
     legend <- HeatmapAnnotation(JACCARD_index = seq(0, 1,
@@ -128,7 +129,7 @@ setMethod(
 
 
 #' @title Show the stratification representatives from the ClustAllObject
-#' @aliases resStratification,ClustAllObject-method
+#' @aliases resStratification,ClustAllObject,numericOrNA,logicalOrNA,numericOrNA-method
 #' @description
 #' This function returns the stratifications representatives by keeping those
 #' clusters with a minimum percentage of the population. Default is 0.05.
@@ -154,9 +155,10 @@ setMethod(
 #'
 #' @examples
 #' data("BreastCancerWisconsin", package = "ClustAll")
-#' wdbc <- wdbc[,-c(1,2)]
+#' wdbc <- subset(wdbc,select=c(-ID, -Diagnosis))
+#' wdbc <- wdbc[1:15,1:8]
 #' obj_noNA <- createClustAll(data = wdbc)
-#' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
+#' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 1, simplify = TRUE)
 #' resStratification(Object = obj_noNA1, population = 0.05,
 #'                   stratification_similarity = 0.88, all = FALSE)
 #'
@@ -230,16 +232,16 @@ setMethod(
 
 
 #' @title cluster2data
-#' @aliases cluster2data,ClustAllObject-method
+#' @aliases cluster2data,ClustAllObject,character-method
 #' @description
 #' Returns the original data in a dataframe, including the selected robust
 #' stratification(s) as varaibles. The representative stratification names can
 #' be obtained using the method. \code{\link{resStratification}}
 #' @usage cluster2data(Object,
-#'                     clusterName)
+#'                     stratificationName)
 #'
 #' @param Object \code{\link{ClustAllObject-class}} object
-#' @param clusterName Character vector with one or more stratification names
+#' @param stratificationName Character vector with one or more stratification names
 #'
 #' @return data.frame
 #'
@@ -248,25 +250,26 @@ setMethod(
 #'
 #' @examples
 #' data("BreastCancerWisconsin", package = "ClustAll")
-#' wdbc <- wdbc[,-c(1,2)]
+#' wdbc <- subset(wdbc,select=c(-ID, -Diagnosis))
+#' wdbc <- wdbc[1:15,1:8]
 #' obj_noNA <- createClustAll(data = wdbc)
-#' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
+#' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 1, simplify = TRUE)
 #' resStratification(Object = obj_noNA1, population = 0.05,
 #'                   stratification_similarity = 0.88, all = FALSE)
 #' df <- cluster2data(Object = obj_noNA1,
-#'                    clusterName = c("cuts_c_3","cuts_a_9","cuts_b_13"))
+#'                    stratificationName = c("cuts_a_1","cuts_b_5","cuts_a_5"))
 #' @export
 setGeneric(
   name="cluster2data",
-  def=function(Object, clusterName){standardGeneric("cluster2data")}
+  def=function(Object, stratificationName){standardGeneric("cluster2data")}
 )
 
 setMethod(
   f="cluster2data",
   signature=signature(
     Object="ClustAllObject",
-    clusterName="character"),
-  definition=function(Object, clusterName) {
+    stratificationName="character"),
+  definition=function(Object, stratificationName) {
 
     if (isProcessed(Object) == FALSE) {
       message("The object is not processed. You need to run runClustAll.")
@@ -274,10 +277,10 @@ setMethod(
       stop()
     }
 
-    checkCluster(clusterName, Object@summary_clusters)
+    checkCluster(stratificationName, Object@summary_clusters)
 
     df <- Object@dataOriginal
-    df[, clusterName] <- Object@summary_clusters[clusterName]
+    df[, stratificationName] <- Object@summary_clusters[stratificationName]
 
     return(df)
   }
@@ -288,12 +291,13 @@ setMethod(
 #' @import dplyr
 #' @title Plots Sankey Diagram showing the cluster distribution and shifts
 #' between a pair of stratifications derived from ClustAllObject
-#' @aliases plotSANKEY,ClustAllObject-method
+#' @aliases plotSANKEY,ClustAllObject,character,logicalOrNA-method
 #' @description
 #' This function plots the Sankey Diagram with the cluster distribution and
 #' shifts between a pair of stratifications
 #' @usage plotSANKEY(Object,
-#'                   clusters)
+#'                   clusters,
+#'                   validationData=FALSE)
 #' @param Object \code{\link{ClustAllObject-class}} object
 #' @param clusters Character vector with the names of a pair of stratifications.
 #' Check resStratification to obtain the stratification names.
@@ -304,13 +308,18 @@ setMethod(
 #' \code{\link{ClustAllObject-class}}
 #' @examples
 #' data("BreastCancerWisconsin", package = "ClustAll")
-#' wdbc <- wdbc[,-c(1,2)]
+#' label <- as.numeric(as.factor(wdbc$Diagnosis))
+#' wdbc <- subset(wdbc,select=c(-ID, -Diagnosis))
+#' wdbc <- wdbc[1:15,1:8]
+#' label <- label[16:30]
 #' obj_noNA <- createClustAll(data = wdbc)
-#' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
+#' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 1, simplify = TRUE)
 #' resStratification(Object = obj_noNA1, population = 0.05,
 #'                   stratification_similarity = 0.88, all = FALSE)
-#' plotSANKEY(Object = obj_noNA1, clusters = c("cuts_c_3","cuts_a_9"))
-#' plotSANKEY(Object = obj_noNA1, clusters = c("cuts_c_3","cuts_b_13"))
+#' plotSANKEY(Object = obj_noNA1, clusters = c("cuts_a_1","cuts_b_5"))
+#'
+#' obj_noNA1 <- addValidationData(obj_noNA1, label)
+#' plotSANKEY(Object = obj_noNA1, clusters = "cuts_a_1", validationData=TRUE)
 #'
 #' @export
 setGeneric(
@@ -399,13 +408,13 @@ setMethod(
 
 
 #' @title validateStratification
-#' @aliases validateStratification,ClustAllObject-method
+#' @aliases validateStratification,ClustAllObject,characterOrNA-method
 #' @description
 #' Returns the sensitivity and specifity of the selected stratification the
 #' original lebelling. The representative stratification names can be obtained
 #' using the method \code{\link{resStratification}}
-#' @usage cluster2data(Object,
-#'        stratificationName)
+#' @usage validateStratification(Object,
+#'                               stratificationName)
 #'
 #' @param Object \code{\link{ClustAllObject-class}} object
 #' @param stratificationName Character vector with the name a stratification.
@@ -418,12 +427,18 @@ setMethod(
 #'
 #' @examples
 #' data("BreastCancerWisconsin", package = "ClustAll")
-#' wdbc$Diagnosis <- as.numeric(as.factor(wdbc$Diagnosis))
-#' wdbc <- wdbc[,-c(1)] # delete patients IDs
-#' obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
-#' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
+#' label <- as.numeric(as.factor(wdbc$Diagnosis))
+#' wdbc <- subset(wdbc,select=c(-ID, -Diagnosis))
+#' wdbc <- wdbc[1:15,1:8]
+#' label <- label[16:30]
+#' obj_noNA <- createClustAll(data = wdbc)
+#' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 1, simplify = TRUE)
 #' resStratification(Object = obj_noNA1, population = 0.05,
 #'                   stratification_similarity = 0.88, all = FALSE)
+#' obj_noNA1 <- addValidationData(Object = obj_noNA1,
+#'                                dataValidation = label)
+#' validateStratification(obj_noNA1, "cuts_a_1")
+#'
 #' @export
 setGeneric(
   name="validateStratification",

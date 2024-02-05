@@ -146,14 +146,14 @@ validDataImputed <- function(data, dataImputed, dataOriginal) {
             return(TRUE)
 
         } else {
-    message("The input data and the data used for imputation are different.")
-            message("Please, make sure you are using the same.")
-            stop()
+          message("The input data and the data used for imputation are different.")
+          message("Please, make sure you are using the same.")
+          stop()
         }
 
     } else {
         message("You must introduce mice::mice function output.")
-        messsage("For more information visit mice package.")
+        message("For more information visit mice package.")
         stop()
     }
 }

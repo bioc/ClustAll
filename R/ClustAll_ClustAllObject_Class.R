@@ -1,10 +1,63 @@
 # setClassUnion includes the new classes defined -------------------------------
+
+#' Class union of list, null or missing
+#' @title Class Union listOrNULL
+#' @aliases listOrNULL-class
+#' @name listOrNULL
+#' @description Contains either list, NULL or missing object
+#' @exportClass listOrNULL
+#' @export
 setClassUnion("listOrNULL", c("list", "NULL", "missing"))
+
+#' Class union of numeric, null or missing
+#' @title Class Union numericOrNA
+#' @aliases numericOrNA-class
+#' @name numericOrNA
+#' @description Contains either numeric, NULL or missing object
+#' @exportClass numericOrNA
+#' @export
 setClassUnion("numericOrNA", c("numeric", "missing", "NULL"))
+
+
+#' @title characterOrNA
+#' Class union of character, null or missing
+#' @aliases characterOrNA-class
+#' @name characterOrNA
+#' @description Contains either character, NULL or missing object
+#' @exportClass characterOrNA
+#' @export
 setClassUnion("characterOrNA", c("character", "missing", "NULL"))
+
+
+
+#' Class union of logical, null or missing
+#' @title logicalOrNA
+#' @aliases logicalOrNA-class
+#' @name logicalOrNA
+#' @description Contains either logical, NULL or missing object
+#' @exportClass logicalOrNA
+#' @export
 setClassUnion("logicalOrNA", c("logical", "missing", "NULL"))
+
+
+#' Class union of matrix, null or missing
+#' @title matrixOrNULL
+#' @aliases matrixOrNULL-class
+#' @name matrixOrNULL
+#' @description Contains either matrix or NULL object
+#' @exportClass matrixOrNULL
+#' @export
 setClassUnion("matrixOrNULL", c("matrix", "NULL"))
-setClassUnion("numericOrCharacter", c("numeric", "character"))
+
+#' Class union of numericor character
+#' @title numericOrCharacter
+#' @aliases numericOrCharacter-class
+#' @name numericOrCharacter
+#' @description Contains either numeric or character object
+#' @exportClass numericOrCharacter
+#' @export
+numericOrCharacter <- setClassUnion("numericOrCharacter",
+                                    c("numeric", "character"))
 
 
 # ClustAllObject Class ---------------------------------------------------------
@@ -28,6 +81,7 @@ setClassUnion("numericOrCharacter", c("numeric", "character"))
 #' @slot JACCARD_DISTANCE_F matrixOrNULL. Matrix containing the Jaccard
 #' distances derived from the robust populations stratifications if ClustAll
 #' pipeline has been executed previously. Otherwise NULL.
+#' @exportClass ClustAllObject
 #' @export
 setClass(
   Class="ClustAllObject",
@@ -47,8 +101,24 @@ setClass(
 # ClustAllObject constructor
 #' constuctor for \code{\link{ClustAllObject-class}}
 #' @title initializeClustAllObject
+#' @param .Object initializing object
+#' @param data Data Frame of the data used. Maybe modified from the input
+#' data.
+#' @param dataOriginal Data Frame of the original data introduced.
+#' @param dataImputed  Mids object derived from the
+#' mice package that stores the imputed data, in case
+#' imputation was applied. Otherwise NULL.
+#' @param dataValidation labelling numericOrNA. Original data labelling.
+#' @param nImputation Number of multiple imputations to be applied.
+#' @param processed Logical if the ClustAll pipeline has been executed previously
+#' @param summary_clusters listOrNULL. List with the resulting stratifications
+#' for each combination of clustering methods (distance + clustering algorithm)
+#' and depth, in case ClustAll pipeline has been executed previously.
+#' Otherwise NULL.
+#' @param JACCARD_DISTANCE_F matrixOrNULL. Matrix containing the Jaccard
+#' distances derived from the robust populations stratifications if ClustAll
+#' pipeline has been executed previously. Otherwise NULL.
 #' @return An object of class \code{\link{ClustAllObject-class}}
-
 setMethod(
   f="initialize",
   signature="ClustAllObject",
@@ -91,8 +161,7 @@ setMethod(
 #' \code{\link{runClustAll}}
 #' @examples
 #' data("BreastCancerWisconsin", package = "ClustAll")
-#' wdbc$Diagnosis <- as.numeric(as.factor(wdbc$Diagnosis))
-#' wdbc <- wdbc[,-c(1)] # delete patients IDs
+#' wdbc <- subset(wdbc,select=-ID)
 #' obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
 #' showData(obj_noNA)
 #' @export
@@ -124,11 +193,12 @@ setMethod(
 #' @seealso \code{\link{createClustAll}}, \code{\link{ClustAllObject-class}},
 #' \code{\link{runClustAll}}
 #' @examples
+#' data("BreastCancerWisconsinMISSING", package = "ClustAll")
 #' data("BreastCancerWisconsin", package = "ClustAll")
-#' wdbc$Diagnosis <- as.numeric(as.factor(wdbc$Diagnosis))
-#' wdbc <- wdbc[,-c(1)] # delete patients IDs
-#' obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
-#' showDataImputed(obj_noNA)
+#' wdbc <- subset(wdbc,select=-ID)
+#' obj_NA <- createClustAll(data = wdbcNA, colValidation = "Diagnosis",
+#'                          dataImputed = wdbcMIDS)
+#' showDataImputed(obj_NA)
 #' @export
 setGeneric(
   name="showDataImputed",
@@ -158,11 +228,12 @@ setMethod(
 #' @seealso \code{\link{createClustAll}}, \code{\link{ClustAllObject-class}},
 #' \code{\link{runClustAll}}
 #' @examples
+#' data("BreastCancerWisconsinMISSING", package = "ClustAll")
 #' data("BreastCancerWisconsin", package = "ClustAll")
-#' wdbc$Diagnosis <- as.numeric(as.factor(wdbc$Diagnosis))
-#' wdbc <- wdbc[,-c(1)] # delete patients IDs
-#' obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
-#' showNumberImputations(obj_noNA)
+#' wdbc <- subset(wdbc,select=-ID)
+#' obj_NA <- createClustAll(data = wdbcNA, colValidation = "Diagnosis",
+#'                          dataImputed = wdbcMIDS)
+#' showNumberImputations(obj_NA)
 #' @export
 setGeneric(
   name="showNumberImputations",
@@ -197,10 +268,11 @@ setMethod(
 #' @seealso \code{\link{runClustAll}}, \code{\link{ClustAllObject-class}}
 #' @examples
 #' data("BreastCancerWisconsin", package = "ClustAll")
-#' wdbc$Diagnosis <- as.numeric(as.factor(wdbc$Diagnosis))
-#' wdbc <- wdbc[,-c(1)] # delete patients IDs
-#' obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
-#' showSummaryClusters(obj_noNA)
+#' wdbc <- subset(wdbc,select=c(-ID, -Diagnosis))
+#' wdbc <- wdbc[1:15,1:8]
+#' obj_noNA <- createClustAll(data = wdbc)
+#' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 1, simplify = FALSE)
+#' showSummaryClusters(obj_noNA1)
 #' @export
 setGeneric(
   name="showSummaryClusters",
@@ -232,10 +304,10 @@ setMethod(
 #' @seealso \code{\link{runClustAll}}, \code{\link{ClustAllObject-class}}
 #' @examples
 #' data("BreastCancerWisconsin", package = "ClustAll")
-#' wdbc$Diagnosis <- as.numeric(as.factor(wdbc$Diagnosis))
-#' wdbc <- wdbc[,-c(1)] # delete patients IDs
-#' obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
-#' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
+#' wdbc <- subset(wdbc,select=c(-ID, -Diagnosis))
+#' wdbc <- wdbc[1:15,1:8]
+#' obj_noNA <- createClustAll(data = wdbc)
+#' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 1, simplify = FALSE)
 #' showJaccardDistances(obj_noNA1)
 #' @export
 setGeneric(
@@ -256,7 +328,7 @@ setMethod(
 
 #' @title Retrieve logical if runClustAll has been executed considering
 #' ClustAllObject as input
-#' @aliases isProcessed, ClustAllObject-method
+#' @aliases isProcessed,ClustAllObject-method
 #' @description
 #' Generic function to retrieve the logical if \code{\link{runClustAll}} have
 #' been runned from a \code{\link{ClustAllObject-class}} object
@@ -266,10 +338,10 @@ setMethod(
 #' @seealso \code{\link{runClustAll}}, \code{\link{ClustAllObject-class}}
 #' @examples
 #' data("BreastCancerWisconsin", package = "ClustAll")
-#' wdbc$Diagnosis <- as.numeric(as.factor(wdbc$Diagnosis))
-#' wdbc <- wdbc[,-c(1)] # delete patients IDs
-#' obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
-#' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
+#' wdbc <- subset(wdbc,select=c(-ID, -Diagnosis))
+#' wdbc <- wdbc[1:15,1:8]
+#' obj_noNA <- createClustAll(data = wdbc)
+#' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 1, simplify = TRUE)
 #' isProcessed(obj_noNA1)
 #' @export
 setGeneric(
@@ -299,11 +371,9 @@ setMethod(
 #' @seealso \code{\link{ClustAllObject-class}}
 #' @examples
 #' data("BreastCancerWisconsin", package = "ClustAll")
-#' wdbc$Diagnosis <- as.numeric(as.factor(wdbc$Diagnosis))
-#' wdbc <- wdbc[,-c(1)] # delete patients IDs
-#' obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
-#' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
-#' showValidationData(obj_noNA1)
+#' wdbc <- subset(wdbc,select=-ID)
+#' obj_noNA <- createClustAll(data = wdbc, colValidation="Diagnosis")
+#' showValidationData(obj_noNA)
 #' @export
 setGeneric(
   name="showValidationData",
@@ -320,23 +390,28 @@ setMethod(
   }
 )
 
-
+#' addValidationData
 #' @title Add the validation data into the ClustAllObject
-#' @aliases addValidationData,ClustAllObject-method
+#' @name addValidationData
+#' @docType methods
+#' @rdname addValidationData
+#' @aliases addValidationData,ClustAllObject,numericOrCharacter-method
 #' @description
 #' Generic function to add validation data to the
 #' \code{\link{ClustAllObject-class}} object
 #' @usage addValidationData(Object, dataValidation)
 #' @param Object \code{\link{ClustAllObject-class}} object
-#' @param dataValidation numeric vector with the validation data
+#' @param dataValidation numericOrCharacter
 #' @return \code{\link{ClustAllObject-class}} object
 #' @seealso \code{\link{ClustAllObject-class}}
 #' @examples
 #' data("BreastCancerWisconsin", package = "ClustAll")
-#' wdbc$Diagnosis <- as.numeric(as.factor(wdbc$Diagnosis))
-#' wdbc <- wdbc[,-c(1)] # delete patients IDs
-#' obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
-#' obj_noNA1 <- addValidationData(Object = obj_noNA, dataValidation = wdbc$Diagnosis)
+#' label <- as.numeric(as.factor(wdbc$Diagnosis))
+#' wdbc <- wdbc[,-c(1, 2)] # delete patients IDs & label
+#' obj_noNA <- createClustAll(data = wdbc)
+#' obj_noNA <- addValidationData(Object = obj_noNA,
+#'                               dataValidation = label)
+#' @exportMethod addValidationData
 #' @export
 setGeneric(
   name="addValidationData",
@@ -367,5 +442,62 @@ setMethod(
     return(Object)
   }
 )
+
+
+# Cocumenting DataSets ---------------------------------------------------------
+#' wdbc: Diagnostic Wisconsin Breast Cancer Database.
+#'
+#' A dataset containing Features are computed from a digitized image of a fine
+#' needle aspirate (FNA) of a breast mass.
+#' They describe characteristics of the cell nuclei present in the image.
+#'
+#' The dataset comprises two types of features —categorical and numerical—
+#' derived from a digitized image of a fine needle aspirate (FNA) of a breast
+#' mass from 659 patients. Each patient is characterized by 31 features (10x3)
+#' and belongs to one of two target classes: ‘malignant’ or ‘benign’.
+#' @source <https://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic>
+#'
+#' \itemize{
+#'   \item Diagnosis Label says tumor is malingnant or benignant
+#'   \item radius. Mean of distances from the center to points on the perimeter
+#'   \item perimeter
+#'   \item area
+#'   \item smoothness. Local variation in radius lengths
+#'   \item compactness. (Perimeter^2 / Area) - 1.0
+#'   \item concavity. Severity of concave portions of the contour
+#'   \item concave points. Number of concave portions of the contour
+#'   \item symmetry.
+#'   \item fractal dimension. “Coastline approximation” - 1.
+#' }
+#'
+#' @docType data
+#' @keywords datasets
+#' @name wdbc
+#' @usage data("BreastCancerWisconsin", package = "ClustAll")
+#' @format A data frame with 660 rows and 31 variables
+NULL
+
+#' wdbcNA: Diagnostic Wisconsin Breast Cancer Database with missing values
+#'
+#' We introduced random missing values to the wdbc dataset. \code{\link{wdbc}}
+#'
+#' @docType data
+#' @keywords datasets
+#' @name wdbcNA
+#' @usage data("BreastCancerWisconsinMISSING", package = "ClustAll")
+#' @format A data frame with 660 rows and 31 variables
+NULL
+
+#' wdbcMIDS: Diagnostic Wisconsin Breast Cancer Database with imputed values
+#'
+#' We introduced imputed random values to the wdbcNA dataset.
+#' Using Mice. It is a mids object. \code{\link{wdbc}}
+#'
+#' @docType data
+#' @keywords datasets
+#' @name wdbcMIDS
+#' @usage data("BreastCancerWisconsinMISSING", package = "ClustAll")
+#' @format A data frame with 660 rows and 31 variables
+NULL
 
 # END OF ClustAll_ClustAllObject_Class.R

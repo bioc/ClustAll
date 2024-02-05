@@ -2,7 +2,7 @@
 % Please edit documentation in R/ClustAll_createClustAll.R
 \name{createClustAll}
 \alias{createClustAll}
-\alias{createClustAll,ClustAllObject-method,missOrNumeric,midsOrNA}
+\alias{createClustAll,data.frame,numericOrNA,ANY,characterOrNA-method}
 \title{Creates ClustAllObject and perform imputations to deal with missing
 values}
 \usage{
@@ -38,16 +38,16 @@ wdbc <- wdbc[,-c(1,2)]
 obj_noNA <- createClustAll(data = wdbc)
 
 # Scenario 2: data contains NAs and imputed data is provided automatically
-data("data_use", package = "ClustAll") # load example data
-obj_NA <- createClustAll(data_NA, nImputation = 5)
+data("BreastCancerWisconsinMISSING", package = "ClustAll") # load example data
+obj_NA <- createClustAll(wdbcNA, nImputation = 5)
 
 # Scenario 3: data contains NAs and imputed data is provided manually
-data("data_use", package = "ClustAll") # load the example data
-ini <- mice(data_use, maxit = 0, print = FALSE)
+data("BreastCancerWisconsinMISSING", package = "ClustAll") # load the example data
+ini <- mice::mice(wdbcNA, maxit = 0, print = FALSE)
 pred <- ini$pred # predictor matrix
-pred["bmi", c("tobacco", "alcohol", "PEnum")] <- 0 # example of how to remove predictors
-imp <- mice(data_use, m=5, pred=pred, maxit=5, seed=1234, print=FALSE)
-obj_imp <- createClustAll(data=data_use, dataImputed = imp)
+pred["radius1", c("perimeter1", "area1", "smoothness1")] <- 0 # example of how to remove predictors
+imp <- mice::mice(wdbcNA, m=5, pred=pred, maxit=5, seed=1234, print=FALSE)
+obj_imp <- createClustAll(data=wdbcNA, dataImputed = imp)
 
 }
 \seealso{

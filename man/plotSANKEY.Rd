@@ -2,12 +2,13 @@
 % Please edit documentation in R/ClustAll_ClustAllObject_Methods.R
 \name{plotSANKEY}
 \alias{plotSANKEY}
-\alias{plotSANKEY,ClustAllObject-method}
+\alias{plotSANKEY,ClustAllObject,character,logicalOrNA-method}
 \title{Plots Sankey Diagram showing the cluster distribution and shifts
 between a pair of stratifications derived from ClustAllObject}
 \usage{
 plotSANKEY(Object,
-                  clusters)
+                  clusters,
+                  validationData=FALSE)
 }
 \arguments{
 \item{Object}{\code{\link{ClustAllObject-class}} object}
@@ -27,13 +28,18 @@ shifts between a pair of stratifications
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")
-wdbc <- wdbc[,-c(1,2)]
+label <- as.numeric(as.factor(wdbc$Diagnosis))
+wdbc <- subset(wdbc,select=c(-ID, -Diagnosis))
+wdbc <- wdbc[1:15,1:8]
+label <- label[16:30]
 obj_noNA <- createClustAll(data = wdbc)
-obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
+obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 1, simplify = TRUE)
 resStratification(Object = obj_noNA1, population = 0.05,
                   stratification_similarity = 0.88, all = FALSE)
-plotSANKEY(Object = obj_noNA1, clusters = c("cuts_c_3","cuts_a_9"))
-plotSANKEY(Object = obj_noNA1, clusters = c("cuts_c_3","cuts_b_13"))
+plotSANKEY(Object = obj_noNA1, clusters = c("cuts_a_1","cuts_b_5"))
+
+obj_noNA1 <- addValidationData(obj_noNA1, label)
+plotSANKEY(Object = obj_noNA1, clusters = "cuts_a_1", validationData=TRUE)
 
 }
 \seealso{

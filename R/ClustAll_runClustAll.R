@@ -10,13 +10,15 @@
 #' @import doSNOW
 #' @import foreach
 #' @import flock
+#' @import cluster
+#' @import utils
+#' @importFrom grDevices colorRampPalette
 #' @importFrom parallel detectCores makeCluster stopCluster
 #' @importFrom methods is new validObject
 #' @importFrom stats as.dist cor cutree hclust median quantile sd
-#' @importFrom utils txtProgressBar capture.output
 #' @title ClustAll: Data driven strategy to find hidden subgroups of patients within
 #' complex diseases using clinical data
-#' @aliases runClustAll,ClustAllObject-method,numericOrNA
+#' @aliases runClustAll,ClustAllObject,numericOrNA,logicalOrNA-method
 #' @description This method runs the ClustAll pipeline
 #'
 #'
@@ -35,10 +37,10 @@
 #'
 #' @examples
 #' data("BreastCancerWisconsin", package = "ClustAll")
-#' wdbc <- wdbc[,-c(1,2)]
+#' wdbc <- subset(wdbc,select=c(-ID, -Diagnosis))
+#' wdbc <- wdbc[1:15,1:8]
 #' obj_noNA <- createClustAll(data = wdbc)
-#' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8, simplify=TRUE)
-#'
+#' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 1, simplify = TRUE)
 #' @export
 
 setGeneric(
@@ -237,7 +239,7 @@ setMethod(
                 }
 
                 PCA_gower <- PCA_gower %>% mutate_if(is.character, as.factor)
-                gower_dist <- daisy(PCA_gower, metric="gower")
+                gower_dist <- cluster::daisy(PCA_gower, metric="gower")
 
 
                 #### Step 2.1.3. c) Gower Distance and K-Medoids clustering method.
@@ -246,7 +248,7 @@ setMethod(
                 # K-Medoids clustering method
                 summary_clusters_c[heights_cut,impgo] <- cstats.table_PAM(dist=gower_dist,
                                                                           k=6)
-                pam_res <- pam(gower_dist, k=summary_clusters_c[heights_cut,impgo])
+                pam_res <- cluster::pam(gower_dist, k=summary_clusters_c[heights_cut,impgo])
                 pam_res_c <- pam_res$clustering
 
                 # Compute the stratification for each depth of the dendrogram,
@@ -261,8 +263,8 @@ setMethod(
 
 
                 #### Step 2.1.4. d) Gower Distance and H-Clust clustering method
-                divisive.clust <- diana(as.matrix(gower_dist), diss = TRUE,
-                                        keep.diss = TRUE)
+                divisive.clust <- cluster::diana(as.matrix(gower_dist),
+                                                 diss = TRUE, keep.diss = TRUE)
                 summary_clusters_d[heights_cut,impgo] <- cstats.table_hclust(gower_dist,
                                                                              divisive.clust, 6)
                 hclustgow_res_c <- cutree(divisive.clust,
@@ -390,7 +392,7 @@ setMethod(
           }
 
           PCA_gower <- PCA_gower %>% mutate_if(is.character, as.factor)
-          gower_dist <- daisy(PCA_gower, metric="gower")
+          gower_dist <- cluster::daisy(PCA_gower, metric="gower")
 
 
           #### Step 2.1.3. c) Gower Distance and K-Medoids clustering method.
@@ -399,7 +401,7 @@ setMethod(
           # K-Medoids clustering method.
           summary_clusters_c[heights_cut,impgo] <- cstats.table_PAM(dist=gower_dist,
                                                                     k=6)
-          pam_res <- pam(gower_dist, k=summary_clusters_c[heights_cut,impgo])
+          pam_res <- cluster::pam(gower_dist, k=summary_clusters_c[heights_cut,impgo])
           pam_res_c <- pam_res$clustering
 
           # calculate TREE for each cut and each imputation and
@@ -413,7 +415,7 @@ setMethod(
 
 
           #### Step 2.1.4. d) Gower Distance and H-Clust clustering method
-          divisive.clust <- diana(as.matrix(gower_dist), diss = TRUE, keep.diss = TRUE)
+          divisive.clust <- cluster::diana(as.matrix(gower_dist), diss = TRUE, keep.diss = TRUE)
           summary_clusters_d[heights_cut,impgo] <- cstats.table_hclust(gower_dist, divisive.clust, 6)
           hclustgow_res_c <- cutree(divisive.clust, k=summary_clusters_d[heights_cut,impgo])
           names(hclustgow_res_c) <- seq_len(dim(Object@data)[1])

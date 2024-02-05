@@ -19,8 +19,7 @@ Generic function to retrieve the initial data used for
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")
-wdbc$Diagnosis <- as.numeric(as.factor(wdbc$Diagnosis))
-wdbc <- wdbc[,-c(1)] # delete patients IDs
+wdbc <- subset(wdbc,select=-ID)
 obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
 showData(obj_noNA)
 }

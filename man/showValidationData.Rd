@@ -19,11 +19,9 @@ true labels from a \code{\link{ClustAllObject-class}} object
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")
-wdbc$Diagnosis <- as.numeric(as.factor(wdbc$Diagnosis))
-wdbc <- wdbc[,-c(1)] # delete patients IDs
-obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
-obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
-showValidationData(obj_noNA1)
+wdbc <- subset(wdbc,select=-ID)
+obj_noNA <- createClustAll(data = wdbc, colValidation="Diagnosis")
+showValidationData(obj_noNA)
 }
 \seealso{
 \code{\link{ClustAllObject-class}}

@@ -92,7 +92,7 @@ cstats.table_PAM <- function(dist, k) {
   output.stats <- matrix(ncol = length(clust.assess), nrow = k-1)
 
   for(i in seq(from=2, to=k)) {
-    pam_fit <- pam(dist, diss = TRUE, k = i)
+    pam_fit <- cluster::pam(dist, diss = TRUE, k = i)
     pam_clust_num <- (pam_fit$clustering)
 
     output.stats[i-1,] <- unlist(cluster.stats(d = dist,

@@ -23,10 +23,10 @@ a \code{\link{ClustAllObject-class}} object
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")
-wdbc$Diagnosis <- as.numeric(as.factor(wdbc$Diagnosis))
-wdbc <- wdbc[,-c(1)] # delete patients IDs
-obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
-obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 8)
+wdbc <- subset(wdbc,select=c(-ID, -Diagnosis))
+wdbc <- wdbc[1:15,1:8]
+obj_noNA <- createClustAll(data = wdbc)
+obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 1, simplify = FALSE)
 showJaccardDistances(obj_noNA1)
 }
 \seealso{
