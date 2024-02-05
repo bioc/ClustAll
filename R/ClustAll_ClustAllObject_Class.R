@@ -1,4 +1,5 @@
 # setClassUnion includes the new classes defined -------------------------------
+<<<<<<< HEAD
 
 #' Class union of list, null or missing
 #' @title Class Union listOrNULL
@@ -7,6 +8,8 @@
 #' @description Contains either list, NULL or missing object
 #' @exportClass listOrNULL
 #' @export
+=======
+>>>>>>> master
 setClassUnion("listOrNULL", c("list", "NULL", "missing"))
 
 #' Class union of numeric, null or missing
@@ -84,6 +87,7 @@ numericOrCharacter <- setClassUnion("numericOrCharacter",
 #' @exportClass ClustAllObject
 #' @export
 setClass(
+<<<<<<< HEAD
   Class="ClustAllObject",
   slots=list(
     data="data.frame",
@@ -95,6 +99,19 @@ setClass(
     summary_clusters="listOrNULL",
     JACCARD_DISTANCE_F="matrixOrNULL"
   )
+=======
+    Class="ClustAllObject",
+    slots=list(
+        data="data.frame",
+        dataOriginal="data.frame",
+        dataImputed="ANY",
+        dataValidation="numericOrNA",
+        nImputation ="numeric",
+        processed="logical",
+        summary_clusters="listOrNULL",
+        JACCARD_DISTANCE_F="matrixOrNULL"
+        )
+>>>>>>> master
 )
 
 
