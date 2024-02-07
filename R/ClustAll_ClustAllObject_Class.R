@@ -5,6 +5,7 @@
 #' @aliases listOrNULL-class
 #' @name listOrNULL
 #' @description Contains either list, NULL or missing object
+#' @return listOrNULL class object
 #' @exportClass listOrNULL
 #' @export
 setClassUnion("listOrNULL", c("list", "NULL", "missing"))
@@ -14,6 +15,7 @@ setClassUnion("listOrNULL", c("list", "NULL", "missing"))
 #' @aliases numericOrNA-class
 #' @name numericOrNA
 #' @description Contains either numeric, NULL or missing object
+#' @return numericOrNA class object
 #' @exportClass numericOrNA
 #' @export
 setClassUnion("numericOrNA", c("numeric", "missing", "NULL"))
@@ -24,6 +26,7 @@ setClassUnion("numericOrNA", c("numeric", "missing", "NULL"))
 #' @aliases characterOrNA-class
 #' @name characterOrNA
 #' @description Contains either character, NULL or missing object
+#' @return characterOrNA class object
 #' @exportClass characterOrNA
 #' @export
 setClassUnion("characterOrNA", c("character", "missing", "NULL"))
@@ -34,6 +37,7 @@ setClassUnion("characterOrNA", c("character", "missing", "NULL"))
 #' @aliases logicalOrNA-class
 #' @name logicalOrNA
 #' @description Contains either logical, NULL or missing object
+#' @return logicalOrNA class object
 #' @exportClass logicalOrNA
 #' @export
 setClassUnion("logicalOrNA", c("logical", "missing", "NULL"))
@@ -44,6 +48,7 @@ setClassUnion("logicalOrNA", c("logical", "missing", "NULL"))
 #' @aliases matrixOrNULL-class
 #' @name matrixOrNULL
 #' @description Contains either matrix or NULL object
+#' @return matrixOrNULL class object
 #' @exportClass matrixOrNULL
 #' @export
 setClassUnion("matrixOrNULL", c("matrix", "NULL"))
@@ -54,6 +59,7 @@ setClassUnion("matrixOrNULL", c("matrix", "NULL"))
 #' @aliases numericOrCharacter-class
 #' @name numericOrCharacter
 #' @description Contains either numeric or character object
+#' @return numericOrCharacter class object
 #' @exportClass numericOrCharacter
 #' @export
 numericOrCharacter <- setClassUnion("numericOrCharacter",
@@ -81,6 +87,7 @@ numericOrCharacter <- setClassUnion("numericOrCharacter",
 #' @slot JACCARD_DISTANCE_F matrixOrNULL. Matrix containing the Jaccard
 #' distances derived from the robust populations stratifications if ClustAll
 #' pipeline has been executed previously. Otherwise NULL.
+#' @return ClustAllObject class object
 #' @exportClass ClustAllObject
 #' @export
 setClass(
@@ -475,6 +482,7 @@ setMethod(
 #' @name wdbc
 #' @usage data("BreastCancerWisconsin", package = "ClustAll")
 #' @format A data frame with 660 rows and 31 variables
+#' @return wdbc dataset
 NULL
 
 #' wdbcNA: Diagnostic Wisconsin Breast Cancer Database with missing values
@@ -486,6 +494,7 @@ NULL
 #' @name wdbcNA
 #' @usage data("BreastCancerWisconsinMISSING", package = "ClustAll")
 #' @format A data frame with 660 rows and 31 variables
+#' @return wdbcNA dataset
 NULL
 
 #' wdbcMIDS: Diagnostic Wisconsin Breast Cancer Database with imputed values
@@ -498,6 +507,7 @@ NULL
 #' @name wdbcMIDS
 #' @usage data("BreastCancerWisconsinMISSING", package = "ClustAll")
 #' @format A data frame with 660 rows and 31 variables
+#' @return wdbcMIDS dataset
 NULL
 
 # END OF ClustAll_ClustAllObject_Class.R
