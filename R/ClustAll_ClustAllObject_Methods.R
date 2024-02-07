@@ -85,13 +85,13 @@ setMethod(
                                     max(robust_stratification[, "Depth"])),
                                   c("darkcyan", "#F7DCCA", "#C75F97"))))
 
-    hp <- Heatmap(as.matrix(m), name="hp", cluster_columns=FALSE,
-                  cluster_rows=FALSE, left_annotation=ra, col=col_fun,
-                  bottom_annotation = NULL, show_column_names = FALSE,
-                  heatmap_legend_param = list(
-                    direction = "vertical", title="JACCARD index", at=c(0, 1),
-                    legend_width = unit(10, "cm")
-                  ))
+    hp <- ComplexHeatmap::Heatmap(as.matrix(m), name="hp", cluster_columns=FALSE,
+                                  cluster_rows=FALSE, left_annotation=ra, col=col_fun,
+                                  bottom_annotation = NULL, show_column_names = FALSE,
+                                  heatmap_legend_param = list(
+                                    direction = "vertical", title="JACCARD index", at=c(0, 1),
+                                    legend_width = unit(10, "cm")
+                                  ))
 
     if (is.null(res)) {
       paint <- FALSE
@@ -111,13 +111,13 @@ setMethod(
         index <- which(rownames(m) %in% c(paint_names[z], paint_names[z+1]))
         start <- index[1] - 1
         finish <- index[2]
-        decorate_heatmap_body("hp", row_slice = 1, column_slice = 1, {
-          grid.rect(unit(start/full_length, "npc"), unit(1-start/full_length,
-                                                         "npc"), # top left
-                    width = (finish-start)/full_length,
-                    height = (finish-start)/full_length,
-                    gp = gpar(lwd = 2.5, lty = 2.5, fill=FALSE, col="red"),
-                    just = c("left", "top"), draw = TRUE
+        ComplexHeatmap::decorate_heatmap_body("hp", row_slice = 1, column_slice = 1, {
+                        grid.rect(unit(start/full_length, "npc"), unit(1-start/full_length,
+                                                                       "npc"), # top left
+                                  width = (finish-start)/full_length,
+                                  height = (finish-start)/full_length,
+                                  gp = gpar(lwd = 2.5, lty = 2.5, fill=FALSE, col="red"),
+                                  just = c("left", "top"), draw = TRUE
           )
         })
       }
@@ -397,10 +397,10 @@ setMethod(
     links$IDsource <- match(links$source, nodes$name)-1
     links$IDtarget <- match(links$target, nodes$name)-1
 
-    plot <- sankeyNetwork(Links = links, Nodes = nodes,
-                          Source = "IDsource", Target = "IDtarget",
-                          Value = "value", NodeID = "name",
-                          sinksRight=FALSE)
+    plot <- networkD3::sankeyNetwork(Links = links, Nodes = nodes,
+                                     Source = "IDsource", Target = "IDtarget",
+                                     Value = "value", NodeID = "name",
+                                     sinksRight=FALSE)
 
     return(plot)
   }
