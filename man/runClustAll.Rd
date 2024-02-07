@@ -3,8 +3,8 @@
 \name{runClustAll}
 \alias{runClustAll}
 \alias{runClustAll,ClustAllObject,numericOrNA,logicalOrNA-method}
-\title{ClustAll: Data driven strategy to find hidden subgroups of patients within
-complex diseases using clinical data}
+\title{ClustAll: Data driven strategy to find hidden subgroups of patients
+within complex diseases using clinical data}
 \usage{
 runClustAll(Object,
                    threads=1,

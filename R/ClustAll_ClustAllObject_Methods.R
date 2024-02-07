@@ -66,24 +66,24 @@ setMethod(
                           colors = grDevices::colorRampPalette(brewer.pal(9,"Blues"))(25),
                           breaks=seq(0, 1, length.out = 25))
 
-    legend <- HeatmapAnnotation(JACCARD_index = seq(0, 1,
+    legend <- ComplexHeatmap::HeatmapAnnotation(JACCARD_index = seq(0, 1,
                                                     length.out = ncol(m)),
-                                col = list(lg = col_fun),
-                                annotation_name_side = "right")
-    ra <- rowAnnotation(
-      Distance=robust_stratification[,"Distance"],
-      Clustering=robust_stratification[,"Clustering"],
-      Depth=robust_stratification[,"Depth"],
-      col = list(Distance=structure(names=c("Correlation","Gower"),
-                                    c("#CCCCFF","blue4") ),
-                 Clustering=structure(names=c("Hierachical", "k-means",
-                                              "k-medoids"),
-                                      c("forestgreen", "sandybrown",
-                                        "tomato3")),
-                 Depth=colorRamp2(c(1,
-                                    round(max(robust_stratification[, "Depth"])/2),
-                                    max(robust_stratification[, "Depth"])),
-                                  c("darkcyan", "#F7DCCA", "#C75F97"))))
+                                                col = list(lg = col_fun),
+                                                annotation_name_side = "right")
+    ra <- ComplexHeatmap::rowAnnotation(
+            Distance=robust_stratification[,"Distance"],
+            Clustering=robust_stratification[,"Clustering"],
+            Depth=robust_stratification[,"Depth"],
+            col = list(Distance=structure(names=c("Correlation","Gower"),
+                                          c("#CCCCFF","blue4") ),
+                       Clustering=structure(names=c("Hierachical", "k-means",
+                                                    "k-medoids"),
+                                            c("forestgreen", "sandybrown",
+                                              "tomato3")),
+                       Depth=colorRamp2(c(1,
+                                          round(max(robust_stratification[, "Depth"])/2),
+                                          max(robust_stratification[, "Depth"])),
+                                        c("darkcyan", "#F7DCCA", "#C75F97"))))
 
     hp <- ComplexHeatmap::Heatmap(as.matrix(m), name="hp", cluster_columns=FALSE,
                                   cluster_rows=FALSE, left_annotation=ra, col=col_fun,
@@ -98,7 +98,7 @@ setMethod(
     }
 
     if (paint == TRUE) {
-      draw(hp)
+      ComplexHeatmap::draw(hp)
       ngroup <- 0
       paint_names <- c()
       for (i in seq_len(length(res))) {
@@ -112,7 +112,7 @@ setMethod(
         start <- index[1] - 1
         finish <- index[2]
         ComplexHeatmap::decorate_heatmap_body("hp", row_slice = 1, column_slice = 1, {
-                        grid.rect(unit(start/full_length, "npc"), unit(1-start/full_length,
+                        grid::grid.rect(unit(start/full_length, "npc"), unit(1-start/full_length,
                                                                        "npc"), # top left
                                   width = (finish-start)/full_length,
                                   height = (finish-start)/full_length,
@@ -210,14 +210,14 @@ setMethod(
 
             stratificationRep[[i]][[j]] <- c(res[[i]][j],
                                              table(Object@summary_clusters[[res[[i]][j]]]))
-            names(stratificationRep)[[i]] <- paste("Cluster_", i)
+            base::names(stratificationRep)[[i]] <- paste("Cluster_", i)
           }
         }
 
       } else {
         for(i in seq_len(length(res))) {
           stratificationRep[[i]] <- list(table(Object@summary_clusters[[res[[i]]]]))
-          names(stratificationRep)[i] <- res[[i]]
+          base::names(stratificationRep)[i] <- res[[i]]
         }
       }
 
@@ -388,7 +388,7 @@ setMethod(
 
     links <- data.frame(source = source,
                         target = target,
-                        value=value)
+                        value = value)
 
     nodes <- data.frame(name=c(as.character(links$source),
                                as.character(links$target)) %>% unique()
@@ -479,7 +479,7 @@ setMethod(
     sensitivity <- res[3]/(res[3]+res[4])
     specifity <- res[2]/(res[2]+res[1])
     showRes <- c(sensitivity, specifity)
-    names(showRes) <- c("sensitivity", "specificity")
+    base::names(showRes) <- c("sensitivity", "specificity")
 
     return(showRes)
   }

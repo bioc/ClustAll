@@ -11,27 +11,27 @@ obtainDefCluster <- function(mat_using, cluster_similarity=0.7){
 
     for (i in seq_len(ncol(mat_using)-1)) {
         # Avoid repeating same cluster
-        if (i < j-1 | names(mat_using[i,])[j] %in% candidates_clustering) {
+        if (i < j-1 | base::names(mat_using[i,])[j] %in% candidates_clustering) {
             next
         }
 
         if (i == ncol(mat_using)-1) {
             if (mat_using[i,i+1] >= cluster_similarity) {
-                candidates_clustering <- c(names(mat_using[i,])[i],
-                                            names(mat_using[i,])[i+1])
+                candidates_clustering <- c(base::names(mat_using[i,])[i],
+                                           base::names(mat_using[i,])[i+1])
                 definitive_clusters <- append(definitive_clusters,
                                                 list(candidates_clustering))
             }
         } else {
 
             if (mat_using[i,i+1] >= cluster_similarity) {
-                candidates_clustering <- c(names(mat_using[i,])[i])
+                candidates_clustering <- c(base::names(mat_using[i,])[i])
 
                 for (j in seq(from=(i+1), to=(ncol(mat_using)))) {
 
                     if (j==ncol(mat_using)) {
                         candidates_clustering <- c(candidates_clustering,
-                                                    names(mat_using[i,])[j])
+                                                   base::names(mat_using[i,])[j])
                         definitive_clusters <- append(definitive_clusters,
                                                     list(candidates_clustering))
                         break
@@ -39,7 +39,7 @@ obtainDefCluster <- function(mat_using, cluster_similarity=0.7){
 
                 if(mat_using[i,j] >= cluster_similarity) {
                     candidates_clustering <- c(unique(candidates_clustering),
-                                                names(mat_using[i,])[j])
+                                               base::names(mat_using[i,])[j])
                     if (j == (ncol(mat_using)-2)) {
                         append(definitive_clusters, list(candidates_clustering))
                     }
@@ -47,7 +47,7 @@ obtainDefCluster <- function(mat_using, cluster_similarity=0.7){
             # The lower this value is, the larger group of clusters is obtained
                 } else if (mat_using[i+1,j] >= cluster_similarity){
                     candidates_clustering <- c(unique(candidates_clustering),
-                                                names(mat_using[i,])[j])
+                                               base::names(mat_using[i,])[j])
                     if (j == (ncol(mat_using)-2)) {
                         append(definitive_clusters, list(candidates_clustering))
                     }
@@ -78,11 +78,11 @@ chooseClusters <- function(definitive_clusters, summary_clusters,
     possible_stratifications <- list()
     chosen_clusters <- list()
 
-    for (i in seq_len(length(names(summary_clusters)))) {
+    for (i in seq_len(length(base::names(summary_clusters)))) {
         possible_stratifications[i] <- list(as.numeric(table(summary_clusters[[i]])))
     }
 
-    names(possible_stratifications) <- names(summary_clusters)
+    base::names(possible_stratifications) <- base::names(summary_clusters)
 
     for (i in seq_len(length(definitive_clusters))) {
         for (j in definitive_clusters[[i]]) {
@@ -116,7 +116,7 @@ chooseClusters <- function(definitive_clusters, summary_clusters,
 # This function checks if the introduced cluster exists in the list of clusters
 checkCluster <- function(cluster, lCluster) {
     stopProcess <- FALSE
-    booleans <- cluster %in% names(lCluster)
+    booleans <- cluster %in% base::names(lCluster)
 
     for (i in seq_len(length(booleans))) {
         if (booleans[i] == FALSE) {

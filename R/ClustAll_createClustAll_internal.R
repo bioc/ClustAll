@@ -21,9 +21,9 @@ checkDataIntroduced <- function(data) {
                 variables_categorical <- must_convert_variables
             }
         } else {
-            variables_binary <- names(which(sapply(data[,must_convert_variables],
+            variables_binary <- base::names(which(sapply(data[,must_convert_variables],
                                                     isBinary)))
-            variables_categorical <- names(which(!sapply(data[,must_convert_variables],
+            variables_categorical <- base::names(which(!sapply(data[,must_convert_variables],
                                                                 isBinary)))
             }
 
@@ -38,7 +38,7 @@ checkDataIntroduced <- function(data) {
         if (length(variables_categorical > 1)) {
         message("Categorical variables detected! Applying One Hot enconding...")
             for (variable_name in variables_categorical) {
-                onehot_variables <- names(table(data[, variable_name]))
+                onehot_variables <- base::names(table(data[, variable_name]))
                 for (new_onehot_variable in onehot_variables) {
                     data_new[, paste0(variable_name, "_", new_onehot_variable)] <- rep(0, nrow(data_new))
             data_new[(which(data_new[, variable_name] == new_onehot_variable)),

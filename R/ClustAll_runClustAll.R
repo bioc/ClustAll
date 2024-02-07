@@ -16,8 +16,8 @@
 #' @importFrom parallel detectCores makeCluster stopCluster
 #' @importFrom methods is new validObject
 #' @importFrom stats as.dist cor cutree hclust median quantile sd
-#' @title ClustAll: Data driven strategy to find hidden subgroups of patients within
-#' complex diseases using clinical data
+#' @title ClustAll: Data driven strategy to find hidden subgroups of patients
+#' within complex diseases using clinical data
 #' @aliases runClustAll,ClustAllObject,numericOrNA,logicalOrNA-method
 #' @description This method runs the ClustAll pipeline
 #'
@@ -188,7 +188,7 @@ setMethod(
                 kmeans_res_c <- kmeans_res[as.character(oS_kmeans)][[1]]$cluster
 
                 for (t in seq_len(as.numeric(oS_kmeans))) { # for every k
-                  induse <- as.numeric(names(kmeans_res_c[kmeans_res_c==t]))
+                  induse <- as.numeric(base::names(kmeans_res_c[kmeans_res_c==t]))
 
                   locked <- flock::lock(lock) # synchronization between processes
                   summary_matrices_a[[heights_cut]][induse, induse] <- summary_matrices_a[[heights_cut]][induse, induse] + 1
@@ -215,7 +215,7 @@ setMethod(
                 hclust_res_c <- cutree(hclust_res, k=oS_hclust)
 
                 for (t in seq_len(oS_hclust)) {
-                  induse <- as.numeric(names(hclust_res_c[hclust_res_c==t]))
+                  induse <- as.numeric(base::names(hclust_res_c[hclust_res_c==t]))
                   locked <- flock::lock(lock) # synchronization between processes
                   summary_matrices_b[[heights_cut]][induse, induse] <- summary_matrices_b[[heights_cut]][induse, induse] + 1 # add result
                   flock::unlock(locked)
@@ -254,7 +254,7 @@ setMethod(
                 # Compute the stratification for each depth of the dendrogram,
                 # each imputation and its corresponding optimal number of clusters
                 for (t in seq_len(summary_clusters_c[heights_cut, impgo])) {
-                  induse <- as.numeric(names(pam_res_c[pam_res_c==t]))
+                  induse <- as.numeric(base::names(pam_res_c[pam_res_c==t]))
 
                   locked <- flock::lock(lock) # synchronization between processes
                   summary_matrices_c[[heights_cut]][induse, induse] <- summary_matrices_c[[heights_cut]][induse, induse] + 1
@@ -269,10 +269,10 @@ setMethod(
                                                                              divisive.clust, 6)
                 hclustgow_res_c <- cutree(divisive.clust,
                                           k=summary_clusters_d[heights_cut,impgo])
-                names(hclustgow_res_c) <- seq_len(dim(Object@data)[1])
+                base::names(hclustgow_res_c) <- seq_len(dim(Object@data)[1])
 
                 for (t in seq_len(summary_clusters_d[heights_cut, impgo]))  {
-                  induse <- as.numeric(names(hclustgow_res_c[hclustgow_res_c==t]))
+                  induse <- as.numeric(base::names(hclustgow_res_c[hclustgow_res_c==t]))
                   locked <- flock::lock(lock) # synchronization between processes
                   summary_matrices_d[[heights_cut]][induse, induse] <- summary_matrices_d[[heights_cut]][induse, induse] + 1
                   flock::unlock(locked)
@@ -342,7 +342,7 @@ setMethod(
           kmeans_res_c <- kmeans_res[as.character(oS_kmeans)][[1]]$cluster
 
           for (t in seq_len(as.numeric(oS_kmeans))) { # for every k
-            induse <- as.numeric(names(kmeans_res_c[kmeans_res_c==t]))
+            induse <- as.numeric(base::names(kmeans_res_c[kmeans_res_c==t]))
 
             locked <- flock::lock(lock) # synchronization between processes
             summary_matrices_a[[heights_cut]][induse, induse] <- summary_matrices_a[[heights_cut]][induse, induse] + 1
@@ -370,7 +370,7 @@ setMethod(
           hclust_res_c <- cutree(hclust_res, k=oS_hclust)
 
           for (t in seq_len(oS_hclust)) {
-            induse <- as.numeric(names(hclust_res_c[hclust_res_c==t]))
+            induse <- as.numeric(base::names(hclust_res_c[hclust_res_c==t]))
             locked <- flock::lock(lock) # synchronization
             summary_matrices_b[[heights_cut]][induse, induse] <- summary_matrices_b[[heights_cut]][induse, induse] + 1 # add result
             flock::unlock(locked)
@@ -407,7 +407,7 @@ setMethod(
           # calculate TREE for each cut and each imputation and
           # its corresponding optimal K
           for (t in seq_len(summary_clusters_c[heights_cut, impgo])) {
-            induse <- as.numeric(names(pam_res_c[pam_res_c==t]))
+            induse <- as.numeric(base::names(pam_res_c[pam_res_c==t]))
             locked <- flock::lock(lock) # synchronization
             summary_matrices_c[[heights_cut]][induse, induse] <- summary_matrices_c[[heights_cut]][induse, induse] + 1
             flock::unlock(locked)
@@ -418,10 +418,10 @@ setMethod(
           divisive.clust <- cluster::diana(as.matrix(gower_dist), diss = TRUE, keep.diss = TRUE)
           summary_clusters_d[heights_cut,impgo] <- cstats.table_hclust(gower_dist, divisive.clust, 6)
           hclustgow_res_c <- cutree(divisive.clust, k=summary_clusters_d[heights_cut,impgo])
-          names(hclustgow_res_c) <- seq_len(dim(Object@data)[1])
+          base::names(hclustgow_res_c) <- seq_len(dim(Object@data)[1])
 
           for (t in seq_len(summary_clusters_d[heights_cut, impgo]))  {
-            induse <- as.numeric(names(hclustgow_res_c[hclustgow_res_c==t]))
+            induse <- as.numeric(base::names(hclustgow_res_c[hclustgow_res_c==t]))
             locked <- flock::lock(lock) # synchronization between processes
             summary_matrices_d[[heights_cut]][induse, induse] <- summary_matrices_d[[heights_cut]][induse, induse] + 1
             flock::unlock(locked)
@@ -448,16 +448,16 @@ setMethod(
     }
 
     # rename the stratification matrices
-    names(summary_matrices_a) <- paste0("cuts_a_",
+    base::names(summary_matrices_a) <- paste0("cuts_a_",
                                         seq_len(length(summary_matrices_a)),
                                         sep="")
-    names(summary_matrices_b) <- paste0("cuts_b_",
+    base::names(summary_matrices_b) <- paste0("cuts_b_",
                                         seq_len(length(summary_matrices_b)),
                                         sep="")
-    names(summary_matrices_c) <- paste0("cuts_c_",
+    base::names(summary_matrices_c) <- paste0("cuts_c_",
                                         seq_len(length(summary_matrices_c)),
                                         sep="")
-    names(summary_matrices_d) <- paste0("cuts_d_",
+    base::names(summary_matrices_d) <- paste0("cuts_d_",
                                         seq_len(length(summary_matrices_d)),
                                         sep="")
 
@@ -478,7 +478,7 @@ setMethod(
       hclustgo <- hclust(1-as.dist(summary_matrices_MEASURES[[i]][]))
       summary_clusters[[i]] <- cutree(hclustgo, k=summary_n_clust[i])
     }
-    names(summary_clusters) <- names(summary_matrices_MEASURES)
+    base::names(summary_clusters) <- base::names(summary_matrices_MEASURES)
 
     # Jaccard Distance
     JACCARD_DISTANCE <- matrix(NA, length(summary_matrices_MEASURES),
@@ -495,8 +495,9 @@ setMethod(
     registerDoSNOW(cl)
 
     # Create the matrix
-    JACCARD_DISTANCE <- matrix(NA, length(summary_matrices_MEASURES), length(summary_matrices_MEASURES))
-    rownames(JACCARD_DISTANCE) <- names(summary_matrices_MEASURES)
+    JACCARD_DISTANCE <- matrix(NA, length(summary_matrices_MEASURES),
+                               length(summary_matrices_MEASURES))
+    rownames(JACCARD_DISTANCE) <- base::names(summary_matrices_MEASURES)
     colnames(JACCARD_DISTANCE) <- rownames(JACCARD_DISTANCE)
 
     # For two stratifications, this function calculates the similarity statistic
@@ -525,7 +526,7 @@ setMethod(
     # Optionally, set the diagonal to 1
     diag(JACCARD_DISTANCE) <- 1
 
-    rownames(JACCARD_DISTANCE) <- names(summary_matrices_MEASURES)
+    rownames(JACCARD_DISTANCE) <- base::names(summary_matrices_MEASURES)
     colnames(JACCARD_DISTANCE) <- rownames(JACCARD_DISTANCE)
 
     message("")

@@ -55,7 +55,7 @@ obtainDataPCA <- function(impData, variables_clust,
                           heights_cut) {
   treego <- cutree(variables_clust, h=possible_heights[heights_cut])
   groups_go <- unique(treego)
-  variables_use <- names(treego[treego==groups_go[1]])
+  variables_use <- base::names(treego[treego==groups_go[1]])
 
   if (length(variables_use)==1) {
     data_PCA <- impData[,variables_use]
@@ -68,7 +68,7 @@ obtainDataPCA <- function(impData, variables_clust,
   if (length(groups_go) > 1) {
     for (h in seq(from=2, to=length(groups_go))) {
 
-      variables_use <- names(treego[treego==groups_go[h]])
+      variables_use <- base::names(treego[treego==groups_go[h]])
       if (length(variables_use) == 1) {
         data_PCA <- cbind(data_PCA,impData[,variables_use])
 
