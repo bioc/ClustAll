@@ -27,8 +27,10 @@ This method runs the ClustAll pipeline
 data("BreastCancerWisconsin", package = "ClustAll")
 wdbc <- subset(wdbc,select=c(-ID, -Diagnosis))
 wdbc <- wdbc[1:15,1:8]
+\donttest{
 obj_noNA <- createClustAll(data = wdbc)
 obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 1, simplify = TRUE)
+}
 }
 \seealso{
 \code{\link{resStratification}},\code{\link{plotJACCARD}},

@@ -476,7 +476,7 @@ Perform imputation and store in an mids object. In this case, mice
 package is used.
 
 ```{r, results=FALSE}
-library(mice)
+require(mice)
 data("BreastCancerWisconsinMISSING", package = "ClustAll") # load example data
 data_use_NA <- wdbcNA
 str(data_use_NA)
@@ -487,7 +487,7 @@ imp_data_use <- mice(data_use_NA[-1], m=2, maxit = 5,seed=1234, print=FALSE)
 
 #### 3.3.2 Create ClustAll object
 
-```{r, results=FALSE}
+```{r, results=FALSE, eval=FALSE}
 # dataImputed contains the mids object with the imputed
 obj_imp1 <- createClustAll(data=data_use_NA, dataImputed = imp_data_use, 
                            colValidation = "Diagnosis") 
