@@ -23,6 +23,7 @@ original lebelling. The representative stratification names can be obtained
 using the method \code{\link{resStratification}}
 }
 \examples{
+\dontrun{
 data("BreastCancerWisconsin", package = "ClustAll")
 label <- as.numeric(as.factor(wdbc$Diagnosis))
 wdbc <- subset(wdbc,select=c(-ID, -Diagnosis))
@@ -35,6 +36,7 @@ resStratification(Object = obj_noNA1, population = 0.05,
 obj_noNA1 <- addValidationData(Object = obj_noNA1,
                                dataValidation = label)
 validateStratification(obj_noNA1, "cuts_a_1")
+}
 
 }
 \seealso{

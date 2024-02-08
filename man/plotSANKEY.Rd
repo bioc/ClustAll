@@ -27,6 +27,7 @@ This function plots the Sankey Diagram with the cluster distribution and
 shifts between a pair of stratifications
 }
 \examples{
+\dontrun{
 data("BreastCancerWisconsin", package = "ClustAll")
 label <- as.numeric(as.factor(wdbc$Diagnosis))
 wdbc <- subset(wdbc,select=c(-ID, -Diagnosis))
@@ -40,6 +41,7 @@ plotSANKEY(Object = obj_noNA1, clusters = c("cuts_a_1","cuts_b_5"))
 
 obj_noNA1 <- addValidationData(obj_noNA1, label)
 plotSANKEY(Object = obj_noNA1, clusters = "cuts_a_1", validationData=TRUE)
+}
 
 }
 \seealso{

@@ -33,13 +33,14 @@ It returns all the robust stratification (TRUE) or the representative for
 each group of stratifications (FALSE). Default is FALSE
 }
 \examples{
+\dontrun{
 data("BreastCancerWisconsin", package = "ClustAll")
 wdbc <- subset(wdbc,select=c(-ID, -Diagnosis))
-wdbc <- wdbc[1:15,1:8]
 obj_noNA <- createClustAll(data = wdbc)
 obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 1, simplify = TRUE)
 resStratification(Object = obj_noNA1, population = 0.05,
                   stratification_similarity = 0.88, all = FALSE)
+}
 
 }
 \seealso{

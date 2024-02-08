@@ -27,12 +27,13 @@ This function plots the correlation matrix heatmap showing the Jaccard
 Distance between robust stratifications
 }
 \examples{
+\dontrun{
 data("BreastCancerWisconsin", package = "ClustAll")
 wdbc <- subset(wdbc,select=c(-ID, -Diagnosis))
-wdbc <- wdbc[1:15,1:8]
 obj_noNA <- createClustAll(data = wdbc)
 obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 1, simplify = TRUE)
 plotJACCARD(obj_noNA1, paint = TRUE, stratification_similarity = 0.9)
+}
 }
 \seealso{
 \code{\link{resStratification}},\code{\link{cluster2data}},

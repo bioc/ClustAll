@@ -26,12 +26,13 @@
 #' \code{\link{ClustAllObject-class}}
 #'
 #' @examples
+#' \dontrun{
 #' data("BreastCancerWisconsin", package = "ClustAll")
 #' wdbc <- subset(wdbc,select=c(-ID, -Diagnosis))
-#' wdbc <- wdbc[1:15,1:8]
 #' obj_noNA <- createClustAll(data = wdbc)
 #' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 1, simplify = TRUE)
 #' plotJACCARD(obj_noNA1, paint = TRUE, stratification_similarity = 0.9)
+#' }
 #' @export
 setGeneric(
   name="plotJACCARD",
@@ -154,13 +155,14 @@ setMethod(
 #' \code{\link{ClustAllObject-class}}
 #'
 #' @examples
+#' \dontrun{
 #' data("BreastCancerWisconsin", package = "ClustAll")
 #' wdbc <- subset(wdbc,select=c(-ID, -Diagnosis))
-#' wdbc <- wdbc[1:15,1:8]
 #' obj_noNA <- createClustAll(data = wdbc)
 #' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 1, simplify = TRUE)
 #' resStratification(Object = obj_noNA1, population = 0.05,
 #'                   stratification_similarity = 0.88, all = FALSE)
+#' }
 #'
 #' @export
 setGeneric(
@@ -249,15 +251,16 @@ setMethod(
 #' \code{\link{ClustAllObject-class}}
 #'
 #' @examples
+#' \dontrun{
 #' data("BreastCancerWisconsin", package = "ClustAll")
 #' wdbc <- subset(wdbc,select=c(-ID, -Diagnosis))
-#' wdbc <- wdbc[1:15,1:8]
 #' obj_noNA <- createClustAll(data = wdbc)
 #' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 1, simplify = TRUE)
 #' resStratification(Object = obj_noNA1, population = 0.05,
 #'                   stratification_similarity = 0.88, all = FALSE)
 #' df <- cluster2data(Object = obj_noNA1,
 #'                    stratificationName = c("cuts_a_1","cuts_b_5","cuts_a_5"))
+#' }
 #' @export
 setGeneric(
   name="cluster2data",
@@ -307,6 +310,7 @@ setMethod(
 #' @seealso \code{\link{resStratification}},\code{\link{cluster2data}},
 #' \code{\link{ClustAllObject-class}}
 #' @examples
+#' \dontrun{
 #' data("BreastCancerWisconsin", package = "ClustAll")
 #' label <- as.numeric(as.factor(wdbc$Diagnosis))
 #' wdbc <- subset(wdbc,select=c(-ID, -Diagnosis))
@@ -320,6 +324,7 @@ setMethod(
 #'
 #' obj_noNA1 <- addValidationData(obj_noNA1, label)
 #' plotSANKEY(Object = obj_noNA1, clusters = "cuts_a_1", validationData=TRUE)
+#' }
 #'
 #' @export
 setGeneric(
@@ -426,6 +431,7 @@ setMethod(
 #' \code{\link{ClustAllObject-class}}
 #'
 #' @examples
+#' \dontrun{
 #' data("BreastCancerWisconsin", package = "ClustAll")
 #' label <- as.numeric(as.factor(wdbc$Diagnosis))
 #' wdbc <- subset(wdbc,select=c(-ID, -Diagnosis))
@@ -438,6 +444,7 @@ setMethod(
 #' obj_noNA1 <- addValidationData(Object = obj_noNA1,
 #'                                dataValidation = label)
 #' validateStratification(obj_noNA1, "cuts_a_1")
+#' }
 #'
 #' @export
 setGeneric(

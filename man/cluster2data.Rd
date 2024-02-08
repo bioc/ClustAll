@@ -22,15 +22,16 @@ stratification(s) as varaibles. The representative stratification names can
 be obtained using the method. \code{\link{resStratification}}
 }
 \examples{
+\dontrun{
 data("BreastCancerWisconsin", package = "ClustAll")
 wdbc <- subset(wdbc,select=c(-ID, -Diagnosis))
-wdbc <- wdbc[1:15,1:8]
 obj_noNA <- createClustAll(data = wdbc)
 obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 1, simplify = TRUE)
 resStratification(Object = obj_noNA1, population = 0.05,
                   stratification_similarity = 0.88, all = FALSE)
 df <- cluster2data(Object = obj_noNA1,
                    stratificationName = c("cuts_a_1","cuts_b_5","cuts_a_5"))
+}
 }
 \seealso{
 \code{\link{resStratification}},\code{\link{plotJACCARD}},
