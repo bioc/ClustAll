@@ -67,17 +67,17 @@ setMethod(
                           colors = grDevices::colorRampPalette(brewer.pal(9,"Blues"))(25),
                           breaks=seq(0, 1, length.out = 25))
 
-    legend <- ComplexHeatmap::HeatmapAnnotation(JACCARD_index = seq(0, 1,
-                                                    length.out = ncol(m)),
-                                                col = list(lg = col_fun),
-                                                annotation_name_side = "right")
-    ra <- ComplexHeatmap::rowAnnotation(
+    legend <- HeatmapAnnotation(JACCARD_index = seq(0, 1,
+                                length.out = ncol(m)),
+                                col = list(lg = col_fun),
+                                annotation_name_side = "right")
+    ra <- rowAnnotation(
             Distance=robust_stratification[,"Distance"],
             Clustering=robust_stratification[,"Clustering"],
             Depth=robust_stratification[,"Depth"],
             col = list(Distance=structure(names=c("Correlation","Gower"),
                                           c("#CCCCFF","blue4") ),
-                       Clustering=structure(names=c("Hierachical", "k-means",
+                       Clustering=structure(names=c("Hierarchical", "k-means",
                                                     "k-medoids"),
                                             c("forestgreen", "sandybrown",
                                               "tomato3")),
@@ -86,20 +86,20 @@ setMethod(
                                           max(robust_stratification[, "Depth"])),
                                         c("darkcyan", "#F7DCCA", "#C75F97"))))
 
-    hp <- ComplexHeatmap::Heatmap(as.matrix(m), name="hp", cluster_columns=FALSE,
-                                  cluster_rows=FALSE, left_annotation=ra, col=col_fun,
-                                  bottom_annotation = NULL, show_column_names = FALSE,
-                                  heatmap_legend_param = list(
-                                    direction = "vertical", title="JACCARD index", at=c(0, 1),
-                                    legend_width = unit(10, "cm")
-                                  ))
+    hp <- Heatmap(as.matrix(m), name="hp", cluster_columns=FALSE,
+                  cluster_rows=FALSE, left_annotation=ra, col=col_fun,
+                  bottom_annotation = NULL, show_column_names = FALSE,
+                  heatmap_legend_param = list(
+                    direction = "vertical", title="JACCARD index", at=c(0, 1),
+                    legend_width = unit(10, "cm")
+                  ))
 
     if (is.null(res)) {
       paint <- FALSE
     }
 
     if (paint == TRUE) {
-      ComplexHeatmap::draw(hp)
+      draw(hp)
       ngroup <- 0
       paint_names <- c()
       for (i in seq_len(length(res))) {
@@ -112,7 +112,7 @@ setMethod(
         index <- which(rownames(m) %in% c(paint_names[z], paint_names[z+1]))
         start <- index[1] - 1
         finish <- index[2]
-        ComplexHeatmap::decorate_heatmap_body("hp", row_slice = 1, column_slice = 1, {
+        decorate_heatmap_body("hp", row_slice = 1, column_slice = 1, {
                         grid::grid.rect(unit(start/full_length, "npc"), unit(1-start/full_length,
                                                                        "npc"), # top left
                                   width = (finish-start)/full_length,
@@ -202,26 +202,22 @@ setMethod(
       # percentage of the total population in each cluster. Default is 0.05 (5%)
       res <- chooseClusters(definitive_clusters, Object@summary_clusters,
                             population, all)
-      stratificationRep <- list()
-
-      if (all == TRUE) {
-        for (i in seq_len(length(res))) {
-          stratificationRep[[i]] <- list()
-
-          for (j in seq_len(length(res[[i]]))) {
-
-            stratificationRep[[i]][[j]] <- c(res[[i]][j],
-                                             table(Object@summary_clusters[[res[[i]][j]]]))
-            base::names(stratificationRep)[[i]] <- paste("Cluster_", i)
-          }
+      stratificationRep <- lapply(seq_along(res), function(i) {
+        if (all == TRUE) {
+          inner_list <- lapply(seq_along(res[[i]]), function(j) {
+            list(res[[i]][j], table(Object@summary_clusters[[res[[i]][j]]]))
+          })
+          names(inner_list) <- paste("Cluster_", seq_along(res[[i]]))
+          inner_list
+        } else {
+          list(table(Object@summary_clusters[[res[[i]]]]))
         }
+      })
 
-      } else {
-        for(i in seq_len(length(res))) {
-          stratificationRep[[i]] <- list(table(Object@summary_clusters[[res[[i]]]]))
-          base::names(stratificationRep)[i] <- res[[i]]
-        }
+      if (all == FALSE) {
+        names(stratificationRep) <- res
       }
+
 
       return(stratificationRep)
 
@@ -381,15 +377,13 @@ setMethod(
     source <- sort(rep(names1, times=length(unique(df[,clusters[2]]))))
     target <- rep(names2, times=length(unique(df[,clusters[1]])))
 
-    value <- c()
-
-    for (i in unique(df[,1])) {
-      df_tmp <- df[which(df[,1] == i),]
+    value <- unlist(lapply(unique(df[, 1]), function(i) {
+      df_tmp <- df[df[, 1] == i, ]
       tmp <- nrow(df)
-      for (j in unique(df[,2])) {
-        value <- c(value, length(which(df_tmp[,2] == j))/tmp)
-      }
-    }
+      unlist(lapply(unique(df[, 2]), function(j) {
+        length(which(df_tmp[, 2] == j)) / tmp
+      }))
+    }))
 
     links <- data.frame(source = source,
                         target = target,

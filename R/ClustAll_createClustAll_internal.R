@@ -92,12 +92,14 @@ checkVectorIntroduced <- function(data) {
 
 # This function checks the number of imputations is valid
 validnImputation <- function(nImputation, imputedNull) {
-    if (!is.numeric(nImputation)) {
+    if (!is.numeric(nImputation) & !is.null(nImputation)) {
         if (imputedNull == FALSE) {
             message("Argument nImputation is not valid.")
             message("Please introduce a positive number of imputations.")
             stop()
         }
+    } else if (is.null(nImputation) & imputedNull == TRUE) {
+      nImputation <- 0
     } else if (nImputation < 0) {
         message("Argument nImputation is not valid.")
         message("Please introduce a positive number of imputations.")
@@ -105,8 +107,6 @@ validnImputation <- function(nImputation, imputedNull) {
     } else if (nImputation %% 1 != 0) { # check it is not float value
         message("Decimal number included, the decimal value will be rounded.")
         nImputation <- round(nImputation, digits = 0)
-    } else if (is.null(nImputation) & imputedNull == TRUE) {
-        nImputation <- 0
     }
 
     return(nImputation)

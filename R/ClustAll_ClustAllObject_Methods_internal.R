@@ -68,48 +68,45 @@ obtainDefCluster <- function(mat_using, cluster_similarity=0.7){
 # Choose the representative stratification considering at least a minimum
 # percentage of the total population in each cluster. Default is 0.05 (5%)
 chooseClusters <- function(definitive_clusters, summary_clusters,
-                            population=0.05, all=TRUE) {
-    if (0 > population | population >= 1) {
-        message("Not a valid value. A value from 0 to 1 should be introduced.")
-        message("Clusters contain at least 5% of the total population.")
-        population <- 0.05
+                           population=0.05, all=TRUE) {
+  if (0 > population | population >= 1) {
+    message("Not a valid value. A value from 0 to 1 should be introduced.")
+    message("Clusters contain at least 5% of the total population.")
+    population <- 0.05
+  }
+
+  chosen_clusters <- list()
+
+  possible_stratifications <- lapply(summary_clusters, function(cluster) {
+    as.numeric(table(cluster))
+  })
+
+  for (i in seq_len(length(definitive_clusters))) {
+    for (j in definitive_clusters[[i]]) {
+      if (min(unlist(possible_stratifications[j])) < (length(summary_clusters[[1]]))*population) { # at least %X of the population in a cluster
+        definitive_clusters[[i]] <- definitive_clusters[[i]][definitive_clusters[[i]] != j]
+      }
     }
 
-    possible_stratifications <- list()
-    chosen_clusters <- list()
+    if (length(definitive_clusters[[i]]) == 0) {
+      next
 
-    for (i in seq_len(length(base::names(summary_clusters)))) {
-        possible_stratifications[i] <- list(as.numeric(table(summary_clusters[[i]])))
-    }
-
-    base::names(possible_stratifications) <- base::names(summary_clusters)
-
-    for (i in seq_len(length(definitive_clusters))) {
-        for (j in definitive_clusters[[i]]) {
-            if (min(unlist(possible_stratifications[j])) < (length(summary_clusters[[1]]))*population) { # at least %X of the population in a cluster
-                definitive_clusters[[i]] <- definitive_clusters[[i]][definitive_clusters[[i]] != j]
-            }
-        }
-
-        if (length(definitive_clusters[[i]]) == 0) {
-            next
-
-        } else if ((length(definitive_clusters[[i]]) %% 2) == 0) {
-            chosen_clusters <- c(chosen_clusters,
-                definitive_clusters[[i]][length(definitive_clusters[[i]])/2])
-
-        } else {
-            chosen_clusters <- c(chosen_clusters,
-        definitive_clusters[[i]][ceiling(length(definitive_clusters[[i]])/2)])
-        }
-    }
-
-    if (all == TRUE) {
-        return(definitive_clusters)
+    } else if ((length(definitive_clusters[[i]]) %% 2) == 0) {
+      chosen_clusters <- c(chosen_clusters,
+                           definitive_clusters[[i]][length(definitive_clusters[[i]])/2])
 
     } else {
-        return(chosen_clusters)
+      chosen_clusters <- c(chosen_clusters,
+                           definitive_clusters[[i]][ceiling(length(definitive_clusters[[i]])/2)])
     }
+  }
+
+  if (all == TRUE) {
+    return(definitive_clusters)
+
+  } else {
+    return(chosen_clusters)
+  }
 }
 
 
@@ -145,7 +142,7 @@ obtain_metadata <- function(m) {
                                 "Gower")
     names_clusteringmeth <- names_clustering
     names_clusteringmeth[which(names_clusteringmeth %in% c("a",
-                                                        "c"))] <- "Hierachical"
+                                                        "c"))] <- "Hierarchical"
     names_clusteringmeth[which(names_clusteringmeth == "b")] <- "k-means"
     names_clusteringmeth[which(names_clusteringmeth == "d")] <- "k-medoids"
 

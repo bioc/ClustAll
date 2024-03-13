@@ -10,6 +10,7 @@
 #' @export
 setClassUnion("listOrNULL", c("list", "NULL", "missing"))
 
+
 #' Class union of numeric, null or missing
 #' @title Class Union numericOrNA
 #' @aliases numericOrNA-class
@@ -156,6 +157,25 @@ setMethod(
 
 # ClustAllObject MEMBER ACCESS METHODS -----------------------------------------
 
+#' Show method for a \code{\link{ClustAllObject-class}} object
+#' @title show method for ClustAllObject
+#' @param object \code{\link{ClustAllObject-class}} object
+#' @return summarize information about the object
+setMethod("show", "ClustAllObject", function(object) {
+
+    cat(is(object)[[1]], "\n",
+        "Data: Number of variables: ",ncol(object@data),
+        ". Number of patients: ", nrow(object@data), "\n",
+        "Imputation: ", ifelse(is.null(object@dataImputed), "NO.", "YES."),
+        "\nNumber of imputations: ", object@nImputation, "\n",
+        "Processed: ", object@processed, "\n",
+        "Number of stratifications: ", ifelse(object@processed,
+                                             nrow(object@JACCARD_DISTANCE_F),
+                                             "NULL"), "\n", sep = ""
+    )
+  }
+)
+
 #' @title Retrieve the initial data from ClustAllObject
 #' @aliases showData,ClustAllObject-method
 #' @description
@@ -181,19 +201,43 @@ setMethod(
   f="showData",
   signature=signature(
     Object="ClustAllObject"),
-  definition=function(Object) {
-
-    return(Object@data)
-  }
+  definition=function(Object) {Object@data}
 )
 
+#' @title Retrieve the initial dataOriginal from ClustAllObject
+#' @aliases dataOriginal,ClustAllObject-method
+#' @description
+#' Generic function to retrieve the initial data used for
+#' \code{\link{createClustAll}} from a \code{\link{ClustAllObject-class}} object
+#' @usage dataOriginal(Object)
+#' @param Object \code{\link{ClustAllObject-class}} object
+#' @return The Data Frame with the initial data
+#' @seealso \code{\link{createClustAll}}, \code{\link{ClustAllObject-class}},
+#' \code{\link{runClustAll}}
+#' @examples
+#' data("BreastCancerWisconsin", package = "ClustAll")
+#' wdbc <- subset(wdbc,select=-ID)
+#' obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
+#' dataOriginal(obj_noNA)
+#' @export
+setGeneric(
+  name="dataOriginal",
+  def=function(Object){standardGeneric("dataOriginal")}
+)
+
+setMethod(
+  f="dataOriginal",
+  signature=signature(
+    Object="ClustAllObject"),
+  definition=function(Object) {Object@dataOriginal}
+)
 
 #' @title Retrieve the imputed data from ClustAllObject
-#' @aliases showDataImputed,ClustAllObject-method
+#' @aliases dataImputed,ClustAllObject-method
 #' @description
 #' Generic function to retrieve the imputed data obtained in
 #' \code{\link{createClustAll}} from a \code{\link{ClustAllObject-class}} object
-#' @usage showDataImputed(Object)
+#' @usage dataImputed(Object)
 #' @param Object \code{\link{ClustAllObject-class}} object
 #' @return Mids class object with the imputed data or NULL if imputation was
 #' not required
@@ -205,30 +249,28 @@ setMethod(
 #' wdbc <- subset(wdbc,select=-ID)
 #' obj_NA <- createClustAll(data = wdbcNA, colValidation = "Diagnosis",
 #'                          dataImputed = wdbcMIDS)
-#' showDataImputed(obj_NA)
+#' dataImputed(obj_NA)
 #' @export
 setGeneric(
-  name="showDataImputed",
-  def=function(Object){standardGeneric("showDataImputed")}
+  name="dataImputed",
+  def=function(Object){standardGeneric("dataImputed")}
 )
 
 setMethod(
-  f="showDataImputed",
+  f="dataImputed",
   signature=signature(
     Object="ClustAllObject"),
-  definition=function(Object) {
-    return(Object@dataImputed)
-  }
+  definition=function(Object) {Object@dataImputed}
 )
 
 
 #' @title Retrieve the number of imputations applied at the imputation step from
 #' ClustAllObject
-#' @aliases showNumberImputations,ClustAllObject-method
+#' @aliases nImputation,ClustAllObject-method
 #' @description
 #' Generic function to retrieve the number of imputations in
 #' \code{\link{createClustAll}} from a \code{\link{ClustAllObject-class}} object
-#' @usage showNumberImputations(Object)
+#' @usage nImputation(Object)
 #' @param Object \code{\link{ClustAllObject-class}} object
 #' @return Numeric vector that contains the number of imputations. 0 in the
 #' case of no imputations were required
@@ -240,34 +282,31 @@ setMethod(
 #' wdbc <- subset(wdbc,select=-ID)
 #' obj_NA <- createClustAll(data = wdbcNA, colValidation = "Diagnosis",
 #'                          dataImputed = wdbcMIDS)
-#' showNumberImputations(obj_NA)
+#' nImputation(obj_NA)
 #' @export
 setGeneric(
-  name="showNumberImputations",
-  def=function(Object){standardGeneric("showNumberImputations")}
+  name="nImputation",
+  def=function(Object){standardGeneric("nImputation")}
 )
 
 setMethod(
-  f="showNumberImputations",
+  f="nImputation",
   signature=signature(
     Object="ClustAllObject"),
-  definition=function(Object) {
-
-    return(Object@nImputation)
-  }
+  definition=function(Object) {Object@nImputation}
 )
 
 
 #' @title Retrieve the resulting stratifications for each combination of
 #' clusterings method (distance + clustering algorithm) and depth from
 #' ClustAllObject
-#' @aliases showSummaryClusters,ClustAllObject-method
+#' @aliases summary_clusters,ClustAllObject-method
 #' @description
 #' Generic function to retrieve the resulting stratifications for each
 #' combination of clusterings method (distance + clustering algorithm) and
 #' depth of \code{\link{runClustAll}} from a \code{\link{ClustAllObject-class}}
 #' object
-#' @usage showSummaryClusters(Object)
+#' @usage summary_clusters(Object)
 #' @param Object \code{\link{ClustAllObject-class}} object
 #' @return List with the resulting stratifications for each combination of
 #' clusterings method (distance + clustering algorithm) and depth methods or
@@ -279,31 +318,29 @@ setMethod(
 #' wdbc <- wdbc[1:15,1:8]
 #' obj_noNA <- createClustAll(data = wdbc)
 #' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 1, simplify = FALSE)
-#' showSummaryClusters(obj_noNA1)
+#' summary_clusters(obj_noNA1)
 #' @export
 setGeneric(
-  name="showSummaryClusters",
-  def=function(Object){standardGeneric("showSummaryClusters")}
+  name="summary_clusters",
+  def=function(Object){standardGeneric("summary_clusters")}
 )
 
 setMethod(
-  f="showSummaryClusters",
+  f="summary_clusters",
   signature=signature(
     Object="ClustAllObject"),
-  definition=function(Object) {
-    return(Object@summary_clusters)
-  }
+  definition=function(Object) {Object@summary_clusters}
 )
 
 
 #' @title Retrieve the matrix with the Jaccard distances derived from the robust
 #' populations stratifications in ClustAllObject
-#' @aliases showJaccardDistances,ClustAllObject-method
+#' @aliases JACCARD_DISTANCE_F,ClustAllObject-method
 #' @description
 #' Generic function to retrieve the matrix with the Jaccard distances derived
 #' from the robust populations stratifications in\code{\link{runClustAll}} from
 #' a \code{\link{ClustAllObject-class}} object
-#' @usage showJaccardDistances(Object)
+#' @usage JACCARD_DISTANCE_F(Object)
 #' @param Object \code{\link{ClustAllObject-class}} object
 #' @return Matrix containing the Jaccard distances derived from the robust
 #' populations stratifications or NULL if runClustAll method has not been
@@ -315,31 +352,28 @@ setMethod(
 #' wdbc <- wdbc[1:15,1:8]
 #' obj_noNA <- createClustAll(data = wdbc)
 #' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 1, simplify = FALSE)
-#' showJaccardDistances(obj_noNA1)
+#' JACCARD_DISTANCE_F(obj_noNA1)
 #' @export
 setGeneric(
-  name="showJaccardDistances",
-  def=function(Object){standardGeneric("showJaccardDistances")}
+  name="JACCARD_DISTANCE_F",
+  def=function(Object){standardGeneric("JACCARD_DISTANCE_F")}
 )
 
 setMethod(
-  f="showJaccardDistances",
+  f="JACCARD_DISTANCE_F",
   signature=signature(
     Object="ClustAllObject"),
-  definition=function(Object) {
-
-    return(Object@JACCARD_DISTANCE_F)
-  }
+  definition=function(Object) {Object@JACCARD_DISTANCE_F}
 )
 
 
 #' @title Retrieve logical if runClustAll has been executed considering
 #' ClustAllObject as input
-#' @aliases isProcessed,ClustAllObject-method
+#' @aliases processed,ClustAllObject-method
 #' @description
 #' Generic function to retrieve the logical if \code{\link{runClustAll}} have
 #' been runned from a \code{\link{ClustAllObject-class}} object
-#' @usage isProcessed(Object)
+#' @usage processed(Object)
 #' @param Object \code{\link{ClustAllObject-class}} object
 #' @return TRUE if runClustAll has been already executed. Otherwise FALSE
 #' @seealso \code{\link{runClustAll}}, \code{\link{ClustAllObject-class}}
@@ -348,15 +382,15 @@ setMethod(
 #' wdbc <- subset(wdbc,select=c(-ID, -Diagnosis))
 #' wdbc <- wdbc[1:15,1:8]
 #' obj_noNA <- createClustAll(data = wdbc)
-#' isProcessed(obj_noNA)
+#' processed(obj_noNA)
 #' @export
 setGeneric(
-  name="isProcessed",
-  def=function(Object){standardGeneric("isProcessed")}
+  name="processed",
+  def=function(Object){standardGeneric("processed")}
 )
 
 setMethod(
-  f="isProcessed",
+  f="processed",
   signature=signature(
     Object="ClustAllObject"),
   definition=function(Object) {
@@ -367,11 +401,11 @@ setMethod(
 
 
 #' @title Retrieve the original data labelling from ClustAllObject
-#' @aliases showValidationData,ClustAllObject-method
+#' @aliases dataValidation,ClustAllObject-method
 #' @description
 #' Generic function to retrieve numeric vector if it has been added with the
 #' true labels from a \code{\link{ClustAllObject-class}} object
-#' @usage showValidationData(Object)
+#' @usage dataValidation(Object)
 #' @param Object \code{\link{ClustAllObject-class}} object
 #' @return numeric vector if true labels have been added. Otherwise NULL
 #' @seealso \code{\link{ClustAllObject-class}}
@@ -379,21 +413,18 @@ setMethod(
 #' data("BreastCancerWisconsin", package = "ClustAll")
 #' wdbc <- subset(wdbc,select=-ID)
 #' obj_noNA <- createClustAll(data = wdbc, colValidation="Diagnosis")
-#' showValidationData(obj_noNA)
+#' dataValidation(obj_noNA)
 #' @export
 setGeneric(
-  name="showValidationData",
-  def=function(Object){standardGeneric("showValidationData")}
+  name="dataValidation",
+  def=function(Object){standardGeneric("dataValidation")}
 )
 
 setMethod(
-  f="showValidationData",
+  f="dataValidation",
   signature=signature(
     Object="ClustAllObject"),
-  definition=function(Object) {
-
-    return(Object@dataValidation)
-  }
+  definition=function(Object) {Object@dataValidation}
 )
 
 #' addValidationData
@@ -507,6 +538,42 @@ NULL
 #' @usage data("BreastCancerWisconsinMISSING", package = "ClustAll")
 #' @format A data frame with 660 rows and 31 variables
 #' @return wdbcMIDS dataset
+NULL
+
+#' obj_noNA1: Processed wdbc dataset for testing purposed
+#'
+#' Processed wdbc as appear in vignette
+#'
+#' @docType data
+#' @keywords datasets
+#' @name obj_noNA1
+#' @usage data("testData", package = "ClustAll")
+#' @format A processed ClustAllObject
+#' @return ClustAllObject Object
+NULL
+
+#' obj_noNA1simplify: Processed wdbc dataset for testing purposed
+#'
+#' Processed wdbc as appear in vignette, with simplify TRUE parameter
+#'
+#' @docType data
+#' @keywords datasets
+#' @name obj_noNA1simplify
+#' @usage data("testData", package = "ClustAll")
+#' @format A processed ClustAllObject
+#' @return ClustAllObject Object
+NULL
+
+#' obj_noNAno1Validation: Processed wdbc dataset for testing purposed
+#'
+#' Processed wdbc as appear in vignette, with no validation data
+#'
+#' @docType data
+#' @keywords datasets
+#' @name obj_noNAno1Validation
+#' @usage data("testData", package = "ClustAll")
+#' @format A processed ClustAllObject
+#' @return ClustAllObject Object
 NULL
 
 # END OF ClustAll_ClustAllObject_Class.R

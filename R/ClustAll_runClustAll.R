@@ -6,7 +6,6 @@
 #' @import modeest
 #' @import dplyr
 #' @import fpc
-#' @import clValid
 #' @import doSNOW
 #' @import foreach
 #' @import flock
@@ -476,7 +475,7 @@ setMethod(
     ### Step 2.2. Filtering non-robust stratifications
     summary_clusters <- vector("list", length(summary_matrices_MEASURES))
 
-    for(i in seq_len(length(summary_clusters))) {
+    for (i in seq_len(length(summary_clusters))) {
       hclustgo <- hclust(1-as.dist(summary_matrices_MEASURES[[i]][]))
       summary_clusters[[i]] <- cutree(hclustgo, k=summary_n_clust[i])
     }
