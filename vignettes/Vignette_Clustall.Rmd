@@ -47,7 +47,8 @@ table <- data.frame(Nomenclature=c("a","b","c","d"),
 knitr::kable(table, align = c("l", "l", "l"), caption = "ClustAll Stratification Output Interpretation")
 ```
 
-![Schematic representation of the ClustAll pipeline](img/workflow.jpg)
+![Schematic representation of the ClustAll pipeline](./img/workflow.jpg)
+
 
 # Installation
 
@@ -137,9 +138,9 @@ To display population-robust stratifications (\>85% bootstrapping stability), we
 
 In this specific case, a similarity of 0.88 reveals three different groups of alternatives for stratifying the population, indicated by the the red rectangles:
 
-```{r plot1, fig.height=12, fig.width=12,results=FALSE, warning=FALSE, fig.cap = "Correlation matrix heatmap. It depcits the similarity between population-robust stratifications. The discontinuous red rectangles highlight alternative stratifications solutions based on those stratifications that exhibit certain level of similarity. The heatmap row annotation describes the combination of parameters —distance metric, clustering method, and embedding number— from which each stratification is derived.", echo = FALSE}
+```{r plot1, fig.height=12, fig.width=12, warning=FALSE, fig.cap = "Correlation matrix heatmap. It depcits the similarity between population-robust stratifications. The discontinuous red rectangles highlight alternative stratifications solutions based on those stratifications that exhibit certain level of similarity. The heatmap row annotation describes the combination of parameters —distance metric, clustering method, and embedding number— from which each stratification is derived."}
 
-plotJACCARD(Object = obj_noNA1, stratification_similarity = 0.88)
+plotJACCARD(Object = obj_noNA1, stratification_similarity = 0.88, paint = TRUE)
 ```
 
 ## Retrieve stratification representatives
@@ -200,7 +201,7 @@ validateStratification(obj_noNA1, "cuts_b_13")
 validateStratification(obj_noNA1, "cuts_b_9")
 ```
 
-Session Info
+# Session Info
 
 ```{r session info}
 sessionInfo()

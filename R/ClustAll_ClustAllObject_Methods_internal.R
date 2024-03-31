@@ -61,6 +61,10 @@ obtainDefCluster <- function(mat_using, cluster_similarity=0.7){
         }
     }
 
+    min_NperGroup <- 3
+    definitive_clusters <- definitive_clusters[which(unlist(lapply(definitive_clusters,
+                                               function(x) {length(x)>=min_NperGroup})))]
+
     return(definitive_clusters)
 }
 

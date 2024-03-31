@@ -487,10 +487,6 @@ setMethod(
     }
     base::names(summary_clusters) <- base::names(summary_matrices_MEASURES)
 
-    # Jaccard Distance
-    JACCARD_DISTANCE <- matrix(NA, length(summary_matrices_MEASURES),
-                               length(summary_matrices_MEASURES))
-
     message("")
     message("\nCalculating correlation distance matrix of the statifications...\n")
     pb <- txtProgressBar(max=nimp, style=3)
@@ -511,7 +507,7 @@ setMethod(
     # in comemberships of the observations.
     # The comembership is defined as the pairs of observations that are
     # clustered together.
-    JACCARD_DISTANCE <- foreach(seq_len(nrow(JACCARD_DISTANCE)), .combine = 'rbind', .options.snow=opts) %dopar% {
+    JACCARD_DISTANCE <- foreach(i = 1:nrow(JACCARD_DISTANCE), .combine = 'rbind', .options.snow=opts) %dopar% {
       result_row <- numeric(nrow(JACCARD_DISTANCE))
       for (j in i:nrow(JACCARD_DISTANCE)) {
         result_row[j] <- cluster_similarity_adapt(summary_clusters[[i]],

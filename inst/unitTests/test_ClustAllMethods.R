@@ -2,7 +2,7 @@ data("testData", package = "ClustAll")
 
 # Test obtain expected result for a certain similarity
 test_defClusters <- function() {
-  expected_result <- c("cuts_a_28", "cuts_c_9",  "cuts_c_4",  "cuts_b_13")
+  expected_result <- c("cuts_a_28", "cuts_c_9",  "cuts_c_4")
   result <- resStratification(Object=obj_noNA1, stratification_similarity=0.9,
                               all = F)
 
