@@ -216,7 +216,7 @@ comembership <- function(labels) {
   idx_comembership <- 1
 
   # Traverse through all pairs of observations to identify comemberships
-  for (i in 1:(n - 1)) {
+  for (i in seq_len(n - 1)) {
     for (j in (i + 1):n) {
       if (labels[i] == labels[j]) {
         comembership[idx_comembership] <- 1
@@ -252,7 +252,7 @@ comembership_table <- function(labels1, labels2) {
   comembership2 <- FALSE
 
   # Traverse through all pairs of observations to identify comemberships
-  for (i in 1:(n1 - 1)) {
+  for (i in seq_len(n1 - 1)) {
     for (j in (i + 1):n1) {
       # If either of the clusterings have a comembership, set the comembership
       # flag as true.

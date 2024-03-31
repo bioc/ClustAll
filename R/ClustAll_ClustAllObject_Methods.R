@@ -28,6 +28,7 @@
 #' @examples
 #' data("BreastCancerWisconsin", package = "ClustAll")
 #' wdbc <- subset(wdbc,select=c(-ID, -Diagnosis))
+#' wdbc <- wdbc[1:15,1:8]
 #' obj_noNA <- createClustAll(data = wdbc)
 #' \donttest{
 #' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 1, simplify = TRUE)
@@ -99,29 +100,28 @@ setMethod(
     }
 
     if (paint == TRUE) {
+      ht_opt$message <- FALSE
       draw(hp)
       ngroup <- 0
-      paint_names <- c()
-      for (i in seq_len(length(res))) {
-        paint_names <- c(paint_names, res[[i]][[1]][1])
-        paint_names <- c(paint_names, res[[i]][[length(res[[i]])]][1])
-      }
+      paint_names <- unlist(lapply(res, function(sublist) {
+        c(sublist[[1]][[1]], sublist[[length(sublist)]][[1]])
+      }))
 
-      for (z in seq(from=1, to=length(paint_names), by=2)) {
-        ngroup <- ngroup + 1
-        index <- which(rownames(m) %in% c(paint_names[z], paint_names[z+1]))
-        start <- index[1] - 1
-        finish <- index[2]
-        decorate_heatmap_body("hp", row_slice = 1, column_slice = 1, {
-                        grid::grid.rect(unit(start/full_length, "npc"), unit(1-start/full_length,
-                                                                       "npc"), # top left
-                                  width = (finish-start)/full_length,
-                                  height = (finish-start)/full_length,
-                                  gp = gpar(lwd = 2.5, lty = 2.5, fill=FALSE, col="red"),
-                                  just = c("left", "top"), draw = TRUE
-          )
-        })
-      }
+      invisible(lapply(seq(from = 1, to = length(paint_names), by = 2), function(z) {
+              ngroup <- ngroup + 1
+              index <- which(rownames(m) %in% c(paint_names[z], paint_names[z + 1]))
+              start <- index[1] - 1
+              finish <- index[2]
+              decorate_heatmap_body("hp", row_slice = 1, column_slice = 1, {
+                grid::grid.rect(unit(start / full_length, "npc"), unit(1 - start / full_length, "npc"), # top left
+                                width = (finish - start) / full_length,
+                                height = (finish - start) / full_length,
+                                gp = gpar(lwd = 2.5, lty = 2.5, fill = FALSE, col = "red"),
+                                just = c("left", "top"), draw = TRUE
+                )
+              })
+            }))
+
     } else {
       return(hp)
     }
@@ -157,6 +157,7 @@ setMethod(
 #' @examples
 #' data("BreastCancerWisconsin", package = "ClustAll")
 #' wdbc <- subset(wdbc,select=c(-ID, -Diagnosis))
+#' wdbc <- wdbc[1:15,1:8]
 #' obj_noNA <- createClustAll(data = wdbc)
 #' \donttest{
 #' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 1, simplify = TRUE)
@@ -249,6 +250,7 @@ setMethod(
 #' @examples
 #' data("BreastCancerWisconsin", package = "ClustAll")
 #' wdbc <- subset(wdbc,select=c(-ID, -Diagnosis))
+#' wdbc <- wdbc[1:15,1:8]
 #' obj_noNA <- createClustAll(data = wdbc)
 #' \donttest{
 #' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 1, simplify = TRUE)

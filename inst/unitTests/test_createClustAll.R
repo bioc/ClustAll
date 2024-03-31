@@ -53,12 +53,6 @@ test_ValidImputation <- function() {
 
   dataImputed <- mice::mice(data_NA, m=2, maxit=5, seed=123) # manual imputation
   obj_imputed <- createClustAll(data_NA, dataImputed = dataImputed)  # Expected it works as the original data is the same
-
-  # data_NAchanged <- data_NA <- data.frame(a = c(2, 2, 3, 4), b = c("A", "B", "A", "B"), # we changed the first element of a column 1->2
-  #                                         c = c("A", "B", "A", NA))
-  # dataImputedchanged <- mice::mice(data_NAchanged, m=2, maxit=5, seed=123) # manual imputation
-  # checkException(createClustAll(data=data_NA, dataImputed=dataImputedchanged)) # exception expected as the data frame
-  #                                                                              # and the original data of imputations are different
 }
 
 test_addValidationData <- function() {

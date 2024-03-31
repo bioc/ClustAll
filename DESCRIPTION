@@ -10,7 +10,7 @@ Authors@R: c(person("Asier", "Ortega-Legarreta", role = c("aut","cre"),
            email = "spalomie@navarra.es"))
 Imports: FactoMineR, bigstatsr, clValid, doSNOW, parallel, foreach, dplyr, 
         fpc, mice, modeest, flock, networkD3, methods, ComplexHeatmap, cluster,
-        RColorBrewer, circlize, grDevices, ggplot2, grid, stats, utils
+        RColorBrewer, circlize, grDevices, ggplot2, grid, stats, utils, pbapply
 Suggests: RUnit, knitr, BiocGenerics, rmarkdown, BiocStyle, roxygen2
 Description: Data driven strategy to find hidden groups of patients with complex
         diseases using clinical data. ClustAll facilitates the unsupervised 

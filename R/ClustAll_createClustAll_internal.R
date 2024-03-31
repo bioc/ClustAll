@@ -6,57 +6,75 @@
 # This functions checks if the data frame introduced contains character vectors.
 # In that case, it transforms them into numerical values assuming they are categorical values.
 checkDataIntroduced <- function(data) {
-    if (any(sapply(data, is.character))) {
-        message("The dataset contains character values.")
-        message("They are converted to categorical (more than one class) or to binary (one class).")
-        data_new <- data
-        must_convert_variables <- which(sapply(data, is.character))
+  if (any(sapply(data, is.character))) {
+    message("The dataset contains character values.")
+    message("They are converted to categorical (more than one class) or to binary (one class).")
+    data_new <- data
+    must_convert_variables <- which(sapply(data, is.character))
 
-        if (length(must_convert_variables) == 1) {
-            if (isBinary(data[,must_convert_variables])) {
-                variables_binary <- must_convert_variables
-                variables_categorical <- NULL
-            } else {
-                variables_binary <- NULL
-                variables_categorical <- must_convert_variables
-            }
-        } else {
-            variables_binary <- base::names(which(sapply(data[,must_convert_variables],
-                                                    isBinary)))
-            variables_categorical <- base::names(which(!sapply(data[,must_convert_variables],
-                                                                isBinary)))
-            }
-
-        if (length(variables_binary) == 1) {
-            data_new[, variables_binary] <- as.numeric(as.factor(data_new[,
-                                                            variables_binary]))
-        } else if (length(variables_binary) > 1) {
-            data_new[, variables_binary] <- sapply(data_new[, variables_binary],
-                                        function(x) as.numeric(as.factor(x)))
-        }
-
-        if (length(variables_categorical > 1)) {
-        message("Categorical variables detected! Applying One Hot enconding...")
-            for (variable_name in variables_categorical) {
-                onehot_variables <- base::names(table(data[, variable_name]))
-                for (new_onehot_variable in onehot_variables) {
-                    data_new[, paste0(variable_name, "_", new_onehot_variable)] <- rep(0, nrow(data_new))
-            data_new[(which(data_new[, variable_name] == new_onehot_variable)),
-                        paste0(variable_name, "_", new_onehot_variable)] <- 1
-                data_new[(which(is.na(data_new[, variable_name]))),
-                        paste0(variable_name, "_", new_onehot_variable)] <- NA
-                }
-                data_new <- subset(data_new,
-                        select = -which(colnames(data_new) == variable_name))
-            }
-        }
-
+    if (length(must_convert_variables) == 1) {
+      if (isBinary(data[,must_convert_variables])) {
+        variables_binary <- must_convert_variables
+        variables_categorical <- NULL
+      } else {
+        variables_binary <- NULL
+        variables_categorical <- must_convert_variables
+      }
     } else {
-        data_new <- data
+      variables_binary <- names(which(sapply(data[,must_convert_variables], isBinary)))
+      variables_categorical <- names(which(!sapply(data[,must_convert_variables], isBinary)))
     }
 
-    message("Before continuing, check that the transformation has been processed correctly.\n")
-    return(data_new)
+    if (length(variables_binary) == 1) {
+      data_new[, variables_binary] <- as.numeric(as.factor(data_new[, variables_binary]))
+    } else if (length(variables_binary) > 1) {
+      data_new[, variables_binary] <- sapply(data_new[, variables_binary], function(x) as.numeric(as.factor(x)))
+    }
+
+    if (length(variables_categorical) > 0) {
+      message("Categorical variables detected! Applying One Hot encoding...")
+
+      if (length(variables_categorical) == 1) {
+        onehot_variables <- base::names(table(data[, variables_categorical]))
+
+        result <- sapply(onehot_variables, function(new_onehot_variable) {
+          temp <- rep(0, nrow(data_new))
+          temp[which(data_new[, variables_categorical] == new_onehot_variable)] <- 1
+          temp[which(is.na(data_new[, variables_categorical]))] <- NA
+          return(temp)
+        })
+
+        colnames(result) <- paste0(variables_categorical, "_", colnames(result))
+        data_new <- cbind(data_new, result)
+
+        data_new <- subset(data_new,
+                           select = -which(colnames(data_new) == variables_categorical))
+
+      } else {
+
+        onehot_columns <- sapply(variables_categorical, function(variable_name) {
+          onehot_variables <- unique(data[, variable_name])
+          sapply(onehot_variables, function(new_onehot_variable) {
+            as.numeric(data[, variable_name] == new_onehot_variable)
+          })
+        })
+
+        combined_onehot <- do.call(cbind, Map(function(df, name) {
+          colnames(df) <- paste(name, colnames(df), sep = "_")
+          return(df)
+        }, onehot_columns, names(onehot_columns)))
+
+        data_new <- cbind(data_new, combined_onehot)
+        data_new <- subset(data_new,
+                           select = -which(colnames(data_new) %in% names(onehot_columns)))
+      }
+    }
+  } else {
+    data_new <- data
+  }
+
+  message("Before continuing, check that the transformation has been processed correctly.\n")
+  return(data_new)
 }
 
 

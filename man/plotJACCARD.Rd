@@ -29,6 +29,7 @@ Distance between robust stratifications
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")
 wdbc <- subset(wdbc,select=c(-ID, -Diagnosis))
+wdbc <- wdbc[1:15,1:8]
 obj_noNA <- createClustAll(data = wdbc)
 \donttest{
 obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 1, simplify = TRUE)

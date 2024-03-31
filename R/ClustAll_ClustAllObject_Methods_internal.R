@@ -68,7 +68,7 @@ obtainDefCluster <- function(mat_using, cluster_similarity=0.7){
 # Choose the representative stratification considering at least a minimum
 # percentage of the total population in each cluster. Default is 0.05 (5%)
 chooseClusters <- function(definitive_clusters, summary_clusters,
-                           population=0.05, all=TRUE) {
+                           population = 0.05, all = TRUE) {
   if (0 > population | population >= 1) {
     message("Not a valid value. A value from 0 to 1 should be introduced.")
     message("Clusters contain at least 5% of the total population.")
@@ -81,29 +81,27 @@ chooseClusters <- function(definitive_clusters, summary_clusters,
     as.numeric(table(cluster))
   })
 
-  for (i in seq_len(length(definitive_clusters))) {
-    for (j in definitive_clusters[[i]]) {
-      if (min(unlist(possible_stratifications[j])) < (length(summary_clusters[[1]]))*population) { # at least %X of the population in a cluster
-        definitive_clusters[[i]] <- definitive_clusters[[i]][definitive_clusters[[i]] != j]
+  definitive_clusters <- lapply(definitive_clusters, function(cluster) {
+    for (j in cluster) {
+      if (min(unlist(possible_stratifications[j])) < (length(summary_clusters[[1]])) * population) {
+        cluster <- cluster[cluster != j]
       }
     }
+    return(cluster)
+  })
 
-    if (length(definitive_clusters[[i]]) == 0) {
-      next
-
-    } else if ((length(definitive_clusters[[i]]) %% 2) == 0) {
-      chosen_clusters <- c(chosen_clusters,
-                           definitive_clusters[[i]][length(definitive_clusters[[i]])/2])
-
+  chosen_clusters <- lapply(definitive_clusters, function(cluster) {
+    if (length(cluster) == 0) {
+      return(NULL)
+    } else if ((length(cluster) %% 2) == 0) {
+      return(cluster[length(cluster) / 2])
     } else {
-      chosen_clusters <- c(chosen_clusters,
-                           definitive_clusters[[i]][ceiling(length(definitive_clusters[[i]])/2)])
+      return(cluster[ceiling(length(cluster) / 2)])
     }
-  }
+  })
 
   if (all == TRUE) {
     return(definitive_clusters)
-
   } else {
     return(chosen_clusters)
   }
@@ -112,21 +110,19 @@ chooseClusters <- function(definitive_clusters, summary_clusters,
 
 # This function checks if the introduced cluster exists in the list of clusters
 checkCluster <- function(cluster, lCluster) {
-    stopProcess <- FALSE
-    booleans <- cluster %in% base::names(lCluster)
+  stopProcess <- FALSE
+  booleans <- cluster %in% base::names(lCluster)
 
-    for (i in seq_len(length(booleans))) {
-        if (booleans[i] == FALSE) {
-            message("The follwoing cluster does not exist.")
-            message(cluster[i])
-            message("You may want to check the clusters using resStratification.")
-            stopProcess <- TRUE
-        }
-    }
+  if(any(!booleans)) {
+    message("The following cluster(s) do(es) not exist:")
+    message(paste0(cluster[!booleans], sep="\n"))
+    message("You may want to check the clusters using resStratification.")
+    stopProcess <- TRUE
+  }
 
-    if (stopProcess){
-        stop()
-    }
+  if (stopProcess){
+    stop()
+  }
 }
 
 

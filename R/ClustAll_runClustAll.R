@@ -11,6 +11,7 @@
 #' @import flock
 #' @import cluster
 #' @import utils
+#' @import pbapply
 #' @importFrom grDevices colorRampPalette
 #' @importFrom parallel detectCores makeCluster stopCluster
 #' @importFrom methods is new validObject
@@ -188,13 +189,14 @@ setMethod(
                 kmeans_res <- clusters(data_PCA.clValid_internal_kmeans, "kmeans")
                 kmeans_res_c <- kmeans_res[as.character(oS_kmeans)][[1]]$cluster
 
-                for (t in seq_len(as.numeric(oS_kmeans))) { # for every k
+                invisible(sapply(seq_len(as.numeric(oS_kmeans)), function(t) {
                   induse <- as.numeric(base::names(kmeans_res_c[kmeans_res_c==t]))
 
                   locked <- flock::lock(lock) # synchronization between processes
                   summary_matrices_a[[heights_cut]][induse, induse] <- summary_matrices_a[[heights_cut]][induse, induse] + 1
                   flock::unlock(locked)
-                }
+                }))
+
 
                 summary_clusters_a[heights_cut, impgo] <- oS_kmeans
 
@@ -215,12 +217,13 @@ setMethod(
                                        "hierarchical")
                 hclust_res_c <- cutree(hclust_res, k=oS_hclust)
 
-                for (t in seq_len(oS_hclust)) {
-                  induse <- as.numeric(base::names(hclust_res_c[hclust_res_c==t]))
+                invisible(sapply(seq_len(oS_hclust), function(t) {
+                  induse <- as.numeric(base::names(hclust_res_c[hclust_res_c == t]))
                   locked <- flock::lock(lock) # synchronization between processes
-                  summary_matrices_b[[heights_cut]][induse, induse] <- summary_matrices_b[[heights_cut]][induse, induse] + 1 # add result
+                  summary_matrices_b[[heights_cut]][induse, induse] <- summary_matrices_b[[heights_cut]][induse, induse] + 1
                   flock::unlock(locked)
-                }
+                }))
+
                 summary_clusters_b[heights_cut, impgo] <- oS_hclust
 
 
@@ -254,13 +257,13 @@ setMethod(
 
                 # Compute the stratification for each depth of the dendrogram,
                 # each imputation and its corresponding optimal number of clusters
-                for (t in seq_len(summary_clusters_c[heights_cut, impgo])) {
-                  induse <- as.numeric(base::names(pam_res_c[pam_res_c==t]))
+                invisible(sapply(seq_len(summary_clusters_c[heights_cut, impgo]), function(t) {
+                  induse <- as.numeric(base::names(pam_res_c[pam_res_c == t]))
 
                   locked <- flock::lock(lock) # synchronization between processes
                   summary_matrices_c[[heights_cut]][induse, induse] <- summary_matrices_c[[heights_cut]][induse, induse] + 1
                   flock::unlock(locked)
-                }
+                }))
 
 
                 #### Step 2.1.4. d) Gower Distance and H-Clust clustering method
@@ -272,12 +275,13 @@ setMethod(
                                           k=summary_clusters_d[heights_cut,impgo])
                 base::names(hclustgow_res_c) <- seq_len(dim(Object@data)[1])
 
-                for (t in seq_len(summary_clusters_d[heights_cut, impgo]))  {
-                  induse <- as.numeric(base::names(hclustgow_res_c[hclustgow_res_c==t]))
+                invisible(sapply(seq_len(summary_clusters_d[heights_cut, impgo]), function(t) {
+                  induse <- as.numeric(base::names(hclustgow_res_c[hclustgow_res_c == t]))
                   locked <- flock::lock(lock) # synchronization between processes
                   summary_matrices_d[[heights_cut]][induse, induse] <- summary_matrices_d[[heights_cut]][induse, induse] + 1
                   flock::unlock(locked)
-                }
+                }))
+
               }
 
       ### END OF step, if only one or no imputation were considered
@@ -342,13 +346,13 @@ setMethod(
           kmeans_res <- clusters(data_PCA.clValid_internal_kmeans, "kmeans")
           kmeans_res_c <- kmeans_res[as.character(oS_kmeans)][[1]]$cluster
 
-          for (t in seq_len(as.numeric(oS_kmeans))) { # for every k
-            induse <- as.numeric(base::names(kmeans_res_c[kmeans_res_c==t]))
+          invisible(sapply(seq_len(as.numeric(oS_kmeans)), function(t) {
+            induse <- as.numeric(base::names(kmeans_res_c[kmeans_res_c == t]))
 
             locked <- flock::lock(lock) # synchronization between processes
             summary_matrices_a[[heights_cut]][induse, induse] <- summary_matrices_a[[heights_cut]][induse, induse] + 1
             flock::unlock(locked)
-          }
+          }))
 
           summary_clusters_a[heights_cut, impgo] <- oS_kmeans
 
@@ -370,12 +374,13 @@ setMethod(
           hclust_res <- clusters(data_PCA.clValid_internal_hclust, "hierarchical")
           hclust_res_c <- cutree(hclust_res, k=oS_hclust)
 
-          for (t in seq_len(oS_hclust)) {
-            induse <- as.numeric(base::names(hclust_res_c[hclust_res_c==t]))
+          invisible(sapply(seq_len(oS_hclust), function(t) {
+            induse <- as.numeric(base::names(hclust_res_c[hclust_res_c == t]))
             locked <- flock::lock(lock) # synchronization
             summary_matrices_b[[heights_cut]][induse, induse] <- summary_matrices_b[[heights_cut]][induse, induse] + 1 # add result
             flock::unlock(locked)
-          }
+          }))
+
           summary_clusters_b[heights_cut, impgo] <- oS_hclust
 
 
@@ -407,12 +412,12 @@ setMethod(
 
           # calculate TREE for each cut and each imputation and
           # its corresponding optimal K
-          for (t in seq_len(summary_clusters_c[heights_cut, impgo])) {
-            induse <- as.numeric(base::names(pam_res_c[pam_res_c==t]))
+          invisible(sapply(seq_len(summary_clusters_c[heights_cut, impgo]), function(t) {
+            induse <- as.numeric(base::names(pam_res_c[pam_res_c == t]))
             locked <- flock::lock(lock) # synchronization
             summary_matrices_c[[heights_cut]][induse, induse] <- summary_matrices_c[[heights_cut]][induse, induse] + 1
             flock::unlock(locked)
-          }
+          }))
 
 
           #### Step 2.1.4. d) Gower Distance and H-Clust clustering method
@@ -421,12 +426,13 @@ setMethod(
           hclustgow_res_c <- cutree(divisive.clust, k=summary_clusters_d[heights_cut,impgo])
           base::names(hclustgow_res_c) <- seq_len(dim(Object@data)[1])
 
-          for (t in seq_len(summary_clusters_d[heights_cut, impgo]))  {
-            induse <- as.numeric(base::names(hclustgow_res_c[hclustgow_res_c==t]))
+          invisible(sapply(seq_len(summary_clusters_d[heights_cut, impgo]), function(t) {
+            induse <- as.numeric(base::names(hclustgow_res_c[hclustgow_res_c == t]))
             locked <- flock::lock(lock) # synchronization between processes
             summary_matrices_d[[heights_cut]][induse, induse] <- summary_matrices_d[[heights_cut]][induse, induse] + 1
             flock::unlock(locked)
-          }
+          }))
+
         }
       }
     }
@@ -505,7 +511,7 @@ setMethod(
     # in comemberships of the observations.
     # The comembership is defined as the pairs of observations that are
     # clustered together.
-    JACCARD_DISTANCE <- foreach(i = 1:nrow(JACCARD_DISTANCE), .combine = 'rbind', .options.snow=opts) %dopar% {
+    JACCARD_DISTANCE <- foreach(seq_len(nrow(JACCARD_DISTANCE)), .combine = 'rbind', .options.snow=opts) %dopar% {
       result_row <- numeric(nrow(JACCARD_DISTANCE))
       for (j in i:nrow(JACCARD_DISTANCE)) {
         result_row[j] <- cluster_similarity_adapt(summary_clusters[[i]],
@@ -533,15 +539,10 @@ setMethod(
     message("")
     message("\nFiltering non-robust statifications...\n")
 
-    pb <- txtProgressBar(min = 0, max = length(summary_matrices_MEASURES),
-                         initial = 0, style = 3)
-
     # Population based-robustness: Bootstrapping
-    summary_matrices_STABILITY <- matrix(NA,
-                                         length(summary_matrices_MEASURES), 3)
-    for(i in seq_len(length(summary_matrices_MEASURES))) {
+    result_list <- pblapply(summary_matrices_MEASURES, function(mat) {
       invisible(capture.output( # avoid printing function messages
-        r1 <- clusterboot(data=as.dist(1000-summary_matrices_MEASURES[[i]][]),
+        r1 <- clusterboot(data=as.dist(1000-mat[]),
                           B=100, distances=TRUE, bootmethod="boot",
                           bscompare=TRUE, multipleboot=FALSE,
                           jittertuning=0.05, noisetuning=c(0.05,4),
@@ -551,11 +552,12 @@ setMethod(
                           recover=0.75,method="complete",k=2)
       ))
 
-      summary_matrices_STABILITY[i,seq(from=1,to=2)] <- as.numeric(r1$bootmean[seq(from=1,to=2)])
-      summary_matrices_STABILITY[i,3] <- mean(summary_matrices_STABILITY[i,seq(from=1,to=2)])
+      stability <- as.numeric(r1$bootmean[seq(from=1, to=2)])
+      mean_stability <- mean(stability)
+      return(c(stability, mean_stability))
+    })
 
-      setTxtProgressBar(pb,i)
-    }
+    summary_matrices_STABILITY <- do.call(rbind, result_list)
 
     quantileuse <- 0.85 # Stratifications with less than 85% stability are excluded
     qgo <- quantile(summary_matrices_STABILITY[,3], quantileuse)
