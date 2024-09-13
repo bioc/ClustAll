@@ -3,28 +3,33 @@
 \name{plotSANKEY}
 \alias{plotSANKEY}
 \alias{plotSANKEY,ClustAllObject,character,logicalOrNA-method}
-\title{Plots Sankey Diagram showing the cluster distribution and shifts
-between a pair of stratifications derived from ClustAllObject}
+\title{plotSANKEY: Plots Sankey Diagram showing the cluster distribution
+and shifts between a pair of stratifications derived from ClustAllObject}
 \usage{
 plotSANKEY(Object,
                   clusters,
                   validationData=FALSE)
 }
 \arguments{
-\item{Object}{\code{\link{ClustAllObject-class}} object}
+\item{Object}{\code{\link{ClustAllObject-class}} object.}
 
-\item{clusters}{Character vector with the names of a pair of stratifications.
-Check resStratification to obtain the stratification names.}
+\item{clusters}{Character vector with the names of a pair of
+stratifications to compare. When validationData is TRUE, only include the
+cluster names you want to compare with the validation information. Check
+\code{\link{resStratification}} for stratification results.}
 
-\item{validationData}{Logical value to use original labelling data to compare
-with the ClustALL selected stratification.}
+\item{validationData}{Logical value indicating whether to use true labels
+(validation data) for comparison with the selected stratification.}
 }
 \value{
-plot
+Sankey plot showing the distribution and shifts between the
+selected stratifications. When validationData is TRUE, the plot includes the
+true labels (validation data) if available.
 }
 \description{
-This function plots the Sankey Diagram with the cluster distribution and
-shifts between a pair of stratifications
+This function generates a Sankey Diagram that visualizes the distribution of
+stratifications and the shifts between two stratifications derived from a
+ClustAllObject.
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")

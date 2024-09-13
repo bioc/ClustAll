@@ -12,5 +12,5 @@ logicalOrNA class object
 Contains either logical, NULL or missing object
 }
 \details{
-Class union of logical, null or missing
+Class union of logical, null and missing
 }

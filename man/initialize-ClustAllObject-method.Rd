@@ -19,32 +19,34 @@
 \arguments{
 \item{.Object}{initializing object}
 
-\item{data}{Data Frame of the data used. Maybe modified from the input
-data.}
+\item{data}{Data Frame of the input data after applying one-hot encoding to the
+categorical variables and extracting the validation (true label) column.}
 
-\item{dataOriginal}{Data Frame of the original data introduced.}
+\item{dataOriginal}{Data Frame of the input data.}
 
-\item{dataImputed}{Mids object derived from the
-mice package that stores the imputed data, in case
-imputation was applied. Otherwise NULL.}
+\item{dataImputed}{Mids object derived from the mice package that stores the
+imputed data, in case imputation was applied. Otherwise NULL.}
 
-\item{dataValidation}{labelling numericOrNA. Original data labelling.}
+\item{dataValidation}{A vector in the case there is a validation (true label)
+column in the input data. This information can be added later with
+\code{\link{addValidationData}}. Otherwise NULL.}
 
-\item{nImputation}{Number of multiple imputations to be applied.}
+\item{nImputation}{Number of imputations performed.}
 
-\item{processed}{Logical if the ClustAll pipeline has been executed previously}
+\item{processed}{A boolean. TRUE if \code{\link{runClustAll}} has been
+executed. Otherwise FALSE.}
 
-\item{summary_clusters}{listOrNULL. List with the resulting stratifications
+\item{summary_clusters}{List with the resulting stratifications
 for each combination of clustering methods (distance + clustering algorithm)
-and depth, in case ClustAll pipeline has been executed previously.
+and depth, in case \code{\link{runClustAll}} has been executed previously.
 Otherwise NULL.}
 
-\item{JACCARD_DISTANCE_F}{matrixOrNULL. Matrix containing the Jaccard
-distances derived from the robust populations stratifications if ClustAll
-pipeline has been executed previously. Otherwise NULL.}
+\item{JACCARD_DISTANCE_F}{Matrix containing the Jaccard distances derived from
+the robust stratifications after applying the bootstrapping if
+\code{\link{runClustAll}} has been executed previously. Otherwise NULL.}
 }
 \value{
-An object of class \code{\link{ClustAllObject-class}}
+ClustAllObject class object.
 }
 \description{
 constuctor for \code{\link{ClustAllObject-class}}

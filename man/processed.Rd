@@ -3,20 +3,20 @@
 \name{processed}
 \alias{processed}
 \alias{processed,ClustAllObject-method}
-\title{Retrieve logical if runClustAll has been executed considering
-ClustAllObject as input}
+\title{processed accession method}
 \usage{
 processed(Object)
 }
 \arguments{
-\item{Object}{\code{\link{ClustAllObject-class}} object}
+\item{Object}{\code{\link{ClustAllObject-class}} object.}
 }
 \value{
-TRUE if runClustAll has been already executed. Otherwise FALSE
+TRUE if runClustAll has been executed. Otherwise FALSE.
 }
 \description{
-Generic function to retrieve the logical if \code{\link{runClustAll}} have
-been runned from a \code{\link{ClustAllObject-class}} object
+Generic function to know if \code{\link{ClustAllObject-class}} has been
+processed. TRUE if \code{\link{runClustAll}} has been executed. Otherwise
+FALSE.
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")

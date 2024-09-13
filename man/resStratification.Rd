@@ -3,7 +3,7 @@
 \name{resStratification}
 \alias{resStratification}
 \alias{resStratification,ClustAllObject,numericOrNA,logicalOrNA,numericOrNA-method}
-\title{Show the stratification representatives from the ClustAllObject}
+\title{resStratification: Show the representative stratifications}
 \usage{
 resStratification(Object,
                          population=0.05,
@@ -11,26 +11,34 @@ resStratification(Object,
                          stratification_similarity=0.7)
 }
 \arguments{
-\item{Object}{\code{\link{ClustAllObject-class}} object}
+\item{Object}{\code{\link{ClustAllObject-class}} object.}
 
-\item{population}{Numeric vector with the minimum percentage of the total
-population that a stratification must have to be considered as representative}
+\item{population}{Numeric vector specifying the minimum percentage of the
+total population that a stratification must have to be considered valid.}
 
-\item{all}{Logical vector to return all the representative stratifications
-per group of clusters. If it is FALSE, only the centroid stratification of
-each group of clusters is returned}
+\item{all}{Logical vector indicating whether to return all representative
+stratifications for each group of clusters. If FALSE, only the centroid
+(representative) stratification of each group is returned.}
 
-\item{stratification_similarity}{The minimum Jaccard distance value to
-consider two groups similar. Default is 0.7}
+\item{stratification_similarity}{Numeric value representing the minimum
+Jaccard distance required to consider two stratifications as similar.
+The default is 0.7.}
 }
 \value{
-list
+List containing all statistically robust stratifications,
+grouped by clusters formed based on the previously defined minimum cluster
+similarity and population criteria. If all is set to TRUE, the function
+returns all robust stratifications for each cluster. If all is set to FALSE,
+only the centroid (representative) stratification for each cluster group is
+returned.
 }
 \description{
-This function returns the stratifications representatives by keeping those
-clusters with a minimum percentage of the population. Default is 0.05.
-It returns all the robust stratification (TRUE) or the representative for
-each group of stratifications (FALSE). Default is FALSE
+This function returns a list of representative stratifications.
+Stratifications that do not meet the minimum population threshold for each
+group are discarded. The minimum population percentage can be set with a
+default value of 0.05 (5%). When 'all' is TRUE, the function returns all
+robust stratifications; otherwise, it returns the representative for each
+group of stratification.
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")

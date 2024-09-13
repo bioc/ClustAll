@@ -1,23 +1,30 @@
 # createClustAll ---------------------------------------------------------------
-#' @title Creates ClustAllObject and perform imputations to deal with missing
-#' values
+#' @title createClustAll: Creates ClustAllObject
 #' @aliases createClustAll,data.frame,numericOrNA,ANY,characterOrNA-method
 #' @description
-#' This pipeline creates the ClustAllObject and computes the imputations if the
-#' dataset contains missing values. The next step would be
-#' \code{\link{runClustAll}}
+#' Creates the ClustAllObject object. Applies one-hot encoding to columns with
+#' categorical values from the input data and extracts the validation column if
+#' available. It performs data imputation if the dataset contains missing values
+#' and no imputed dataset is provided.
+#' In total there are 3 scenarios when we create the object:
+#' - Scenario 1: data does not contain missing values.
+#' -Scenario 2: data contains NAs and there is no imputed data. Then, it
+#' performs the imputations automatically.
+#' - Scenario 3: data contains NAs and imputed data is provided manually.
+#' Once \code{\link{ClustAllObject-class}} has been created, the ClustALL
+#' pipeline can be run executing \code{\link{runClustAll}}.
 #' @usage createClustAll(data=data,
 #'                       nImputation=NULL,
 #'                       dataImputed=NULL,
 #'                       colValidation=NULL)
-#' @param data Data Frame of the using data. It may contain missing (NA) values.
-#' @param nImputation Numeric value with the number of imputations to be
-#' computed in case the data contains NAs.
-#' @param dataImputed mids object created with mice package. The introduced data
-#' for the imputation and the data using must be the same.
-#' @param colValidation Character value with the original labelling of the input
-#' data.
-#' @return An object of class \code{\link{ClustAllObject-class}}
+#' @param data Data Frame of the using data. It may contain missing values (NA).
+#' @param nImputation Number of imputations to be computed in case the data
+#' contains NAs and impued data is not available.
+#' @param dataImputed mids object created with mice package. The input data
+#' for the imputation and the data must be the same.
+#' @param colValidation vector with the referece labeling of the original
+#' dataset provided in “data” (if available). Default is NULL.
+#' @return \code{\link{ClustAllObject-class}} object.
 #' @seealso \code{\link{runClustAll}}, \code{\link{ClustAllObject-class}}
 #' @examples
 #' # Scenario 1: data does not contain missing values
@@ -25,22 +32,28 @@
 #' wdbc <- wdbc[,-c(1,2)]
 #' obj_noNA <- createClustAll(data = wdbc)
 #'
-#' # Scenario 2: data contains NAs and imputed data is provided automatically
-#' data("BreastCancerWisconsinMISSING", package = "ClustAll") # load example data
-#' obj_NA <- createClustAll(wdbcNA, nImputation = 5)
-#'
+#' # Scenario 2: data contains NAs and there is no imputed data.
+#' # Then it performs the imputations automatically
+#' data("BreastCancerWisconsinMISSING", package = "ClustAll")
+#' \donttest{
+#' obj_NA <- createClustAll(wdbcNA, nImputation = 2)
+#' }
 #' # Scenario 3: data contains NAs and imputed data is provided manually
-#' data("BreastCancerWisconsinMISSING", package = "ClustAll") # load the example data
+#' data("BreastCancerWisconsinMISSING", package = "ClustAll")
 #' ini <- mice::mice(wdbcNA, maxit = 0, print = FALSE)
 #' pred <- ini$pred # predictor matrix
-#' pred["radius1", c("perimeter1", "area1", "smoothness1")] <- 0 # example of how to remove predictors
+#' pred["radius1", c("perimeter1", "area1", "smoothness1")] <- 0 # example of
+#' # how to remove predictors
+#' \donttest{
 #' imp <- mice::mice(wdbcNA, m=5, pred=pred, maxit=5, seed=1234, print=FALSE)
 #' obj_imp <- createClustAll(data=wdbcNA, dataImputed = imp)
+#' }
 #'
 #' @export
 setGeneric(
   name="createClustAll",
-  def=function(data=data, nImputation=NULL, dataImputed=NULL, colValidation=NULL)
+  def=function(data=data, nImputation=NULL, dataImputed=NULL,
+               colValidation=NULL)
   {standardGeneric("createClustAll")}
 )
 
@@ -84,7 +97,7 @@ setMethod(
     clustAllObj <- new("ClustAllObject",data=data,dataOriginal=dataOriginal,
                        dataImputed=dataImputed, nImputation=nImputation,
                        dataValidation=dataValidation)
-    message("\nClustALL object created successfully. You can use runClustAll.")
+    message("\nClustALL object was created successfully. You can run runClustAll.")
 
     return(clustAllObj)
   }

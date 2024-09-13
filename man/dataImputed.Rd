@@ -3,7 +3,7 @@
 \name{dataImputed}
 \alias{dataImputed}
 \alias{dataImputed,ClustAllObject-method}
-\title{Retrieve the imputed data from ClustAllObject}
+\title{dataImputed accession method}
 \usage{
 dataImputed(Object)
 }
@@ -11,8 +11,7 @@ dataImputed(Object)
 \item{Object}{\code{\link{ClustAllObject-class}} object}
 }
 \value{
-Mids class object with the imputed data or NULL if imputation was
-not required
+Mids class object with the imputed data or NULL.
 }
 \description{
 Generic function to retrieve the imputed data obtained in

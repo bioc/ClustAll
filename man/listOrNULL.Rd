@@ -12,5 +12,5 @@ listOrNULL class object
 Contains either list, NULL or missing object
 }
 \details{
-Class union of list, null or missing
+Class union of list, null and missing
 }

@@ -12,5 +12,5 @@ numericOrCharacter class object
 Contains either numeric or character object
 }
 \details{
-Class union of numericor character
+Class union of numeric and character
 }

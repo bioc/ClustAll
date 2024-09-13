@@ -3,14 +3,12 @@
 \name{summary_clusters}
 \alias{summary_clusters}
 \alias{summary_clusters,ClustAllObject-method}
-\title{Retrieve the resulting stratifications for each combination of
-clusterings method (distance + clustering algorithm) and depth from
-ClustAllObject}
+\title{summary_clusters accession method}
 \usage{
 summary_clusters(Object)
 }
 \arguments{
-\item{Object}{\code{\link{ClustAllObject-class}} object}
+\item{Object}{\code{\link{ClustAllObject-class}} object.}
 }
 \value{
 List with the resulting stratifications for each combination of
@@ -21,7 +19,7 @@ NULL if runClustAll method has not been executed yet.
 Generic function to retrieve the resulting stratifications for each
 combination of clusterings method (distance + clustering algorithm) and
 depth of \code{\link{runClustAll}} from a \code{\link{ClustAllObject-class}}
-object
+object.
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")

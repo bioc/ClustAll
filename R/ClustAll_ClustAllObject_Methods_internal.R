@@ -141,10 +141,10 @@ obtain_metadata <- function(m) {
     names_distance <- ifelse(names_clustering %in% c("a", "b"), "Correlation",
                                 "Gower")
     names_clusteringmeth <- names_clustering
-    names_clusteringmeth[which(names_clusteringmeth %in% c("a",
-                                                        "c"))] <- "Hierarchical"
-    names_clusteringmeth[which(names_clusteringmeth == "b")] <- "k-means"
-    names_clusteringmeth[which(names_clusteringmeth == "d")] <- "k-medoids"
+    names_clusteringmeth[which(names_clusteringmeth %in% c("b",
+                                                        "d"))] <- "H-Clustering"
+    names_clusteringmeth[which(names_clusteringmeth == "a")] <- "K-Means"
+    names_clusteringmeth[which(names_clusteringmeth == "c")] <- "K-Medoids"
 
     return(data.frame("Distance"=names_distance,
                         "Clustering"=names_clusteringmeth,

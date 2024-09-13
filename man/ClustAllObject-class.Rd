@@ -5,37 +5,42 @@
 \alias{ClustAllObject-class}
 \title{ClustAllObject}
 \value{
-ClustAllObject class object
+ClustAllObject class object.
 }
 \description{
-Stores the original data used, the imputed datasets and the
-results of the ClustAll pipeline.
+This class contains the original data and the imputed datasets
+needed to run the ClustAll pipeline. The results of all the stratifications
+are stored in summary_clusters. From the stratifications that pass the
+bootstrapping, a matrix with the Jaccard distances is calculated and stored
+in JACCARD_DISTANCE_F.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{data}}{Data Frame of the data used. Maybe modified from the input
-data.}
+\item{\code{data}}{Data Frame of the input data after applying one-hot encoding to the
+categorical variables and extracting the validation (true label) column.}
 
-\item{\code{dataOriginal}}{Data Frame of the original data introduced.}
+\item{\code{dataOriginal}}{Data Frame of the input data.}
 
-\item{\code{dataImputed}}{Mids object derived from the
-mice package that stores the imputed data, in case
-imputation was applied. Otherwise NULL.}
+\item{\code{dataImputed}}{Mids object derived from the mice package that stores the
+imputed data, in case imputation was applied. Otherwise NULL.}
 
-\item{\code{dataValidation}}{labelling numericOrNA. Original data labelling.}
+\item{\code{dataValidation}}{A vector in the case there is a validation (true label)
+column in the input data. This information can be added later with
+\code{\link{addValidationData}}. Otherwise NULL.}
 
-\item{\code{nImputation}}{Number of multiple imputations to be applied.}
+\item{\code{nImputation}}{Number of imputations performed.}
 
-\item{\code{processed}}{Logical if the ClustAll pipeline has been executed previously}
+\item{\code{processed}}{A boolean. TRUE if \code{\link{runClustAll}} has been
+executed. Otherwise FALSE.}
 
-\item{\code{summary_clusters}}{listOrNULL. List with the resulting stratifications
+\item{\code{summary_clusters}}{List with the resulting stratifications
 for each combination of clustering methods (distance + clustering algorithm)
-and depth, in case ClustAll pipeline has been executed previously.
+and depth, in case \code{\link{runClustAll}} has been executed previously.
 Otherwise NULL.}
 
-\item{\code{JACCARD_DISTANCE_F}}{matrixOrNULL. Matrix containing the Jaccard
-distances derived from the robust populations stratifications if ClustAll
-pipeline has been executed previously. Otherwise NULL.}
+\item{\code{JACCARD_DISTANCE_F}}{Matrix containing the Jaccard distances derived from
+the robust stratifications after applying the bootstrapping if
+\code{\link{runClustAll}} has been executed previously. Otherwise NULL.}
 }}
 

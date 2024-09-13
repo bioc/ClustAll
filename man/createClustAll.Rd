@@ -3,8 +3,7 @@
 \name{createClustAll}
 \alias{createClustAll}
 \alias{createClustAll,data.frame,numericOrNA,ANY,characterOrNA-method}
-\title{Creates ClustAllObject and perform imputations to deal with missing
-values}
+\title{createClustAll: Creates ClustAllObject}
 \usage{
 createClustAll(data=data,
                       nImputation=NULL,
@@ -12,24 +11,32 @@ createClustAll(data=data,
                       colValidation=NULL)
 }
 \arguments{
-\item{data}{Data Frame of the using data. It may contain missing (NA) values.}
+\item{data}{Data Frame of the using data. It may contain missing values (NA).}
 
-\item{nImputation}{Numeric value with the number of imputations to be
-computed in case the data contains NAs.}
+\item{nImputation}{Number of imputations to be computed in case the data
+contains NAs and impued data is not available.}
 
-\item{dataImputed}{mids object created with mice package. The introduced data
-for the imputation and the data using must be the same.}
+\item{dataImputed}{mids object created with mice package. The input data
+for the imputation and the data must be the same.}
 
-\item{colValidation}{Character value with the original labelling of the input
-data.}
+\item{colValidation}{vector with the referece labeling of the original
+dataset provided in “data” (if available). Default is NULL.}
 }
 \value{
-An object of class \code{\link{ClustAllObject-class}}
+\code{\link{ClustAllObject-class}} object.
 }
 \description{
-This pipeline creates the ClustAllObject and computes the imputations if the
-dataset contains missing values. The next step would be
-\code{\link{runClustAll}}
+Creates the ClustAllObject object. Applies one-hot encoding to columns with
+categorical values from the input data and extracts the validation column if
+available. It performs data imputation if the dataset contains missing values
+and no imputed dataset is provided.
+In total there are 3 scenarios when we create the object:
+- Scenario 1: data does not contain missing values.
+-Scenario 2: data contains NAs and there is no imputed data. Then, it
+performs the imputations automatically.
+- Scenario 3: data contains NAs and imputed data is provided manually.
+Once \code{\link{ClustAllObject-class}} has been created, the ClustALL
+pipeline can be run executing \code{\link{runClustAll}}.
 }
 \examples{
 # Scenario 1: data does not contain missing values
@@ -37,17 +44,22 @@ data("BreastCancerWisconsin", package = "ClustAll")
 wdbc <- wdbc[,-c(1,2)]
 obj_noNA <- createClustAll(data = wdbc)
 
-# Scenario 2: data contains NAs and imputed data is provided automatically
-data("BreastCancerWisconsinMISSING", package = "ClustAll") # load example data
-obj_NA <- createClustAll(wdbcNA, nImputation = 5)
-
+# Scenario 2: data contains NAs and there is no imputed data.
+# Then it performs the imputations automatically
+data("BreastCancerWisconsinMISSING", package = "ClustAll")
+\donttest{
+obj_NA <- createClustAll(wdbcNA, nImputation = 2)
+}
 # Scenario 3: data contains NAs and imputed data is provided manually
-data("BreastCancerWisconsinMISSING", package = "ClustAll") # load the example data
+data("BreastCancerWisconsinMISSING", package = "ClustAll")
 ini <- mice::mice(wdbcNA, maxit = 0, print = FALSE)
 pred <- ini$pred # predictor matrix
-pred["radius1", c("perimeter1", "area1", "smoothness1")] <- 0 # example of how to remove predictors
+pred["radius1", c("perimeter1", "area1", "smoothness1")] <- 0 # example of
+# how to remove predictors
+\donttest{
 imp <- mice::mice(wdbcNA, m=5, pred=pred, maxit=5, seed=1234, print=FALSE)
 obj_imp <- createClustAll(data=wdbcNA, dataImputed = imp)
+}
 
 }
 \seealso{

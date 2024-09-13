@@ -3,23 +3,22 @@
 \name{JACCARD_DISTANCE_F}
 \alias{JACCARD_DISTANCE_F}
 \alias{JACCARD_DISTANCE_F,ClustAllObject-method}
-\title{Retrieve the matrix with the Jaccard distances derived from the robust
-populations stratifications in ClustAllObject}
+\title{JACCARD_DISTANCE_F accession method}
 \usage{
 JACCARD_DISTANCE_F(Object)
 }
 \arguments{
-\item{Object}{\code{\link{ClustAllObject-class}} object}
+\item{Object}{\code{\link{ClustAllObject-class}} object.}
 }
 \value{
 Matrix containing the Jaccard distances derived from the robust
 populations stratifications or NULL if runClustAll method has not been
-executed yet
+executed yet.
 }
 \description{
 Generic function to retrieve the matrix with the Jaccard distances derived
 from the robust populations stratifications in\code{\link{runClustAll}} from
-a \code{\link{ClustAllObject-class}} object
+a \code{\link{ClustAllObject-class}} object.
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")

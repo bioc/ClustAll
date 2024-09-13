@@ -3,19 +3,20 @@
 \name{dataValidation}
 \alias{dataValidation}
 \alias{dataValidation,ClustAllObject-method}
-\title{Retrieve the original data labelling from ClustAllObject}
+\title{dataValidation accession method}
 \usage{
 dataValidation(Object)
 }
 \arguments{
-\item{Object}{\code{\link{ClustAllObject-class}} object}
+\item{Object}{\code{\link{ClustAllObject-class}} object.}
 }
 \value{
-numeric vector if true labels have been added. Otherwise NULL
+numeric vector with true labels if validation column has been added.
+Otherwise NULL.
 }
 \description{
 Generic function to retrieve numeric vector if it has been added with the
-true labels from a \code{\link{ClustAllObject-class}} object
+true labels from a \code{\link{ClustAllObject-class}} object.
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")

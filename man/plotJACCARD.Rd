@@ -3,28 +3,30 @@
 \name{plotJACCARD}
 \alias{plotJACCARD}
 \alias{plotJACCARD,ClustAllObject,logicalOrNA,numericOrNA-method}
-\title{Correlation matrix heatmap showing the Jaccard distance between
-robust stratifications in the ClustAllObject}
+\title{plotJACCARD: Heatmap of robust stratification distances based on
+ Jaccard similarity}
 \usage{
 plotJACCARD(Object,
                    paint=TRUE,
                    stratification_similarity=0.7)
 }
 \arguments{
-\item{Object}{\code{\link{ClustAllObject-class}} object}
+\item{Object}{\code{\link{ClustAllObject-class}} object.}
 
-\item{paint}{Logical vector with the annotation for the different
-stratifications}
+\item{paint}{TRUE for painting a square Logical vector with the annotation for the different
+stratifications.}
 
-\item{stratification_similarity}{The minimum Jaccard Distance value to
-consider two stratifications similar. Default is 0.7.}
+\item{stratification_similarity}{Numeric value representing the minimum
+Jaccard distance required to consider two stratifications as similar.
+The default is 0.7.}
 }
 \value{
-plot
+Plot of a heatmap of the correlation matrix displaying Jaccard
+distances between statistically robust stratifications.
 }
 \description{
 This function plots the correlation matrix heatmap showing the Jaccard
-Distance between robust stratifications
+distances between robust stratifications.
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")

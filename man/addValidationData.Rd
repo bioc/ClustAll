@@ -4,24 +4,24 @@
 \name{addValidationData}
 \alias{addValidationData}
 \alias{addValidationData,ClustAllObject,numericOrCharacter-method}
-\title{Add the validation data into the ClustAllObject}
+\title{addValidationData}
 \usage{
 addValidationData(Object, dataValidation)
 }
 \arguments{
-\item{Object}{\code{\link{ClustAllObject-class}} object}
+\item{Object}{\code{\link{ClustAllObject-class}} object.}
 
-\item{dataValidation}{numericOrCharacter}
+\item{dataValidation}{A numeric or character vector with the
+validation data (true labels).
+The length of the vector must be the same as input data used in
+\code{\link{createClustAll}}.}
 }
 \value{
-\code{\link{ClustAllObject-class}} object
+\code{\link{ClustAllObject-class}} object.
 }
 \description{
 Generic function to add validation data to the
-\code{\link{ClustAllObject-class}} object
-}
-\details{
-addValidationData
+\code{\link{ClustAllObject-class}} object.
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")

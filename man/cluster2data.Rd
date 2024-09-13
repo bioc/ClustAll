@@ -3,23 +3,25 @@
 \name{cluster2data}
 \alias{cluster2data}
 \alias{cluster2data,ClustAllObject,character-method}
-\title{cluster2data}
+\title{cluster2data: Export selected stratification(s)}
 \usage{
 cluster2data(Object,
                     stratificationName)
 }
 \arguments{
-\item{Object}{\code{\link{ClustAllObject-class}} object}
+\item{Object}{\code{\link{ClustAllObject-class}} object.}
 
-\item{stratificationName}{Character vector with one or more stratification names}
+\item{stratificationName}{Name of the stratification(s) to be exported.}
 }
 \value{
-data.frame
+Returns the original Data Frame with additional column(s)
+corresponding to the selected stratification(s).
 }
 \description{
-Returns the original data in a dataframe, including the selected robust
-stratification(s) as varaibles. The representative stratification names can
-be obtained using the method. \code{\link{resStratification}}
+Returns the original input data in a Data Frame, appending the selected
+robust stratification(s) as additional columns. The names of the representative
+stratifications can be obtained using the \code{\link{resStratification}}
+method.
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")

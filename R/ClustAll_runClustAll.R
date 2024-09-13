@@ -19,18 +19,46 @@
 #' @title ClustAll: Data driven strategy to find hidden subgroups of patients
 #' within complex diseases using clinical data
 #' @aliases runClustAll,ClustAllObject,numericOrNA,logicalOrNA-method
-#' @description This method runs the ClustAll pipeline
+#' @description This method runs the ClustALL pipeline.
+#' The ClustALL framework involves three main steps:
 #'
+#' - Step 1: Data Complexity Reduction (DCR): multiple data embeddings
+#' are created to replace a highly correlated set of variables with
+#' lower-dimension projections derived from Principal Component Analysis (PCA).
+#' This process explores all relevant groupings derived from  a  hierarchical
+#' clustering-based dendrogram. Consequently, DCR computes an embedding for each
+#' depth in the dendrogram.
+#'
+#' - Step 2: The Stratification Process (SP): ClustALL calculates and
+#' preliminarily evaluates stratifications for each embedding by computing a
+#' stratification for each feasible combination of embedding, dissimilarity
+#' metric, and clustering method, considering a predefined range of cluster
+#' numbers. The optimal number of clusters is determined using three internal
+#' validation measures: the sum-of-squares (WB-ratio), Dunn index, and average
+#' silhouette width.  Each combination yields a stratification comprising
+#' 'embedding + distance metric + clustering method'.
+#'
+#' - Step 3: Consensus-based Stratifications (CbS): filters out non-robust
+#' stratifications through bootstrapping. Any stratifications with less than 85%
+#' stability are excluded. From the remaining stratifications, representatives
+#' of very similar outcomes are selected.
+#'
+#' If the simplify parameter is TRUE, every fourth depth of the dendrogram is
+#' calculated from the first and second steps. It is helpful in reducing the
+#' execution time and obtaining preliminary results. However, it is recommended
+#' that it be set to FALSE to obtain robust results.
 #'
 #' @usage runClustAll(Object,
 #'                    threads=1,
 #'                    simplify=FALSE)
 #'
-#' @param Object \code{\link{ClustAllObject-class}} object
-#' @param threads Numeric vector that indicates the number of cores to use
-#' @param simplify if TRUE computes one out of four depths of the dendrogram
+#' @param Object \code{\link{ClustAllObject-class}} object.
+#' @param threads numeric vector that indicates the number of cores to use.
+#' @param simplify if TRUE, only every fourth depth of the dendogram will be
+#' calculated. It will reduce the execution time, but it is recommended to be
+#' set as FALSE to obtain robust results.
 #'
-#' @return An object of class \code{\link{ClustAllObject-class}}
+#' @return A processed object \code{\link{ClustAllObject-class}} object.
 #'
 #' @seealso \code{\link{resStratification}},\code{\link{plotJACCARD}},
 #' \code{\link{cluster2data}},\code{\link{ClustAllObject-class}}
@@ -42,6 +70,7 @@
 #' \donttest{
 #' obj_noNA <- createClustAll(data = wdbc)
 #' obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 1, simplify = TRUE)
+#' obj_noNA1
 #' }
 #' @export
 
@@ -62,7 +91,7 @@ setMethod(
   definition=function(Object, threads=1, simplify=FALSE) {
 
     if (Object@processed == TRUE) {
-      message("ClustAll pipeline have been already executed")
+      message("ClustAll pipeline has been already executed.")
       message("Stopping the process...")
       message("You may want to use resStratification to explore the results.")
       stop()
@@ -102,7 +131,7 @@ setMethod(
     }
 
     if (simplify == TRUE) {
-      message("CAUTION! The simplify parameter is set to TRUE.")
+      message("WARNING! The simplify parameter is set to TRUE.")
       message("For more robust results consider changing the simplify parameter to FALSE.")
       simplifyNumber <- 4
     } else {
@@ -110,7 +139,7 @@ setMethod(
     }
 
     if (threads > detectCores()) {
-      message("A greater number of cores than detected has been included")
+      message("A greater number of cores than detected have been specified.")
       message("The maximum number of cores will be used.")
       threads <- detectCores()
     }
@@ -122,7 +151,7 @@ setMethod(
 
     if (threads == 1) {
       message("Only one core is being used.")
-      message("Consider selecting more cores for process parallelization")
+      message("Consider selecting more cores for a faster performance.")
       message("\n")
     }
 
@@ -488,7 +517,7 @@ setMethod(
     base::names(summary_clusters) <- base::names(summary_matrices_MEASURES)
 
     message("")
-    message("\nCalculating correlation distance matrix of the statifications...\n")
+    message("\nCalculating the correlation distance matrix of the stratifications...\n")
     pb <- txtProgressBar(max=nimp, style=3)
     progress <- function(n) setTxtProgressBar(pb, n)
     opts <- list(progress=progress)
@@ -533,7 +562,7 @@ setMethod(
     colnames(JACCARD_DISTANCE) <- rownames(JACCARD_DISTANCE)
 
     message("")
-    message("\nFiltering non-robust statifications...\n")
+    message("\nFiltering non-robust stratifications...\n")
 
     # Population based-robustness: Bootstrapping
     result_list <- pblapply(summary_matrices_MEASURES, function(mat) {

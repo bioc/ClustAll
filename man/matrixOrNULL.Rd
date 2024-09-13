@@ -12,5 +12,5 @@ matrixOrNULL class object
 Contains either matrix or NULL object
 }
 \details{
-Class union of matrix, null or missing
+Class union of matrix, null and missing
 }

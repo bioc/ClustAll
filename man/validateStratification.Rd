@@ -3,24 +3,27 @@
 \name{validateStratification}
 \alias{validateStratification}
 \alias{validateStratification,ClustAllObject,characterOrNA-method}
-\title{validateStratification}
+\title{validateStratification: calculates the sensitivity and specificity
+of selected stratification}
 \usage{
 validateStratification(Object,
                               stratificationName)
 }
 \arguments{
-\item{Object}{\code{\link{ClustAllObject-class}} object}
+\item{Object}{\code{\link{ClustAllObject-class}} object.}
 
-\item{stratificationName}{Character vector with the name a stratification.
-Check resStratification to obtain stratification names.}
+\item{stratificationName}{Character vector with the name of a stratification.
+Check \code{\link{resStratification}} to obtain stratification names.}
 }
 \value{
-numeric
+the sensitivity and specificity values of the selected stratification
+when validation data is available.
 }
 \description{
-Returns the sensitivity and specifity of the selected stratification the
-original lebelling. The representative stratification names can be obtained
-using the method \code{\link{resStratification}}
+Returns the sensitivity and specificity of the selected stratification
+compared to the true labels (validation data). The names of representative
+stratifications can be obtained using the method
+\code{\link{resStratification}}.
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")

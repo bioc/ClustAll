@@ -12,5 +12,5 @@ numericOrNA class object
 Contains either numeric, NULL or missing object
 }
 \details{
-Class union of numeric, null or missing
+Class union of numeric, null and missing
 }

@@ -3,21 +3,21 @@
 \name{nImputation}
 \alias{nImputation}
 \alias{nImputation,ClustAllObject-method}
-\title{Retrieve the number of imputations applied at the imputation step from
-ClustAllObject}
+\title{nImputation accession method}
 \usage{
 nImputation(Object)
 }
 \arguments{
-\item{Object}{\code{\link{ClustAllObject-class}} object}
+\item{Object}{\code{\link{ClustAllObject-class}} object.}
 }
 \value{
 Numeric vector that contains the number of imputations. 0 in the
-case of no imputations were required
+case of no imputations were required.
 }
 \description{
 Generic function to retrieve the number of imputations in
-\code{\link{createClustAll}} from a \code{\link{ClustAllObject-class}} object
+\code{\link{createClustAll}} from a \code{\link{ClustAllObject-class}}
+object.
 }
 \examples{
 data("BreastCancerWisconsinMISSING", package = "ClustAll")

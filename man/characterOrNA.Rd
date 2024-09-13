@@ -5,7 +5,7 @@
 \alias{characterOrNA}
 \alias{characterOrNA-class}
 \title{characterOrNA
-Class union of character, null or missing}
+Class union of character, null and missing}
 \value{
 characterOrNA class object
 }

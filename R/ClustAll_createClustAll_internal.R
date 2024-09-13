@@ -8,7 +8,7 @@
 checkDataIntroduced <- function(data) {
   if (any(sapply(data, is.character))) {
     message("The dataset contains character values.")
-    message("They are converted to categorical (more than one class) or to binary (one class).")
+    message("They will be transformed into categorical (more than one class) or binary (one class).")
     data_new <- data
     must_convert_variables <- which(sapply(data, is.character))
 
@@ -32,7 +32,7 @@ checkDataIntroduced <- function(data) {
     }
 
     if (length(variables_categorical) > 0) {
-      message("Categorical variables detected! Applying One Hot encoding...")
+      message("Categorical variables detected! Applying One-hot encoding...")
 
       if (length(variables_categorical) == 1) {
         onehot_variables <- base::names(table(data[, variables_categorical]))
@@ -94,7 +94,7 @@ isBinary <- function(vector) {
 checkVectorIntroduced <- function(data) {
     if (any(sapply(data, is.character))) {
         message("The dataset contains character values.")
-        message("They are converted to categorical (more than one class) or to binary (one class).")
+        message("They will be converted to categorical (more than one class) or binary (one class).")
         message("Before continuing, check that the transformation has been processed correctly.\n")
 
         data_new <- data
@@ -112,18 +112,18 @@ checkVectorIntroduced <- function(data) {
 validnImputation <- function(nImputation, imputedNull) {
     if (!is.numeric(nImputation) & !is.null(nImputation)) {
         if (imputedNull == FALSE) {
-            message("Argument nImputation is not valid.")
+            message("Parameter nImputation is not valid.")
             message("Please introduce a positive number of imputations.")
             stop()
         }
     } else if (is.null(nImputation) & imputedNull == TRUE) {
       nImputation <- 0
     } else if (nImputation < 0) {
-        message("Argument nImputation is not valid.")
+        message("Parameter nImputation is not valid.")
         message("Please introduce a positive number of imputations.")
         stop()
     } else if (nImputation %% 1 != 0) { # check it is not float value
-        message("Decimal number included, the decimal value will be rounded.")
+        message("The decimal value will be rounded.")
         nImputation <- round(nImputation, digits = 0)
     }
 
@@ -146,7 +146,7 @@ validData <- function(data, nImputation, dataImputed) {
 
     } else if (anyNA(data) == FALSE  & !is.null(dataImputed)) {
         message("The dataset does NOT contain NA values.")
-        message("The imputed data introduced will not be used.")
+        message("The introduced imputed data will not be used.")
         return(TRUE)
 
     } else {
@@ -171,7 +171,7 @@ validDataImputed <- function(data, dataImputed, dataOriginal) {
 
     } else {
         message("You must introduce mice::mice function output.")
-        message("For more information visit mice package.")
+        message("For more information visit https://cran.r-project.org/web/packages/mice/index.html.")
         stop()
     }
 }
@@ -179,11 +179,11 @@ validDataImputed <- function(data, dataImputed, dataOriginal) {
 
 checkColumn <- function(data, colValidation) {
     if (!is(colValidation, "character")) {
-        message("Please make sure to introduce the name of the original labelling from the input data if present.")
+        message("Please introduce the column name correctly.")
         stop()
     }
     if (!colValidation %in% colnames(data)) {
-        message("The introduced columnname is not present in the dataset.")
+        message("The introduced column name is not present in the dataset.")
         message("Please, make sure to introduce it correctly.")
         stop()
     }

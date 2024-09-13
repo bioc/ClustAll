@@ -11,17 +11,46 @@ runClustAll(Object,
                    simplify=FALSE)
 }
 \arguments{
-\item{Object}{\code{\link{ClustAllObject-class}} object}
+\item{Object}{\code{\link{ClustAllObject-class}} object.}
 
-\item{threads}{Numeric vector that indicates the number of cores to use}
+\item{threads}{numeric vector that indicates the number of cores to use.}
 
-\item{simplify}{if TRUE computes one out of four depths of the dendrogram}
+\item{simplify}{if TRUE, only every fourth depth of the dendogram will be
+calculated. It will reduce the execution time, but it is recommended to be
+set as FALSE to obtain robust results.}
 }
 \value{
-An object of class \code{\link{ClustAllObject-class}}
+A processed object \code{\link{ClustAllObject-class}} object.
 }
 \description{
-This method runs the ClustAll pipeline
+This method runs the ClustALL pipeline.
+The ClustALL framework involves three main steps:
+
+- Step 1: Data Complexity Reduction (DCR): multiple data embeddings
+are created to replace a highly correlated set of variables with
+lower-dimension projections derived from Principal Component Analysis (PCA).
+This process explores all relevant groupings derived from  a  hierarchical
+clustering-based dendrogram. Consequently, DCR computes an embedding for each
+depth in the dendrogram.
+
+- Step 2: The Stratification Process (SP): ClustALL calculates and
+preliminarily evaluates stratifications for each embedding by computing a
+stratification for each feasible combination of embedding, dissimilarity
+metric, and clustering method, considering a predefined range of cluster
+numbers. The optimal number of clusters is determined using three internal
+validation measures: the sum-of-squares (WB-ratio), Dunn index, and average
+silhouette width.  Each combination yields a stratification comprising
+'embedding + distance metric + clustering method'.
+
+- Step 3: Consensus-based Stratifications (CbS): filters out non-robust
+stratifications through bootstrapping. Any stratifications with less than 85%
+stability are excluded. From the remaining stratifications, representatives
+of very similar outcomes are selected.
+
+If the simplify parameter is TRUE, every fourth depth of the dendrogram is
+calculated from the first and second steps. It is helpful in reducing the
+execution time and obtaining preliminary results. However, it is recommended
+that it be set to FALSE to obtain robust results.
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")
@@ -30,6 +59,7 @@ wdbc <- wdbc[1:15,1:8]
 \donttest{
 obj_noNA <- createClustAll(data = wdbc)
 obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 1, simplify = TRUE)
+obj_noNA1
 }
 }
 \seealso{

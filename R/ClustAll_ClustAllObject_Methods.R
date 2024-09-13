@@ -5,22 +5,24 @@
 #' @import ggplot2
 #' @import grid
 #' @import grDevices
-#' @title Correlation matrix heatmap showing the Jaccard distance between
-#' robust stratifications in the ClustAllObject
+#' @title plotJACCARD: Heatmap of robust stratification distances based on
+#'  Jaccard similarity
 #' @aliases plotJACCARD,ClustAllObject,logicalOrNA,numericOrNA-method
 #' @description
 #' This function plots the correlation matrix heatmap showing the Jaccard
-#' Distance between robust stratifications
+#' distances between robust stratifications.
 #' @usage plotJACCARD(Object,
 #'                    paint=TRUE,
 #'                    stratification_similarity=0.7)
 #'
-#' @param Object \code{\link{ClustAllObject-class}} object
-#' @param paint Logical vector with the annotation for the different
-#' stratifications
-#' @param stratification_similarity The minimum Jaccard Distance value to
-#' consider two stratifications similar. Default is 0.7.
-#' @return plot
+#' @param Object \code{\link{ClustAllObject-class}} object.
+#' @param paint TRUE for painting a square Logical vector with the annotation for the different
+#' stratifications.
+#' @param stratification_similarity Numeric value representing the minimum
+#' Jaccard distance required to consider two stratifications as similar.
+#' The default is 0.7.
+#' @return Plot of a heatmap of the correlation matrix displaying Jaccard
+#' distances between statistically robust stratifications.
 #'
 #' @seealso \code{\link{resStratification}},\code{\link{cluster2data}},
 #' \code{\link{ClustAllObject-class}}
@@ -78,8 +80,8 @@ setMethod(
             Depth=robust_stratification[,"Depth"],
             col = list(Distance=structure(names=c("Correlation","Gower"),
                                           c("#CCCCFF","blue4") ),
-                       Clustering=structure(names=c("Hierarchical", "k-means",
-                                                    "k-medoids"),
+                       Clustering=structure(names=c("H-Clustering", "K-Means",
+                                                    "K-Medoids"),
                                             c("forestgreen", "sandybrown",
                                               "tomato3")),
                        Depth=colorRamp2(c(1,
@@ -129,27 +131,35 @@ setMethod(
 )
 
 
-#' @title Show the stratification representatives from the ClustAllObject
+#' @title resStratification: Show the representative stratifications
 #' @aliases resStratification,ClustAllObject,numericOrNA,logicalOrNA,numericOrNA-method
 #' @description
-#' This function returns the stratifications representatives by keeping those
-#' clusters with a minimum percentage of the population. Default is 0.05.
-#' It returns all the robust stratification (TRUE) or the representative for
-#' each group of stratifications (FALSE). Default is FALSE
+#' This function returns a list of representative stratifications.
+#' Stratifications that do not meet the minimum population threshold for each
+#' group are discarded. The minimum population percentage can be set with a
+#' default value of 0.05 (5%). When 'all' is TRUE, the function returns all
+#' robust stratifications; otherwise, it returns the representative for each
+#' group of stratification.
 #' @usage resStratification(Object,
 #'                          population=0.05,
 #'                          all=FALSE,
 #'                          stratification_similarity=0.7)
 #'
-#' @param Object \code{\link{ClustAllObject-class}} object
-#' @param population Numeric vector with the minimum percentage of the total
-#' population that a stratification must have to be considered as representative
-#' @param all Logical vector to return all the representative stratifications
-#' per group of clusters. If it is FALSE, only the centroid stratification of
-#' each group of clusters is returned
-#' @param stratification_similarity The minimum Jaccard distance value to
-#' consider two groups similar. Default is 0.7
-#' @return list
+#' @param Object \code{\link{ClustAllObject-class}} object.
+#' @param population Numeric vector specifying the minimum percentage of the
+#' total population that a stratification must have to be considered valid.
+#' @param all Logical vector indicating whether to return all representative
+#' stratifications for each group of clusters. If FALSE, only the centroid
+#' (representative) stratification of each group is returned.
+#' @param stratification_similarity Numeric value representing the minimum
+#' Jaccard distance required to consider two stratifications as similar.
+#' The default is 0.7.
+#' @return List containing all statistically robust stratifications,
+#' grouped by clusters formed based on the previously defined minimum cluster
+#' similarity and population criteria. If all is set to TRUE, the function
+#' returns all robust stratifications for each cluster. If all is set to FALSE,
+#' only the centroid (representative) stratification for each cluster group is
+#' returned.
 #'
 #' @seealso \code{\link{plotJACCARD}},\code{\link{cluster2data}},
 #' \code{\link{ClustAllObject-class}}
@@ -186,7 +196,7 @@ setMethod(
     if (isProcessed(Object) == FALSE) {
       message("The object has not been processed yet.")
       message(". You need to execute runClustAll.")
-      message("Note that the number of cores to use can be specified")
+      message("Note that the number of cores to use can be specified.")
       stop()
     }
 
@@ -208,7 +218,7 @@ setMethod(
           inner_list <- lapply(seq_along(res[[i]]), function(j) {
             list(res[[i]][j], table(Object@summary_clusters[[res[[i]][j]]]))
           })
-          names(inner_list) <- paste("Cluster_", seq_along(res[[i]]))
+          names(inner_list) <- paste0("Stratification_", seq_along(res[[i]]))
           inner_list
         } else {
           list(table(Object@summary_clusters[[res[[i]]]]))
@@ -217,32 +227,36 @@ setMethod(
 
       if (all == FALSE) {
         names(stratificationRep) <- res
+      } else {
+      names(stratificationRep) <- paste0("Cluster_",
+                                         seq(length(stratificationRep)))
       }
-
 
       return(stratificationRep)
 
     } else {
       message("There are no robust groups of stratification for the selected parameters.")
-      return(NULL)
+      return(list(NULL))
     }
   }
 )
 
 
-#' @title cluster2data
+#' @title cluster2data: Export selected stratification(s)
 #' @aliases cluster2data,ClustAllObject,character-method
 #' @description
-#' Returns the original data in a dataframe, including the selected robust
-#' stratification(s) as varaibles. The representative stratification names can
-#' be obtained using the method. \code{\link{resStratification}}
+#' Returns the original input data in a Data Frame, appending the selected
+#' robust stratification(s) as additional columns. The names of the representative
+#' stratifications can be obtained using the \code{\link{resStratification}}
+#' method.
 #' @usage cluster2data(Object,
 #'                     stratificationName)
 #'
-#' @param Object \code{\link{ClustAllObject-class}} object
-#' @param stratificationName Character vector with one or more stratification names
+#' @param Object \code{\link{ClustAllObject-class}} object.
+#' @param stratificationName Name of the stratification(s) to be exported.
 #'
-#' @return data.frame
+#' @return Returns the original Data Frame with additional column(s)
+#' corresponding to the selected stratification(s).
 #'
 #' @seealso \code{\link{resStratification}},\code{\link{plotJACCARD}},
 #' \code{\link{ClustAllObject-class}}
@@ -290,21 +304,26 @@ setMethod(
 
 #' @import networkD3
 #' @import dplyr
-#' @title Plots Sankey Diagram showing the cluster distribution and shifts
-#' between a pair of stratifications derived from ClustAllObject
+#' @title plotSANKEY: Plots Sankey Diagram showing the cluster distribution
+#' and shifts between a pair of stratifications derived from ClustAllObject
 #' @aliases plotSANKEY,ClustAllObject,character,logicalOrNA-method
 #' @description
-#' This function plots the Sankey Diagram with the cluster distribution and
-#' shifts between a pair of stratifications
+#' This function generates a Sankey Diagram that visualizes the distribution of
+#' stratifications and the shifts between two stratifications derived from a
+#' ClustAllObject.
 #' @usage plotSANKEY(Object,
 #'                   clusters,
 #'                   validationData=FALSE)
-#' @param Object \code{\link{ClustAllObject-class}} object
-#' @param clusters Character vector with the names of a pair of stratifications.
-#' Check resStratification to obtain the stratification names.
-#' @param validationData Logical value to use original labelling data to compare
-#' with the ClustALL selected stratification.
-#' @return plot
+#' @param Object \code{\link{ClustAllObject-class}} object.
+#' @param clusters Character vector with the names of a pair of
+#' stratifications to compare. When validationData is TRUE, only include the
+#' cluster names you want to compare with the validation information. Check
+#' \code{\link{resStratification}} for stratification results.
+#' @param validationData Logical value indicating whether to use true labels
+#' (validation data) for comparison with the selected stratification.
+#' @return Sankey plot showing the distribution and shifts between the
+#' selected stratifications. When validationData is TRUE, the plot includes the
+#' true labels (validation data) if available.
 #' @seealso \code{\link{resStratification}},\code{\link{cluster2data}},
 #' \code{\link{ClustAllObject-class}}
 #' @examples
@@ -408,20 +427,23 @@ setMethod(
 )
 
 
-#' @title validateStratification
+#' @title validateStratification: calculates the sensitivity and specificity
+#' of selected stratification
 #' @aliases validateStratification,ClustAllObject,characterOrNA-method
 #' @description
-#' Returns the sensitivity and specifity of the selected stratification the
-#' original lebelling. The representative stratification names can be obtained
-#' using the method \code{\link{resStratification}}
+#' Returns the sensitivity and specificity of the selected stratification
+#' compared to the true labels (validation data). The names of representative
+#' stratifications can be obtained using the method
+#' \code{\link{resStratification}}.
 #' @usage validateStratification(Object,
 #'                               stratificationName)
 #'
-#' @param Object \code{\link{ClustAllObject-class}} object
-#' @param stratificationName Character vector with the name a stratification.
-#' Check resStratification to obtain stratification names.
+#' @param Object \code{\link{ClustAllObject-class}} object.
+#' @param stratificationName Character vector with the name of a stratification.
+#' Check \code{\link{resStratification}} to obtain stratification names.
 #'
-#' @return numeric
+#' @return the sensitivity and specificity values of the selected stratification
+#' when validation data is available.
 #'
 #' @seealso \code{\link{resStratification}},\code{\link{plotJACCARD}},
 #' \code{\link{ClustAllObject-class}}
@@ -481,6 +503,13 @@ setMethod(
     res <- table(df[,stratificationName], Object@dataValidation)
     sensitivity <- res[3]/(res[3]+res[4])
     specifity <- res[2]/(res[2]+res[1])
+
+    if (sensitivity < 0.5 & specifity < 0.5)
+    {
+      sensitivity <- 1 - sensitivity
+      specifity <- 1 - specifity
+    }
+
     showRes <- c(sensitivity, specifity)
     base::names(showRes) <- c("sensitivity", "specificity")
 

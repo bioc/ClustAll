@@ -32,7 +32,7 @@ wdbc dataset
 \description{
 A dataset containing Features are computed from a digitized image of a fine
 needle aspirate (FNA) of a breast mass.
-They describe characteristics of the cell nuclei present in the image.
+They describe the characteristics of the cell nuclei present in the image.
 }
 \details{
 The dataset comprises two types of features —categorical and numerical—
