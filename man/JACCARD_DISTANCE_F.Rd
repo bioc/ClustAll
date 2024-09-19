@@ -3,22 +3,58 @@
 \name{JACCARD_DISTANCE_F}
 \alias{JACCARD_DISTANCE_F}
 \alias{JACCARD_DISTANCE_F,ClustAllObject-method}
-\title{JACCARD_DISTANCE_F accession method}
+\title{Retrieve Jaccard Distance Matrix for Robust Stratifications}
 \usage{
 JACCARD_DISTANCE_F(Object)
 }
 \arguments{
-\item{Object}{\code{\link{ClustAllObject-class}} object.}
+\item{Object}{A processed \code{\link{ClustAllObject-class}} object. The object
+must have been processed by \code{\link{runClustAll}} before using this method.}
 }
 \value{
-Matrix containing the Jaccard distances derived from the robust
-populations stratifications or NULL if runClustAll method has not been
-executed yet.
+A square matrix where each element represents the Jaccard distance
+between two robust stratifications. The row and column names correspond to
+the names of the robust stratifications. Returns NULL if \code{\link{runClustAll}}
+has not been executed on the object.
 }
 \description{
-Generic function to retrieve the matrix with the Jaccard distances derived
-from the robust populations stratifications in\code{\link{runClustAll}} from
-a \code{\link{ClustAllObject-class}} object.
+This method extracts and returns the matrix of Jaccard distances between
+robust stratifications identified by the ClustALL algorithm. It provides a
+quantitative measure of similarity between different clustering solutions
+that have passed the bootstrapping process for population-based robustness.
+}
+\details{
+The JACCARD_DISTANCE_F method provides crucial information about the similarity
+structure of robust clustering solutions:
+
+1. Jaccard Distance:
+   - A measure of dissimilarity between sample sets, calculated as 1 minus the Jaccard coefficient.
+   - Ranges from 0 (identical stratifications) to 1 (completely different stratifications).
+   - Lower values indicate higher similarity between stratifications.
+
+2. Matrix Structure:
+   - Symmetric matrix with stratification names as row and column labels.
+   - Diagonal elements are always 0 (each stratification is identical to itself).
+   - Off-diagonal elements represent pairwise Jaccard distances.
+
+3. Robust Stratifications:
+   - Only includes stratifications that passed the bootstrapping process.
+   - Represents the most stable and reliable clustering solutions.
+
+This method is particularly useful for:
+- Identifying groups of similar stratifications.
+- Assessing the diversity of robust clustering solutions.
+- Selecting representative stratifications for further analysis.
+- Visualizing the relationships between different clustering outcomes.
+- Input for further clustering or dimensionality reduction of stratifications.
+}
+\note{
+- This method returns the data stored in the 'JACCARD_DISTANCE_F' slot of the ClustAllObject.
+- It will return NULL if \code{\link{runClustAll}} has not been executed on the object.
+- The Jaccard distance is calculated based on the co-occurrence of samples in clusters,
+  not on the specific cluster labels.
+- This matrix is often used as input for the \code{\link{plotJACCARD}} function
+  to visualize the similarity structure of stratifications.
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")
@@ -29,5 +65,6 @@ obj_noNA1 <- runClustAll(Object = obj_noNA, threads = 1, simplify = FALSE)
 JACCARD_DISTANCE_F(obj_noNA1)
 }
 \seealso{
-\code{\link{runClustAll}}, \code{\link{ClustAllObject-class}}
+\code{\link{runClustAll}}, \code{\link{plotJACCARD}},
+\code{\link{resStratification}}, \code{\link{ClustAllObject-class}}
 }

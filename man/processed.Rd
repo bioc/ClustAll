@@ -3,20 +3,53 @@
 \name{processed}
 \alias{processed}
 \alias{processed,ClustAllObject-method}
-\title{processed accession method}
+\title{Check Processing Status of ClustAllObject}
 \usage{
 processed(Object)
 }
 \arguments{
-\item{Object}{\code{\link{ClustAllObject-class}} object.}
+\item{Object}{A \code{\link{ClustAllObject-class}} object created by
+\code{\link{createClustAll}}.}
 }
 \value{
-TRUE if runClustAll has been executed. Otherwise FALSE.
+A logical value:
+\itemize{
+  \item TRUE if \code{\link{runClustAll}} has been executed on the object.
+  \item FALSE if the object has not yet been processed by \code{\link{runClustAll}}.
+}
 }
 \description{
-Generic function to know if \code{\link{ClustAllObject-class}} has been
-processed. TRUE if \code{\link{runClustAll}} has been executed. Otherwise
-FALSE.
+This method retrieves the processing status of a ClustAllObject, indicating
+whether the ClustALL algorithm has been executed on the object. It provides a
+quick way to verify if clustering results are available for analysis.
+}
+\details{
+The processed method serves as a crucial indicator in the ClustALL workflow:
+
+1. Processing Status:
+   - Indicates whether the ClustALL algorithm has been applied to the object.
+   - A TRUE value means clustering results are available for analysis.
+   - A FALSE value indicates the object only contains input data and preprocessing.
+
+2. Workflow Implications:
+   - Helps determine which methods and analyses can be performed on the object.
+   - Guides users in the correct sequence of operations in the ClustALL pipeline.
+
+3. Data Availability:
+   - TRUE status implies availability of:
+     * Stratification results (\code{\link{summary_clusters}})
+     * Jaccard distance matrix (\code{\link{JACCARD_DISTANCE_F}})
+     * Other clustering-related outputs
+   - FALSE status means only input and preprocessed data are available.
+}
+\note{
+- This method checks the 'processed' slot of the ClustAllObject.
+- The processed status is automatically set to TRUE when \code{\link{runClustAll}}
+  completes successfully.
+- Users should not manually modify this status to ensure consistency between
+  the status and the actual content of the object.
+- A FALSE status does not necessarily indicate an error; it simply means
+  \code{\link{runClustAll}} needs to be executed before accessing clustering results.
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")
@@ -26,5 +59,7 @@ obj_noNA <- createClustAll(data = wdbc)
 processed(obj_noNA)
 }
 \seealso{
-\code{\link{runClustAll}}, \code{\link{ClustAllObject-class}}
+\code{\link{runClustAll}}, \code{\link{createClustAll}},
+\code{\link{ClustAllObject-class}}, \code{\link{summary_clusters}},
+\code{\link{JACCARD_DISTANCE_F}}
 }

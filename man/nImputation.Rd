@@ -3,21 +3,40 @@
 \name{nImputation}
 \alias{nImputation}
 \alias{nImputation,ClustAllObject-method}
-\title{nImputation accession method}
+\title{Retrieve Number of Imputations from ClustAllObject}
 \usage{
 nImputation(Object)
 }
 \arguments{
-\item{Object}{\code{\link{ClustAllObject-class}} object.}
+\item{Object}{A \code{\link{ClustAllObject-class}} object created by
+\code{\link{createClustAll}}.}
 }
 \value{
-Numeric vector that contains the number of imputations. 0 in the
-case of no imputations were required.
+An integer indicating the number of imputations performed. Returns 0
+if no imputations were required or performed.
 }
 \description{
-Generic function to retrieve the number of imputations in
-\code{\link{createClustAll}} from a \code{\link{ClustAllObject-class}}
-object.
+This method returns the number of imputations performed when creating or
+processing the ClustAllObject. It provides information about how missing data
+was handled in the ClustALL pipeline.
+}
+\details{
+The nImputation method provides insight into the multiple imputation strategy
+used in the ClustALL analysis pipeline:
+
+This method is particularly useful for:
+- Verifying whether imputation was performed on the dataset.
+- Understanding the extent of the imputation process.
+- Assessing the potential impact of imputation on subsequent analyses.
+- Reporting the methodology used in handling missing data.
+}
+\note{
+- This method returns the value stored in the 'nImputation' slot of the ClustAllObject.
+- A return value of 0 does not necessarily mean the original data had no
+  missing values; it could also indicate that imputation was explicitly skipped.
+- The number of imputations is typically set during the creation of the
+  ClustAllObject with the \code{\link{createClustAll}} function.
+- For accessing the actual imputed datasets, use the \code{\link{dataImputed}} method.
 }
 \examples{
 data("BreastCancerWisconsinMISSING", package = "ClustAll")
@@ -28,6 +47,6 @@ obj_NA <- createClustAll(data = wdbcNA, colValidation = "Diagnosis",
 nImputation(obj_NA)
 }
 \seealso{
-\code{\link{createClustAll}}, \code{\link{ClustAllObject-class}},
-\code{\link{runClustAll}}
+\code{\link{createClustAll}}, \code{\link{dataImputed}},
+\code{\link{ClustAllObject-class}}, \code{\link[mice]{mice}}
 }

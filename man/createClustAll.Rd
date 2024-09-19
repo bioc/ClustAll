@@ -3,40 +3,69 @@
 \name{createClustAll}
 \alias{createClustAll}
 \alias{createClustAll,data.frame,numericOrNA,ANY,characterOrNA-method}
-\title{createClustAll: Creates ClustAllObject}
+\title{Create ClustAllObject for Patient Stratification Analysis}
 \usage{
-createClustAll(data=data,
-                      nImputation=NULL,
-                      dataImputed=NULL,
-                      colValidation=NULL)
+createClustAll(data, nImputation = NULL, dataImputed = NULL,
+                      colValidation = NULL)
 }
 \arguments{
-\item{data}{Data Frame of the using data. It may contain missing values (NA).}
+\item{data}{A data frame containing the input data. It may include missing
+values (NAs) and can contain both numeric and categorical variables.}
 
-\item{nImputation}{Number of imputations to be computed in case the data
-contains NAs and impued data is not available.}
+\item{nImputation}{An integer specifying the number of imputations to perform
+if the data contains missing values. Default is NULL, which means no imputation
+unless missing values are detected.}
 
-\item{dataImputed}{mids object created with mice package. The input data
-for the imputation and the data must be the same.}
+\item{dataImputed}{A 'mids' object created by the mice package, containing
+pre-computed imputations. If provided, this will be used instead of performing
+new imputations. Default is NULL.}
 
-\item{colValidation}{vector with the referece labeling of the original
-dataset provided in “data” (if available). Default is NULL.}
+\item{colValidation}{A character string specifying the name of the column in
+'data' that contains validation labels (true classifications). This column
+will be extracted and stored separately. Default is NULL.}
 }
 \value{
-\code{\link{ClustAllObject-class}} object.
+An unprocessed ClustAllObject without stratification results. Use
+runClustAll on this object to execute the ClustAll pipeline.
 }
 \description{
-Creates the ClustAllObject object. Applies one-hot encoding to columns with
-categorical values from the input data and extracts the validation column if
-available. It performs data imputation if the dataset contains missing values
-and no imputed dataset is provided.
-In total there are 3 scenarios when we create the object:
-- Scenario 1: data does not contain missing values.
--Scenario 2: data contains NAs and there is no imputed data. Then, it
-performs the imputations automatically.
-- Scenario 3: data contains NAs and imputed data is provided manually.
-Once \code{\link{ClustAllObject-class}} has been created, the ClustALL
-pipeline can be run executing \code{\link{runClustAll}}.
+This function initializes a ClustAllObject, which serves as the core data
+structure for the ClustAll package. It preprocesses the input data, handles
+missing values through imputation if necessary, and prepares the data for
+subsequent clustering analysis.
+}
+\details{
+The createClustAll function performs several key steps in preparing data for
+the ClustAll analysis pipeline:
+
+1. Data Preprocessing:
+   - Applies one-hot encoding to categorical variables, converting them to
+     a format suitable for clustering algorithms.
+   - Extracts the validation column (if specified) and stores it separately.
+
+2. Missing Data Handling:
+   - If the data contains missing values and no imputed data is provided,
+     it performs multiple imputation using the mice package.
+   - The number of imputations is determined by the 'nImputation' parameter
+     or set to a default if not specified.
+
+3. Object Initialization:
+   - Creates a new ClustAllObject with slots for original data, processed data,
+     imputed data (if applicable), and validation data (if provided).
+
+The function accommodates three main scenarios:
+a) Data without missing values: Preprocessing is applied, no imputation needed.
+b) Data with missing values, no pre-computed imputations: Automatic imputation is performed.
+c) Data with missing values and pre-computed imputations: The provided imputations are used.
+}
+\note{
+- Categorical variables in the input data should be coded as factors.
+- If 'dataImputed' is provided, it must correspond exactly to the input data
+  in terms of dimensions and variable names.
+- The 'colValidation' parameter allows for the incorporation of known
+  classifications, which can be used later for validating clustering results.
+- After creating the ClustAllObject, use \code{\link{runClustAll}} to perform
+  the actual clustering analysis.
 }
 \examples{
 # Scenario 1: data does not contain missing values
@@ -63,5 +92,6 @@ obj_imp <- createClustAll(data=wdbcNA, dataImputed = imp)
 
 }
 \seealso{
-\code{\link{runClustAll}}, \code{\link{ClustAllObject-class}}
+\code{\link{runClustAll}}, \code{\link{ClustAllObject-class}},
+\code{\link{addValidationData}}
 }

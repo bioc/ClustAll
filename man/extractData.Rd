@@ -8,15 +8,43 @@
 extractData(Object)
 }
 \arguments{
-\item{Object}{\code{\link{ClustAllObject-class}} object.}
+\item{Object}{A \code{\link{ClustAllObject-class}} object created by
+\code{\link{createClustAll}}.}
 }
 \value{
-List with the information of original, modified and imputed data.
+A list containing three elements:
+\itemize{
+  \item Data_modified: A data frame of the preprocessed data used for clustering.
+  \item Data_original: A data frame of the original, unmodified input data.
+  \item Data_imputed: A 'mids' object from the mice package containing imputed
+    datasets, if imputation was performed. NULL otherwise.
+}
 }
 \description{
-Generic function to retrieve all the data used in
-\code{\link{createClustAll}} from a \code{\link{ClustAllObject-class}}
-object.
+This function retrieves all data components stored in a
+\code{\link{ClustAllObject-class}},
+including the preprocessed data, original input data, and imputed datasets
+(if applicable). It provides a comprehensive view of the data at different
+stages of the ClustALL pipeline.
+}
+\details{
+The extractData function provides access to data at various stages of the
+ClustALL pipeline:
+\itemize{
+  \item Data: Reflects preprocessing steps such as one-hot encoding
+    for categorical variables and removal of the validation column.
+  \item DataOriginal: The exact data as input to \code{\link{createClustAll}},
+    useful for reference and verifying preprocessing steps.
+  \item Data_imputed: Multiple imputed datasets if missing data was present
+    and imputation was performed.
+}
+This function is particularly useful for:
+\itemize{
+  \item Verifying preprocessing steps and their effects on the data.
+  \item Accessing original data for additional analyses or visualizations.
+  \item Examining imputed datasets to understand how missing data was handled.
+  \item Exporting data at different stages for use in other analyses or packages.
+}
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")

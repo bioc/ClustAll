@@ -3,30 +3,66 @@
 \name{plotJACCARD}
 \alias{plotJACCARD}
 \alias{plotJACCARD,ClustAllObject,logicalOrNA,numericOrNA-method}
-\title{plotJACCARD: Heatmap of robust stratification distances based on
- Jaccard similarity}
+\title{Visualize Jaccard Distances Between Robust Stratifications}
 \usage{
-plotJACCARD(Object,
-                   paint=TRUE,
-                   stratification_similarity=0.7)
+plotJACCARD(Object, paint = TRUE, stratification_similarity = 0.7)
 }
 \arguments{
-\item{Object}{\code{\link{ClustAllObject-class}} object.}
+\item{Object}{A processed \code{\link{ClustAllObject-class}} object. The object
+must have been processed by \code{\link{runClustAll}} before using this function.}
 
-\item{paint}{TRUE for painting a square Logical vector with the annotation for the different
-stratifications.}
+\item{paint}{Logical. If TRUE (default), the function highlights groups of
+similar stratifications on the heatmap with red squares. This helps in
+visually identifying clusters of similar stratifications.}
 
-\item{stratification_similarity}{Numeric value representing the minimum
-Jaccard distance required to consider two stratifications as similar.
-The default is 0.7.}
+\item{stratification_similarity}{Numeric value between 0 and 1. Sets the
+threshold Jaccard distance for considering two stratifications as similar.
+Default is 0.7. Higher values result in more stringent similarity criteria.}
 }
 \value{
-Plot of a heatmap of the correlation matrix displaying Jaccard
-distances between statistically robust stratifications.
+A plot displaying a correlation matrix heatmap that shows the Jaccard
+Distances between population-based robust stratifications. The heatmap
+visually distinguishes groups of similar stratifications according to the
+specified “stratification_similarity” threshold.
 }
 \description{
-This function plots the correlation matrix heatmap showing the Jaccard
-distances between robust stratifications.
+This function generates a heatmap visualization of the Jaccard distances
+between robust stratifications identified by the ClustALL algorithm. It
+provides a visual representation of the similarity between different
+clustering solutions, helping to identify groups of related stratifications.
+}
+\details{
+The plotJACCARD function visualizes the similarity between robust
+stratifications using a heatmap of Jaccard distances:
+
+- The heatmap color scale represents Jaccard distances, with darker colors
+  indicating higher similarity (lower distance).
+- Stratifications are ordered based on hierarchical clustering of their
+  Jaccard distances.
+- The 'paint' option highlights groups of similar stratifications, making it
+  easier to identify clusters of related solutions.
+- The 'stratification_similarity' parameter allows fine-tuning of what is
+  considered "similar" for the purpose of highlighting.
+
+The function provides annotations for each stratification, including:
+- Distance metric used (e.g., Correlation, Gower)
+- Clustering method employed (e.g., H-Clustering, K-Means, K-Medoids)
+- Depth of the dendrogram cut used in the Data Complexity Reduction step
+
+This visualization is particularly useful for:
+- Identifying groups of similar stratifications
+- Assessing the overall diversity of robust solutions
+- Guiding the selection of representative stratifications for further analysis
+}
+\note{
+- This function requires a processed ClustAllObject.
+Ensure \code{\link{runClustAll}}
+  has been executed before using plotJACCARD.
+- The 'paint' feature may not be visible if there are no groups of stratifications
+  meeting the similarity threshold.
+- For exploring stratifications, it's recommended to start with a high
+  'stratification_similarity' value and gradually decrease it to examine
+  various levels of stratification grouping.
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")
@@ -39,6 +75,6 @@ plotJACCARD(obj_noNA1, paint = TRUE, stratification_similarity = 0.9)
 }
 }
 \seealso{
-\code{\link{resStratification}},\code{\link{cluster2data}},
-\code{\link{ClustAllObject-class}}
+\code{\link{runClustAll}}, \code{\link{resStratification}},
+\code{\link{ClustAllObject-class}}, \code{\link{JACCARD_DISTANCE_F}}
 }

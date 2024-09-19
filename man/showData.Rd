@@ -3,20 +3,41 @@
 \name{showData}
 \alias{showData}
 \alias{showData,ClustAllObject-method}
-\title{data accession method}
+\title{Retrieve Processed Data from ClustAllObject}
 \usage{
 showData(Object)
 }
 \arguments{
-\item{Object}{\code{\link{ClustAllObject-class}} object.}
+\item{Object}{A \code{\link{ClustAllObject-class}} object created by
+\code{\link{createClustAll}}.}
 }
 \value{
-The Data Frame with the initial data
+A data frame containing the processed data used for clustering analysis.
+This data reflects all preprocessing steps applied during object creation but
+does not include any imputation that may have been performed.
 }
 \description{
-Generic function to retrieve the initial data used for
-\code{\link{createClustAll}} from a \code{\link{ClustAllObject-class}}
-object.
+This method extracts and returns the processed data stored in a ClustAllObject.
+The data returned is the version used for clustering analysis, which has undergone
+preprocessing steps such as one-hot encoding for categorical variables and
+removal of the validation column (if present).
+}
+\details{
+The showData method provides access to the core dataset used in the ClustALL
+analysis pipeline. Key aspects of this data include:
+
+1. Preprocessing Applied:
+   - Categorical variables have been converted to numeric form via one-hot encoding.
+   - The validation column (if specified during object creation) has been removed.
+
+2. Data Structure:
+   - All columns are numeric, suitable for use in clustering algorithms.
+   - Row order corresponds to the original input data.
+
+3. Missing Data:
+   - The returned data may still contain missing values (NAs) if imputation
+     was not performed.
+   - For imputed versions of the data, use the \code{\link{dataImputed}} method.
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")
@@ -25,6 +46,6 @@ obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
 showData(obj_noNA)
 }
 \seealso{
-\code{\link{createClustAll}}, \code{\link{ClustAllObject-class}},
-\code{\link{runClustAll}}.
+\code{\link{createClustAll}}, \code{\link{dataOriginal}},
+\code{\link{dataImputed}}, \code{\link{ClustAllObject-class}}
 }

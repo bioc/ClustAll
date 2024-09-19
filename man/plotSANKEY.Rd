@@ -3,33 +3,72 @@
 \name{plotSANKEY}
 \alias{plotSANKEY}
 \alias{plotSANKEY,ClustAllObject,character,logicalOrNA-method}
-\title{plotSANKEY: Plots Sankey Diagram showing the cluster distribution
-and shifts between a pair of stratifications derived from ClustAllObject}
+\title{Visualize Stratification Comparisons with Sankey Diagram}
 \usage{
-plotSANKEY(Object,
-                  clusters,
-                  validationData=FALSE)
+plotSANKEY(Object, clusters, validationData = FALSE)
 }
 \arguments{
-\item{Object}{\code{\link{ClustAllObject-class}} object.}
+\item{Object}{A processed \code{\link{ClustAllObject-class}} object. The object
+must have been processed by \code{\link{runClustAll}} before using this function.}
 
-\item{clusters}{Character vector with the names of a pair of
-stratifications to compare. When validationData is TRUE, only include the
-cluster names you want to compare with the validation information. Check
-\code{\link{resStratification}} for stratification results.}
+\item{clusters}{A character vector specifying the names of stratifications to compare.
+If validationData is FALSE, exactly two stratification names should be provided.
+If validationData is TRUE, provide one stratification name to compare with true labels.}
 
-\item{validationData}{Logical value indicating whether to use true labels
-(validation data) for comparison with the selected stratification.}
+\item{validationData}{Logical. If TRUE, compares the specified stratification with
+the true labels (validation data) if available. Default is FALSE.}
 }
 \value{
-Sankey plot showing the distribution and shifts between the
-selected stratifications. When validationData is TRUE, the plot includes the
-true labels (validation data) if available.
+A Sankey plot showing the composition and flow of clusters between
+the selected stratifications. If true labels are available and
+“validationData” is TRUE, the plot will compare the selected stratification
+against the true labels.
 }
 \description{
-This function generates a Sankey Diagram that visualizes the distribution of
-stratifications and the shifts between two stratifications derived from a
-ClustAllObject.
+This function generates a Sankey diagram to visualize the relationships between
+different stratifications or between a stratification and the true labels (if available).
+It provides an intuitive representation of how samples are distributed across
+clusters in different stratifications or how they align with known stratifications.
+}
+\details{
+The plotSANKEY function provides a powerful visualization tool for understanding
+the relationships between different clustering solutions or between a clustering
+solution and known classifications:
+
+1. Stratification Comparison (validationData = FALSE):
+   - Visualizes how samples are distributed across clusters in two different stratifications.
+   - Helps identify similarities and differences between clustering solutions.
+   - Useful for understanding how changes in clustering parameters affect sample groupings.
+
+2. Validation Comparison (validationData = TRUE):
+   - Compares a single stratification with true labels (if available).
+   - Helps assess how well the clustering aligns with known stratifications.
+   - Useful for evaluating the biological or clinical relevance of a clustering solution.
+
+The Sankey diagram represents:
+- Clusters (or true labels) as nodes on the left and right sides of the diagram.
+- Flows between nodes indicating how samples are distributed.
+- The width of each flow is proportional to the number of samples it represents.
+
+This visualization is particularly useful for:
+- Identifying stable sample groupings across different stratifications.
+- Detecting major shifts in cluster assignments between solutions.
+- Evaluating the concordance between clustering results and known stratifications.
+- Understanding the impact of different clustering approaches on sample groupings.
+}
+\note{
+- This function requires a processed ClustAllObject. Ensure
+\code{\link{runClustAll}}
+  has been executed before using plotSANKEY.
+- When validationData is TRUE, the ClustAllObject must contain validation data
+  (true labels). This can be added using \code{\link{addValidationData}} if not
+  provided during object creation.
+- Stratification names can be obtained from the results of
+\code{\link{resStratification}}
+  or by examining the names in the summary_clusters slot of the ClustAllObject.
+- The Sankey diagram may become cluttered if there are many clusters or if the
+  clustering solutions are very different. In such cases, consider focusing on
+  specific subsets of clusters or using additional filtering criteria.
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")
@@ -50,6 +89,6 @@ plotSANKEY(Object = obj_noNA1, clusters = "cuts_a_1", validationData=TRUE)
 
 }
 \seealso{
-\code{\link{resStratification}},\code{\link{cluster2data}},
-\code{\link{ClustAllObject-class}}
+\code{\link{runClustAll}}, \code{\link{resStratification}},
+\code{\link{addValidationData}}, \code{\link{ClustAllObject-class}}
 }
