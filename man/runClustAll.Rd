@@ -3,54 +3,70 @@
 \name{runClustAll}
 \alias{runClustAll}
 \alias{runClustAll,ClustAllObject,numericOrNA,logicalOrNA-method}
-\title{ClustAll: Data driven strategy to find hidden subgroups of patients
-within complex diseases using clinical data}
+\title{Execute ClustALL Algorithm on a ClustAllObject}
 \usage{
-runClustAll(Object,
-                   threads=1,
-                   simplify=FALSE)
+runClustAll(Object, threads = 1, simplify = FALSE)
 }
 \arguments{
-\item{Object}{\code{\link{ClustAllObject-class}} object.}
+\item{Object}{An unprocessed \code{\link{ClustAllObject-class}} created by
+\code{\link{createClustAll}}. The object should contain the input data and
+any preprocessing, but no stratification results yet.}
 
-\item{threads}{numeric vector that indicates the number of cores to use.}
+\item{threads}{An integer specifying the number of CPU cores to use for
+parallel computing. Default is 1 (single-core processing).}
 
-\item{simplify}{if TRUE, only every fourth depth of the dendogram will be
-calculated. It will reduce the execution time, but it is recommended to be
-set as FALSE to obtain robust results.}
+\item{simplify}{A logical value. If TRUE, only every fourth depth of the
+dendrogram will be considered in the DCR and SP steps, reducing execution
+time but potentially sacrificing detail. Default is FALSE.}
 }
 \value{
-A processed object \code{\link{ClustAllObject-class}} object.
+A processed \code{\link{ClustAllObject-class}} containing
+stratification results from the ClustALL pipeline. The object's
+summary_clusters and JACCARD_DISTANCE_F slots will be populated with results.
 }
 \description{
-This method runs the ClustALL pipeline.
-The ClustALL framework involves three main steps:
+This function applies the ClustALL algorithm to the data stored in a
+ClustAllObject. It performs a comprehensive analysis, generating multiple
+patient stratifications based on various clustering methods and parameters.
+The function implements the core steps of the ClustALL framework: Data
+Complexity Reduction (DCR), Stratification Process (SP), and Consensus-based
+Stratifications (CbS).
+}
+\details{
+The runClustAll function implements the three main steps of the ClustALL
+framework:
 
-- Step 1: Data Complexity Reduction (DCR): multiple data embeddings
-are created to replace a highly correlated set of variables with
-lower-dimension projections derived from Principal Component Analysis (PCA).
-This process explores all relevant groupings derived from  a  hierarchical
-clustering-based dendrogram. Consequently, DCR computes an embedding for each
-depth in the dendrogram.
+1. Data Complexity Reduction (DCR):
+   - Creates multiple data embeddings to replace highly correlated variable
+     sets with lower-dimension projections derived from Principal Component
+     Analysis (PCA).
+   - Explores all relevant groupings derived from a hierarchical
+     clustering-based dendrogram.
+   - Computes an embedding for each depth in the dendrogram.
 
-- Step 2: The Stratification Process (SP): ClustALL calculates and
-preliminarily evaluates stratifications for each embedding by computing a
-stratification for each feasible combination of embedding, dissimilarity
-metric, and clustering method, considering a predefined range of cluster
-numbers. The optimal number of clusters is determined using three internal
-validation measures: the sum-of-squares (WB-ratio), Dunn index, and average
-silhouette width.  Each combination yields a stratification comprising
-'embedding + distance metric + clustering method'.
+2. Stratification Process (SP):
+   - Calculates and preliminarily evaluates stratifications for each embedding.
+   - Computes a stratification for each feasible combination of embedding,
+     dissimilarity metric, and clustering method.
+   - Determines the optimal number of clusters using three internal validation
+     measures: sum-of-squares (WB-ratio), Dunn index, and average silhouette width.
 
-- Step 3: Consensus-based Stratifications (CbS): filters out non-robust
-stratifications through bootstrapping. Any stratifications with less than 85%
-stability are excluded. From the remaining stratifications, representatives
-of very similar outcomes are selected.
+3. Consensus-based Stratifications (CbS):
+   - Filters out non-robust stratifications through bootstrapping.
+   - Excludes stratifications with less than 85% stability.
+   - Selects representatives of very similar outcomes from the remaining
+     stratifications.
 
-If the simplify parameter is TRUE, every fourth depth of the dendrogram is
-calculated from the first and second steps. It is helpful in reducing the
-execution time and obtaining preliminary results. However, it is recommended
-that it be set to FALSE to obtain robust results.
+The 'simplify' parameter, when set to TRUE, reduces computation time by
+considering only every fourth depth of the dendrogram in the first and second
+steps. While useful for preliminary results, it's recommended to set it to
+FALSE for more robust and detailed results.
+}
+\note{
+This function modifies the input ClustAllObject in-place, populating it with
+stratification results. The process can be computationally intensive,
+especially for large datasets or when 'simplify' is set to FALSE. Consider
+using multiple threads for improved performance on multi-core systems.
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")
@@ -63,6 +79,7 @@ obj_noNA1
 }
 }
 \seealso{
-\code{\link{resStratification}},\code{\link{plotJACCARD}},
-\code{\link{cluster2data}},\code{\link{ClustAllObject-class}}
+\code{\link{createClustAll}}, \code{\link{resStratification}},
+\code{\link{plotJACCARD}}, \code{\link{cluster2data}},
+\code{\link{ClustAllObject-class}}
 }

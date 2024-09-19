@@ -8,39 +8,67 @@
 ClustAllObject class object.
 }
 \description{
-This class contains the original data and the imputed datasets
-needed to run the ClustAll pipeline. The results of all the stratifications
-are stored in summary_clusters. From the stratifications that pass the
-bootstrapping, a matrix with the Jaccard distances is calculated and stored
-in JACCARD_DISTANCE_F.
+The ClustAllObject class is the central data structure of the ClustAll
+package, designed to store and manage data and results throughout the patient
+stratification process. It encapsulates the original data, preprocessed data,
+imputation results, and clustering outcomes, providing a cohesive framework
+for the entire ClustALL workflow.
+}
+\details{
+The ClustAllObject is designed to efficiently manage all aspects of the data
+and results throughout the ClustAll pipeline:
+\itemize{
+  \item It preserves the original data while storing preprocessed versions for analysis.
+  \item It handles missing data through multiple imputation, storing both original and imputed datasets.
+  \item It maintains separation between data used for clustering and validation data.
+  \item It stores all generated stratifications and identifies robust solutions.
+  \item It provides a framework for comparing different stratification solutions.
+}
+This structure allows for a streamlined workflow from data input through
+preprocessing, imputation (if needed), stratification, and final analysis of
+results.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{data}}{Data Frame of the input data after applying one-hot encoding to the
-categorical variables and extracting the validation (true label) column.}
+\item{\code{data}}{A data frame containing the preprocessed input data after applying
+one-hot encoding to categorical variables and removing the validation column
+(if present). This is the data used directly in the clustering process.}
 
-\item{\code{dataOriginal}}{Data Frame of the input data.}
+\item{\code{dataOriginal}}{A data frame containing the original, unmodified input data
+as provided to \code{\link{createClustAll}}. This preserves the initial state
+of the data for reference and validation purposes.}
 
-\item{\code{dataImputed}}{Mids object derived from the mice package that stores the
-imputed data, in case imputation was applied. Otherwise NULL.}
+\item{\code{dataImputed}}{If imputation was applied, this slot contains a 'mids' object
+from the mice package with the imputed datasets. If no imputation was performed,
+this is NULL.}
 
-\item{\code{dataValidation}}{A vector in the case there is a validation (true label)
-column in the input data. This information can be added later with
-\code{\link{addValidationData}}. Otherwise NULL.}
+\item{\code{dataValidation}}{A numeric vector containing the reference labels (true labels)
+of the original dataset, if provided. These labels are used for validation purposes
+and are not used in the stratification process itself. NULL if no validation data
+is available.}
 
-\item{\code{nImputation}}{Number of imputations performed.}
+\item{\code{nImputation}}{An integer indicating the number of imputations performed.
+Set to 0 if no imputation was necessary or performed.}
 
-\item{\code{processed}}{A boolean. TRUE if \code{\link{runClustAll}} has been
-executed. Otherwise FALSE.}
+\item{\code{processed}}{A logical flag. TRUE if \code{\link{runClustAll}} has been
+executed on the object, FALSE otherwise. Indicates whether the object contains
+stratification results.}
 
-\item{\code{summary_clusters}}{List with the resulting stratifications
-for each combination of clustering methods (distance + clustering algorithm)
-and depth, in case \code{\link{runClustAll}} has been executed previously.
-Otherwise NULL.}
+\item{\code{summary_clusters}}{A list containing the resulting stratifications for each
+combination of clustering methods (distance metric + clustering algorithm) and
+embedding depth. This is populated after \code{\link{runClustAll}} has been
+executed. NULL otherwise.}
 
-\item{\code{JACCARD_DISTANCE_F}}{Matrix containing the Jaccard distances derived from
-the robust stratifications after applying the bootstrapping if
-\code{\link{runClustAll}} has been executed previously. Otherwise NULL.}
+\item{\code{JACCARD_DISTANCE_F}}{A matrix of Jaccard distances between the robust
+stratifications that passed the bootstrapping process. Used to assess similarity
+between different stratification solutions. NULL if \code{\link{runClustAll}}
+has not been executed.}
 }}
 
+\note{
+The ClustAllObject is typically created using the
+\code{\link{createClustAll}} function and processed using
+\code{\link{runClustAll}}. Direct manipulation of the object's slots is not
+recommended as it may lead to inconsistencies in the analysis pipeline.
+}

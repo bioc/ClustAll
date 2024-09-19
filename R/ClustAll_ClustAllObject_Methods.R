@@ -5,27 +5,65 @@
 #' @import ggplot2
 #' @import grid
 #' @import grDevices
-#' @title plotJACCARD: Heatmap of robust stratification distances based on
-#'  Jaccard similarity
+#' @title Visualize Jaccard Distances Between Robust Stratifications
 #' @aliases plotJACCARD,ClustAllObject,logicalOrNA,numericOrNA-method
 #' @description
-#' This function plots the correlation matrix heatmap showing the Jaccard
-#' distances between robust stratifications.
-#' @usage plotJACCARD(Object,
-#'                    paint=TRUE,
-#'                    stratification_similarity=0.7)
+#' This function generates a heatmap visualization of the Jaccard distances
+#' between robust stratifications identified by the ClustALL algorithm. It
+#' provides a visual representation of the similarity between different
+#' clustering solutions, helping to identify groups of related stratifications.
 #'
-#' @param Object \code{\link{ClustAllObject-class}} object.
-#' @param paint TRUE for painting a square Logical vector with the annotation for the different
-#' stratifications.
-#' @param stratification_similarity Numeric value representing the minimum
-#' Jaccard distance required to consider two stratifications as similar.
-#' The default is 0.7.
-#' @return Plot of a heatmap of the correlation matrix displaying Jaccard
-#' distances between statistically robust stratifications.
+#' @usage plotJACCARD(Object, paint = TRUE, stratification_similarity = 0.7)
 #'
-#' @seealso \code{\link{resStratification}},\code{\link{cluster2data}},
-#' \code{\link{ClustAllObject-class}}
+#' @param Object A processed \code{\link{ClustAllObject-class}} object. The object
+#' must have been processed by \code{\link{runClustAll}} before using this function.
+#' @param paint Logical. If TRUE (default), the function highlights groups of
+#' similar stratifications on the heatmap with red squares. This helps in
+#' visually identifying clusters of similar stratifications.
+#' @param stratification_similarity Numeric value between 0 and 1. Sets the
+#' threshold Jaccard distance for considering two stratifications as similar.
+#' Default is 0.7. Higher values result in more stringent similarity criteria.
+#'
+#' @return A plot displaying a correlation matrix heatmap that shows the Jaccard
+#' Distances between population-based robust stratifications. The heatmap
+#' visually distinguishes groups of similar stratifications according to the
+#' specified “stratification_similarity” threshold.
+#'
+#' @details
+#' The plotJACCARD function visualizes the similarity between robust
+#' stratifications using a heatmap of Jaccard distances:
+#'
+#' - The heatmap color scale represents Jaccard distances, with darker colors
+#'   indicating higher similarity (lower distance).
+#' - Stratifications are ordered based on hierarchical clustering of their
+#'   Jaccard distances.
+#' - The 'paint' option highlights groups of similar stratifications, making it
+#'   easier to identify clusters of related solutions.
+#' - The 'stratification_similarity' parameter allows fine-tuning of what is
+#'   considered "similar" for the purpose of highlighting.
+#'
+#' The function provides annotations for each stratification, including:
+#' - Distance metric used (e.g., Correlation, Gower)
+#' - Clustering method employed (e.g., H-Clustering, K-Means, K-Medoids)
+#' - Depth of the dendrogram cut used in the Data Complexity Reduction step
+#'
+#' This visualization is particularly useful for:
+#' - Identifying groups of similar stratifications
+#' - Assessing the overall diversity of robust solutions
+#' - Guiding the selection of representative stratifications for further analysis
+#'
+#' @note
+#' - This function requires a processed ClustAllObject.
+#' Ensure \code{\link{runClustAll}}
+#'   has been executed before using plotJACCARD.
+#' - The 'paint' feature may not be visible if there are no groups of stratifications
+#'   meeting the similarity threshold.
+#' - For exploring stratifications, it's recommended to start with a high
+#'   'stratification_similarity' value and gradually decrease it to examine
+#'   various levels of stratification grouping.
+#'
+#' @seealso \code{\link{runClustAll}}, \code{\link{resStratification}},
+#' \code{\link{ClustAllObject-class}}, \code{\link{JACCARD_DISTANCE_F}}
 #'
 #' @examples
 #' data("BreastCancerWisconsin", package = "ClustAll")
@@ -131,38 +169,73 @@ setMethod(
 )
 
 
-#' @title resStratification: Show the representative stratifications
+#' @title Extract Representative Stratifications from ClustAllObject
 #' @aliases resStratification,ClustAllObject,numericOrNA,logicalOrNA,numericOrNA-method
 #' @description
-#' This function returns a list of representative stratifications.
-#' Stratifications that do not meet the minimum population threshold for each
-#' group are discarded. The minimum population percentage can be set with a
-#' default value of 0.05 (5%). When 'all' is TRUE, the function returns all
-#' robust stratifications; otherwise, it returns the representative for each
-#' group of stratification.
-#' @usage resStratification(Object,
-#'                          population=0.05,
-#'                          all=FALSE,
-#'                          stratification_similarity=0.7)
+#' This function retrieves and filters representative stratifications from a
+#' processed ClustAllObject. It allows users to explore the most robust and
+#' significant clustering solutions generated by the ClustALL algorithm, based
+#' on population size criteria and stratification similarity.
 #'
-#' @param Object \code{\link{ClustAllObject-class}} object.
-#' @param population Numeric vector specifying the minimum percentage of the
-#' total population that a stratification must have to be considered valid.
-#' @param all Logical vector indicating whether to return all representative
-#' stratifications for each group of clusters. If FALSE, only the centroid
-#' (representative) stratification of each group is returned.
-#' @param stratification_similarity Numeric value representing the minimum
-#' Jaccard distance required to consider two stratifications as similar.
-#' The default is 0.7.
-#' @return List containing all statistically robust stratifications,
-#' grouped by clusters formed based on the previously defined minimum cluster
-#' similarity and population criteria. If all is set to TRUE, the function
-#' returns all robust stratifications for each cluster. If all is set to FALSE,
-#' only the centroid (representative) stratification for each cluster group is
-#' returned.
+#' @usage resStratification(Object, population = 0.05, all = FALSE,
+#'                          stratification_similarity = 0.7)
 #'
-#' @seealso \code{\link{plotJACCARD}},\code{\link{cluster2data}},
-#' \code{\link{ClustAllObject-class}}
+#' @param Object A processed \code{\link{ClustAllObject-class}} object. The object
+#' must have been processed by \code{\link{runClustAll}} before using this function.
+#'
+#' @param population Numeric value between 0 and 1. Specifies the minimum
+#' proportion of the total population that a cluster within a stratification must
+#' contain to be considered valid. Default is 0.05.
+#'
+#' @param all Logical. If TRUE, returns all stratifications meeting the criteria
+#' for each group of similar stratifications. If FALSE (default), returns only
+#' the centroid (most representative) stratification for each group.
+#'
+#' @param stratification_similarity Numeric value between 0 and 1. Sets the
+#' threshold Jaccard distance for considering two stratifications as similar.
+#' Default is 0.7. Higher values result in more stringent similarity criteria.
+#'
+#' @return A list of representative stratifications and their associated clusters.
+#' The structure of the return value depends on the 'all' parameter:
+#' - If all = FALSE: A named list where each element represents the centroid
+#'   stratification for a group of similar stratifications.
+#' - If all = TRUE: A nested list where each top-level element represents a group
+#'   of similar stratifications, and contains all stratifications in that group.
+#' Each stratification is represented by a table showing the distribution of
+#' patients across clusters.
+#'
+#' @details
+#' The resStratification function performs several key steps:
+#'
+#' 1. Filters stratifications based on the 'population' parameter, ensuring that
+#'    each cluster in a stratification contains at least the specified proportion
+#'    of the total population.
+#' 2. Groups similar stratifications based on their Jaccard distances, using the
+#'    'stratification_similarity' threshold.
+#' 3. For each group of similar stratifications:
+#'    - If all = FALSE, selects the centroid (most representative) stratification.
+#'    - If all = TRUE, includes all stratifications in the group.
+#'
+#' This function is particularly useful for:
+#' - Identifying the most robust and significant clustering solutions.
+#' - Reducing the number of stratifications to a manageable set for further analysis.
+#' - Exploring how different similarity thresholds affect the grouping of stratifications.
+#' - Comparing multiple similar stratifications within each group (when all = TRUE).
+#'
+#' @note
+#' - This function requires a processed ClustAllObject. Ensure
+#' \code{\link{runClustAll}}
+#'   has been executed before using resStratification.
+#' - The 'population' parameter helps filter out stratifications with very small,
+#'   potentially insignificant clusters.
+#' - The 'stratification_similarity' parameter allows for fine-tuning the balance
+#'   between diversity and similarity in the returned stratifications.
+#' - When exploring results, it's often useful to try different combinations of
+#'   'population' and 'stratification_similarity' values to understand the
+#'   characteristics of your clustering solutions.
+#'
+#' @seealso \code{\link{runClustAll}}, \code{\link{plotJACCARD}},
+#' \code{\link{cluster2data}}, \code{\link{ClustAllObject-class}}
 #'
 #' @examples
 #' data("BreastCancerWisconsin", package = "ClustAll")
@@ -242,24 +315,59 @@ setMethod(
 )
 
 
-#' @title cluster2data: Export selected stratification(s)
+#' @title Export Stratification Results with Original Data
 #' @aliases cluster2data,ClustAllObject,character-method
 #' @description
-#' Returns the original input data in a Data Frame, appending the selected
-#' robust stratification(s) as additional columns. The names of the representative
-#' stratifications can be obtained using the \code{\link{resStratification}}
-#' method.
-#' @usage cluster2data(Object,
-#'                     stratificationName)
+#' This function combines the original input data with one or more selected
+#' stratifications from the ClustALL algorithm results. It allows users to
+#' examine how samples are clustered in the context of their original features,
+#' facilitating further analysis and interpretation of the stratification
+#' results.
 #'
-#' @param Object \code{\link{ClustAllObject-class}} object.
-#' @param stratificationName Name of the stratification(s) to be exported.
+#' @usage cluster2data(Object, stratificationName)
 #'
-#' @return Returns the original Data Frame with additional column(s)
-#' corresponding to the selected stratification(s).
+#' @param Object A processed \code{\link{ClustAllObject-class}} object.
+#' The object must have been processed by \code{\link{runClustAll}} before using
+#' this function.
+#' @param stratificationName A character vector specifying the names of one or more
+#' stratifications to be exported. These names should correspond to stratifications
+#' generated by the ClustALL algorithm and stored in the Object.
 #'
-#' @seealso \code{\link{resStratification}},\code{\link{plotJACCARD}},
-#' \code{\link{ClustAllObject-class}}
+#' @return
+#' A data.frame that includes the original data with additional column(s)
+#' containing the selected stratification(s). Each selected stratification will
+#' be added as a separate column to the original dataset.
+#'
+#' @details
+#' The cluster2data function serves some important purposes in the ClustALL workflow:
+#'
+#' 1. Data Integration: It combines clustering results with the original feature data,
+#'    allowing for comprehensive analysis of how cluster assignments relate to
+#'    input variables.
+#'
+#' 2. Preparation for External Analysis: The resulting data frame can be easily
+#'    exported for use in other analytical tools or visualization software.
+#'
+#' The function is particularly useful for:
+#' - Identifying features that distinguish different clusters
+#' - Comparing how samples are grouped across different stratifications
+#' - Preparing data for cluster-specific statistical analyses
+#' - Creating visualizations that incorporate both cluster assignments and original features
+#'
+#' @note
+#' - This function requires a processed ClustAllObject. Ensure \code{\link{runClustAll}}
+#'   has been executed before using cluster2data.
+#' - The stratificationName parameter accepts multiple stratification names, allowing
+#'   for simultaneous export of multiple clustering solutions.
+#' - Stratification names can be obtained from the results of \code{\link{resStratification}}
+#'   or by examining the names in the summary_clusters slot of the ClustAllObject.
+#' - The original data in the returned data frame includes all preprocessing steps
+#'   applied during the creation of the ClustAllObject, such as one-hot encoding
+#'   of categorical variables.
+#'
+#' @seealso \code{\link{runClustAll}}, \code{\link{resStratification}},
+#' \code{\link{ClustAllObject-class}}, \code{\link{createClustAll}}
+#'
 #'
 #' @examples
 #' data("BreastCancerWisconsin", package = "ClustAll")
@@ -304,28 +412,72 @@ setMethod(
 
 #' @import networkD3
 #' @import dplyr
-#' @title plotSANKEY: Plots Sankey Diagram showing the cluster distribution
-#' and shifts between a pair of stratifications derived from ClustAllObject
+#' @title Visualize Stratification Comparisons with Sankey Diagram
 #' @aliases plotSANKEY,ClustAllObject,character,logicalOrNA-method
 #' @description
-#' This function generates a Sankey Diagram that visualizes the distribution of
-#' stratifications and the shifts between two stratifications derived from a
-#' ClustAllObject.
-#' @usage plotSANKEY(Object,
-#'                   clusters,
-#'                   validationData=FALSE)
-#' @param Object \code{\link{ClustAllObject-class}} object.
-#' @param clusters Character vector with the names of a pair of
-#' stratifications to compare. When validationData is TRUE, only include the
-#' cluster names you want to compare with the validation information. Check
-#' \code{\link{resStratification}} for stratification results.
-#' @param validationData Logical value indicating whether to use true labels
-#' (validation data) for comparison with the selected stratification.
-#' @return Sankey plot showing the distribution and shifts between the
-#' selected stratifications. When validationData is TRUE, the plot includes the
-#' true labels (validation data) if available.
-#' @seealso \code{\link{resStratification}},\code{\link{cluster2data}},
-#' \code{\link{ClustAllObject-class}}
+#' This function generates a Sankey diagram to visualize the relationships between
+#' different stratifications or between a stratification and the true labels (if available).
+#' It provides an intuitive representation of how samples are distributed across
+#' clusters in different stratifications or how they align with known stratifications.
+#'
+#' @usage plotSANKEY(Object, clusters, validationData = FALSE)
+#'
+#' @param Object A processed \code{\link{ClustAllObject-class}} object. The object
+#' must have been processed by \code{\link{runClustAll}} before using this function.
+#' @param clusters A character vector specifying the names of stratifications to compare.
+#' If validationData is FALSE, exactly two stratification names should be provided.
+#' If validationData is TRUE, provide one stratification name to compare with true labels.
+#' @param validationData Logical. If TRUE, compares the specified stratification with
+#' the true labels (validation data) if available. Default is FALSE.
+#'
+#' @return A Sankey plot showing the composition and flow of clusters between
+#' the selected stratifications. If true labels are available and
+#' “validationData” is TRUE, the plot will compare the selected stratification
+#' against the true labels.
+#'
+#' @details
+#' The plotSANKEY function provides a powerful visualization tool for understanding
+#' the relationships between different clustering solutions or between a clustering
+#' solution and known classifications:
+#'
+#' 1. Stratification Comparison (validationData = FALSE):
+#'    - Visualizes how samples are distributed across clusters in two different stratifications.
+#'    - Helps identify similarities and differences between clustering solutions.
+#'    - Useful for understanding how changes in clustering parameters affect sample groupings.
+#'
+#' 2. Validation Comparison (validationData = TRUE):
+#'    - Compares a single stratification with true labels (if available).
+#'    - Helps assess how well the clustering aligns with known stratifications.
+#'    - Useful for evaluating the biological or clinical relevance of a clustering solution.
+#'
+#' The Sankey diagram represents:
+#' - Clusters (or true labels) as nodes on the left and right sides of the diagram.
+#' - Flows between nodes indicating how samples are distributed.
+#' - The width of each flow is proportional to the number of samples it represents.
+#'
+#' This visualization is particularly useful for:
+#' - Identifying stable sample groupings across different stratifications.
+#' - Detecting major shifts in cluster assignments between solutions.
+#' - Evaluating the concordance between clustering results and known stratifications.
+#' - Understanding the impact of different clustering approaches on sample groupings.
+#'
+#' @note
+#' - This function requires a processed ClustAllObject. Ensure
+#' \code{\link{runClustAll}}
+#'   has been executed before using plotSANKEY.
+#' - When validationData is TRUE, the ClustAllObject must contain validation data
+#'   (true labels). This can be added using \code{\link{addValidationData}} if not
+#'   provided during object creation.
+#' - Stratification names can be obtained from the results of
+#' \code{\link{resStratification}}
+#'   or by examining the names in the summary_clusters slot of the ClustAllObject.
+#' - The Sankey diagram may become cluttered if there are many clusters or if the
+#'   clustering solutions are very different. In such cases, consider focusing on
+#'   specific subsets of clusters or using additional filtering criteria.
+#'
+#' @seealso \code{\link{runClustAll}}, \code{\link{resStratification}},
+#' \code{\link{addValidationData}}, \code{\link{ClustAllObject-class}}
+#'
 #' @examples
 #' data("BreastCancerWisconsin", package = "ClustAll")
 #' label <- as.numeric(as.factor(wdbc$Diagnosis))
@@ -427,25 +579,73 @@ setMethod(
 )
 
 
-#' @title validateStratification: calculates the sensitivity and specificity
-#' of selected stratification
+#' @title Validate Stratification Results Against True Labels
 #' @aliases validateStratification,ClustAllObject,characterOrNA-method
 #' @description
-#' Returns the sensitivity and specificity of the selected stratification
-#' compared to the true labels (validation data). The names of representative
-#' stratifications can be obtained using the method
-#' \code{\link{resStratification}}.
-#' @usage validateStratification(Object,
-#'                               stratificationName)
+#' This function calculates the sensitivity and specificity of a selected
+#' stratification by comparing it to the true labels (validation data) stored
+#' in the ClustAllObject. It provides a quantitative assessment of how well
+#' the clustering aligns with known classifications.
 #'
-#' @param Object \code{\link{ClustAllObject-class}} object.
-#' @param stratificationName Character vector with the name of a stratification.
-#' Check \code{\link{resStratification}} to obtain stratification names.
+#' @usage validateStratification(Object, stratificationName)
 #'
-#' @return the sensitivity and specificity values of the selected stratification
-#' when validation data is available.
+#' @param Object A processed \code{\link{ClustAllObject-class}} object. The object
+#' must have been processed by \code{\link{runClustAll}} and contain validation
+#' data (true labels).
+#' @param stratificationName A character string specifying the name of the
+#' stratification to be validated. This should correspond to a stratification
+#' generated by the ClustALL algorithm and stored in the Object.
 #'
-#' @seealso \code{\link{resStratification}},\code{\link{plotJACCARD}},
+#' @return A named numeric vector containing two elements:
+#' \itemize{
+#'   \item sensitivity: The proportion of true positive classifications
+#'   \item specificity: The proportion of true negative classifications
+#' }
+#'
+#' @details
+#' The validateStratification function provides a crucial step in assessing the
+#' biological or clinical relevance of clustering results:
+#'
+#' 1. Comparison Mechanism:
+#'    - The function compares the cluster assignments of the selected stratification
+#'      with the true labels provided in the validation data.
+#'    - It treats the problem as a binary classification task, considering one
+#'      class as the "positive" class and all others as "negative".
+#'
+#' 2. Sensitivity (True Positive Rate):
+#'    - Measures the proportion of actual positive cases that were correctly identified.
+#'    - Calculated as: (True Positives) / (True Positives + False Negatives)
+#'
+#' 3. Specificity (True Negative Rate):
+#'    - Measures the proportion of actual negative cases that were correctly identified.
+#'    - Calculated as: (True Negatives) / (True Negatives + False Positives)
+#'
+#' 4. Interpretation:
+#'    - Higher sensitivity indicates better identification of the positive class.
+#'    - Higher specificity indicates better identification of the negative classes.
+#'    - The function automatically adjusts calculations if necessary to ensure
+#'      sensitivity and specificity are always ≥ 0.5.
+#'
+#' This function is particularly useful for:
+#' - Evaluating the clinical or biological relevance of clustering solutions
+#' - Comparing different stratifications based on their alignment with known classifications
+#' - Identifying stratifications that best capture known groupings in the data
+#' - Providing quantitative metrics to support the selection of optimal clustering solutions
+#'
+#' @note
+#' - This function requires a processed ClustAllObject with validation data.
+#'   Ensure \code{\link{runClustAll}} has been executed and validation data
+#'   has been added using \code{\link{addValidationData}} if not provided during
+#'   object creation.
+#' - The function assumes binary classification. For multi-class problems, it
+#'   effectively treats one class as "positive" and all others as "negative".
+#' - Stratification names can be obtained from the results of \code{\link{resStratification}}
+#'   or by examining the names in the summary_clusters slot of the ClustAllObject.
+#' - The function will stop with an error if the ClustAllObject does not contain
+#'   validation data or if the specified stratification name is not found.
+#'
+#' @seealso \code{\link{runClustAll}}, \code{\link{resStratification}},
+#' \code{\link{addValidationData}}, \code{\link{plotSANKEY}},
 #' \code{\link{ClustAllObject-class}}
 #'
 #' @examples

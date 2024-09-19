@@ -3,19 +3,45 @@
 \name{dataImputed}
 \alias{dataImputed}
 \alias{dataImputed,ClustAllObject-method}
-\title{dataImputed accession method}
+\title{Retrieve Imputed Data from ClustAllObject}
 \usage{
 dataImputed(Object)
 }
 \arguments{
-\item{Object}{\code{\link{ClustAllObject-class}} object}
+\item{Object}{A \code{\link{ClustAllObject-class}} object created by
+\code{\link{createClustAll}}.}
 }
 \value{
-Mids class object with the imputed data or NULL.
+A 'mids' object from the mice package containing the imputed datasets.
+If no imputation was performed, the method returns NULL.
 }
 \description{
-Generic function to retrieve the imputed data obtained in
-\code{\link{createClustAll}} from a \code{\link{ClustAllObject-class}} object
+This method extracts and returns the imputed datasets stored in a ClustAllObject.
+It provides access to the multiple imputed versions of the data generated to
+handle missing values, if imputation was performed during the object creation
+or processing.
+}
+\details{
+The dataImputed method provides access to the imputed data used in the ClustALL
+analysis pipeline when missing values are present. Key aspects of this data include:
+
+1. Imputation Structure:
+   - Returns a 'mids' object, which contains multiple imputed datasets.
+   - Each imputed dataset is a complete version of the original data with
+     missing values filled in.
+   - The number of imputed datasets corresponds to the 'nImputation' parameter
+     used during object creation.
+
+2. Imputation Method:
+   - Imputation is performed using the mice (Multivariate Imputation by Chained
+     Equations) package.
+   - The specific imputation methods used for each variable can be examined
+     in the returned 'mids' object.
+
+3. Data Consistency:
+   - The imputed datasets maintain the same structure (rows and columns) as
+     the original data.
+   - Only variables with missing values are imputed; complete variables remain unchanged.
 }
 \examples{
 data("BreastCancerWisconsinMISSING", package = "ClustAll")
@@ -26,6 +52,6 @@ obj_NA <- createClustAll(data = wdbcNA, colValidation = "Diagnosis",
 dataImputed(obj_NA)
 }
 \seealso{
-\code{\link{createClustAll}}, \code{\link{ClustAllObject-class}},
-\code{\link{runClustAll}}
+\code{\link{createClustAll}}, \code{\link{showData}},
+\code{\link{dataOriginal}}, \code{\link{ClustAllObject-class}},
 }

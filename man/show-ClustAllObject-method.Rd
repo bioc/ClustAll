@@ -2,16 +2,55 @@
 % Please edit documentation in R/ClustAll_ClustAllObject_Class.R
 \name{show,ClustAllObject-method}
 \alias{show,ClustAllObject-method}
-\title{show method for ClustAllObject}
+\title{Display Summary of ClustAllObject}
 \usage{
 \S4method{show}{ClustAllObject}(object)
 }
 \arguments{
-\item{object}{\code{\link{ClustAllObject-class}} object}
+\item{object}{A \code{\link{ClustAllObject-class}} object to be summarized.}
 }
 \value{
-summarize information about the object
+No return value, called for printing to the console.
 }
 \description{
-Show method for a \code{\link{ClustAllObject-class}} object
+This method provides a concise summary of a ClustAllObject, displaying key
+information about its contents and processing status. It offers a quick
+overview of the object's characteristics without the need to inspect
+individual slots.
+}
+\details{
+The show method for ClustAllObject displays the following information:
+
+1. Object Class: Confirms that the object is of class ClustAllObject.
+
+2. Data Dimensions:
+   - Number of variables (columns) in the processed data.
+   - Number of patients (rows) in the dataset.
+
+3. Imputation Status:
+   - Indicates whether the data has been imputed.
+   - If imputed, shows the number of imputations performed.
+
+4. Processing Status:
+   - Indicates whether the ClustALL algorithm has been run on the object.
+
+5. Stratification Results:
+   - If processed, displays the number of stratifications generated.
+   - If not processed, indicates that stratification results are not available.
+
+This method is particularly useful for:
+- Quick verification of object contents after creation or modification.
+- Checking the processing status before running analyses.
+- Confirming the number of stratifications generated after running the ClustALL algorithm.
+- Easily sharing key object characteristics in reports or discussions.
+}
+\note{
+- This method is automatically called when the object name is entered at the R console.
+- It provides a high-level overview and does not display detailed data or results.
+- For more detailed information about specific aspects of the object, use
+  dedicated accessor methods or examine individual slots directly.
+}
+\seealso{
+\code{\link{createClustAll}}, \code{\link{runClustAll}},
+\code{\link{ClustAllObject-class}}
 }

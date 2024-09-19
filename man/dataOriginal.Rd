@@ -3,20 +3,40 @@
 \name{dataOriginal}
 \alias{dataOriginal}
 \alias{dataOriginal,ClustAllObject-method}
-\title{dataOriginal accession method}
+\title{Retrieve Original Unprocessed Data from ClustAllObject}
 \usage{
 dataOriginal(Object)
 }
 \arguments{
-\item{Object}{\code{\link{ClustAllObject-class}} object.}
+\item{Object}{A \code{\link{ClustAllObject-class}} object created by
+\code{\link{createClustAll}}.}
 }
 \value{
-The Data Frame with the initial data
+A data frame containing the original, unprocessed input data exactly
+as it was provided when creating the ClustAllObject.
 }
 \description{
-Generic function to retrieve the initial data used for
-\code{\link{createClustAll}} from a \code{\link{ClustAllObject-class}}
-object.
+This method extracts and returns the original, unmodified data that was used
+to create the ClustAllObject. It provides access to the raw input data before
+any preprocessing steps were applied, including one-hot encoding, validation
+column removal, or imputation.
+}
+\details{
+The dataOriginal method serves as a reference point for the initial state of
+the data in the ClustALL analysis pipeline. Key aspects of this data include:
+
+1. Data Integrity:
+   - Contains all original variables, including any that may have been removed
+     or transformed during preprocessing.
+   - Preserves original data types (e.g., factors for categorical variables).
+   - Includes the validation column if it was present in the original data.
+
+2. Missing Data:
+   - Reflects the original state of missing values (NAs) in the dataset.
+
+3. Data Structure:
+   - Maintains the original row and column order of the input data.
+   - No transformations or encodings have been applied.
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")
@@ -25,6 +45,6 @@ obj_noNA <- createClustAll(data = wdbc, colValidation = "Diagnosis")
 dataOriginal(obj_noNA)
 }
 \seealso{
-\code{\link{createClustAll}}, \code{\link{ClustAllObject-class}},
-\code{\link{runClustAll}}
+\code{\link{createClustAll}}, \code{\link{showData}},
+\code{\link{dataImputed}}, \code{\link{ClustAllObject-class}}
 }

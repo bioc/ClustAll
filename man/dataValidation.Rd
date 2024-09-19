@@ -3,20 +3,48 @@
 \name{dataValidation}
 \alias{dataValidation}
 \alias{dataValidation,ClustAllObject-method}
-\title{dataValidation accession method}
+\title{Retrieve Validation Data from ClustAllObject}
 \usage{
 dataValidation(Object)
 }
 \arguments{
-\item{Object}{\code{\link{ClustAllObject-class}} object.}
+\item{Object}{A \code{\link{ClustAllObject-class}} object created by
+\code{\link{createClustAll}} or modified by \code{\link{addValidationData}}.}
 }
 \value{
-numeric vector with true labels if validation column has been added.
-Otherwise NULL.
+A numeric vector containing the validation data (true labels) if available.
+Returns NULL if no validation data has been added to the object.
 }
 \description{
-Generic function to retrieve numeric vector if it has been added with the
-true labels from a \code{\link{ClustAllObject-class}} object.
+This method extracts and returns the validation data (true labels) stored in
+a ClustAllObject. These labels represent known classifications or groupings
+of samples, which can be used to assess the performance of clustering results.
+}
+\details{
+The dataValidation method provides access to the ground truth or reference
+classifications for the samples in the dataset:
+
+1. Validation Data Content:
+   - Contains known classifications or groupings of samples.
+   - Typically represents biological, clinical, or other meaningful categorizations.
+   - Used as a benchmark for evaluating clustering performance.
+
+2. Data Characteristics:
+   - Returned as a numeric vector.
+   - Length matches the number of samples in the original dataset.
+   - Each element corresponds to a sample's true label or classification.
+
+3. Availability and Source:
+   - May be added during object creation via the colValidation parameter in \code{\link{createClustAll}}.
+   - Can be added later using the \code{\link{addValidationData}} function.
+   - If not available, the method returns NULL.
+}
+\note{
+- This method returns the data stored in the 'dataValidation' slot of the ClustAllObject.
+- The validation data is not used in the clustering process itself; it's solely for evaluation purposes.
+- If validation data was not provided during object creation or added later, this method will return NULL.
+- Always check for NULL before using the returned data in calculations or visualizations.
+- The interpretation and use of validation data depend on the specific context of your study.
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")
@@ -25,5 +53,6 @@ obj_noNA <- createClustAll(data = wdbc, colValidation="Diagnosis")
 dataValidation(obj_noNA)
 }
 \seealso{
-\code{\link{ClustAllObject-class}}
+\code{\link{createClustAll}}, \code{\link{addValidationData}},
+\code{\link{validateStratification}}, \code{\link{ClustAllObject-class}}
 }
