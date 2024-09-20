@@ -25,7 +25,7 @@ A data frame with 918 rows and 12 variables:
 Kaggle: https://www.kaggle.com/datasets/johnsmith88/heart-disease-dataset
 }
 \usage{
-data("heart", package = "ClustAll")
+data("heart_data", package = "ClustAll")
 }
 \value{
 heart dataset

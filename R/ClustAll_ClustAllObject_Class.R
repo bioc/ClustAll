@@ -1239,8 +1239,8 @@ NULL
 #'
 #' @docType data
 #' @keywords datasets
-#' @name heart
-#' @usage data("heart", package = "ClustAll")
+#' @name heart_data
+#' @usage data("heart_data", package = "ClustAll")
 #' @return heart dataset
 NULL
 
