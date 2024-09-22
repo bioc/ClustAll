@@ -6,7 +6,7 @@
 \title{Class Union: listOrNULL}
 \description{
 This class union allows for flexibility in method signatures and slot
-definitions by accepting either a list, NULL, or a missing value. It's
+definitions by accepting either a list, NULL, or a missing value. It is
 particularly useful when a slot or function parameter might contain a
 list of elements but could also be empty or unspecified.
 }

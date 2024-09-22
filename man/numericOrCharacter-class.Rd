@@ -7,7 +7,7 @@
 \title{Class Union: numericOrCharacter}
 \description{
 This class union allows for flexibility in method signatures and slot
-definitions by accepting either a numeric or character value. It's particularly
+definitions by accepting either a numeric or character value. It is particularly
 useful when a slot or function parameter might contain either numeric data
 or character strings representing numbers or categories.
 }

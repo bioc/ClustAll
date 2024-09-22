@@ -26,34 +26,46 @@ and non-robust stratifications.
 The summary_clusters method provides access to all clustering results generated
 during the ClustALL analysis:
 
-1. Comprehensive Results:
-   - Includes all stratifications generated, regardless of their robustness.
-   - Each stratification represents a unique combination of data embedding,
-     distance metric, clustering algorithm, and number of clusters.
+\enumerate{
+  \item Comprehensive Results:
+  \itemize{
+    \item Includes all stratifications generated, regardless of their robustness.
+    \item Each stratification represents a unique combination of data embedding,
+          distance metric, clustering algorithm, and number of clusters.
+  }
 
-2. Stratification Structure:
-   - Each element in the returned list is named according to the parameters
-     used to generate it (e.g., "cuts_a_1" for the first cut using method 'a').
-   - Each stratification is a vector of integers, where each integer represents
-     a cluster assignment for a sample.
+  \item Stratification Structure:
+  \itemize{
+    \item Each element in the returned list is named according to the parameters
+          used to generate it (e.g., "cuts_a_1" for the first cut using method 'a').
+    \item Each stratification is a vector of integers, where each integer represents
+          a cluster assignment for a sample.
+  }
 
-3. Analysis Possibilities:
-   - Allows for comparison of different clustering solutions.
-   - Enables examination of how different algorithm parameters affect clustering outcomes.
-   - Facilitates identification of consistent patterns across multiple stratifications.
+  \item Analysis Possibilities:
+  \itemize{
+    \item Allows for comparison of different clustering solutions.
+    \item Enables examination of how different algorithm parameters affect clustering outcomes.
+    \item Facilitates identification of consistent patterns across multiple stratifications.
+  }
+}
 
 This method is particularly useful for:
-- Accessing the full range of clustering solutions for in-depth analysis.
-- Comparing robust stratifications (identified by other methods) with the full set of results.
-- Extracting specific stratifications for further analysis or visualization.
+\itemize{
+  \item Accessing the full range of clustering solutions for in-depth analysis.
+  \item Comparing robust stratifications (identified by other methods) with the full set of results.
+  \item Extracting specific stratifications for further analysis or visualization.
+}
 }
 \note{
-- This method returns the data stored in the 'summary_clusters' slot of the ClustAllObject.
-- It will return NULL if \code{\link{runClustAll}} has not been executed on the object.
-- The returned list includes all stratifications, not just those deemed robust.
-  For accessing only robust stratifications, consider using the \code{\link{resStratification}} function.
-- The order and naming of stratifications in the returned list correspond to
-  the order in which they were generated during the ClustALL process.
+\itemize{
+  \item This method returns the data stored in the 'summary_clusters' slot of the ClustAllObject.
+  \item It will return NULL if \code{\link{runClustAll}} has not been executed on the object.
+  \item The returned list includes all stratifications, not just those deemed robust.
+    For accessing only robust stratifications, consider using the \code{\link{resStratification}} function.
+  \item The order and naming of stratifications in the returned list correspond to
+    the order in which they were generated during the ClustALL process.
+}
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")

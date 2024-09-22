@@ -35,40 +35,52 @@ The plotSANKEY function provides a powerful visualization tool for understanding
 the relationships between different clustering solutions or between a clustering
 solution and known classifications:
 
-1. Stratification Comparison (validationData = FALSE):
-   - Visualizes how samples are distributed across clusters in two different stratifications.
-   - Helps identify similarities and differences between clustering solutions.
-   - Useful for understanding how changes in clustering parameters affect sample groupings.
+\enumerate{
+  \item Stratification Comparison (validationData = FALSE):
+  \itemize{
+    \item Visualizes how samples are distributed across clusters in two different stratifications.
+    \item Helps identify similarities and differences between clustering solutions.
+    \item Useful for understanding how changes in clustering parameters affect sample groupings.
+  }
 
-2. Validation Comparison (validationData = TRUE):
-   - Compares a single stratification with true labels (if available).
-   - Helps assess how well the clustering aligns with known stratifications.
-   - Useful for evaluating the biological or clinical relevance of a clustering solution.
+  \item Validation Comparison (validationData = TRUE):
+  \itemize{
+    \item Compares a single stratification with true labels (if available).
+    \item Helps assess how well the clustering aligns with known stratifications.
+    \item Useful for evaluating the biological or clinical relevance of a clustering solution.
+  }
+}
 
 The Sankey diagram represents:
-- Clusters (or true labels) as nodes on the left and right sides of the diagram.
-- Flows between nodes indicating how samples are distributed.
-- The width of each flow is proportional to the number of samples it represents.
+\itemize{
+  \item Clusters (or true labels) as nodes on the left and right sides of the diagram.
+  \item Flows between nodes indicating how samples are distributed.
+  \item The width of each flow is proportional to the number of samples it represents.
+}
 
 This visualization is particularly useful for:
-- Identifying stable sample groupings across different stratifications.
-- Detecting major shifts in cluster assignments between solutions.
-- Evaluating the concordance between clustering results and known stratifications.
-- Understanding the impact of different clustering approaches on sample groupings.
+\itemize{
+  \item Identifying stable sample groupings across different stratifications.
+  \item Detecting major shifts in cluster assignments between solutions.
+  \item Evaluating the concordance between clustering results and known stratifications.
+  \item Understanding the impact of different clustering approaches on sample groupings.
+}
 }
 \note{
-- This function requires a processed ClustAllObject. Ensure
-\code{\link{runClustAll}}
-  has been executed before using plotSANKEY.
-- When validationData is TRUE, the ClustAllObject must contain validation data
-  (true labels). This can be added using \code{\link{addValidationData}} if not
-  provided during object creation.
-- Stratification names can be obtained from the results of
-\code{\link{resStratification}}
-  or by examining the names in the summary_clusters slot of the ClustAllObject.
-- The Sankey diagram may become cluttered if there are many clusters or if the
-  clustering solutions are very different. In such cases, consider focusing on
-  specific subsets of clusters or using additional filtering criteria.
+\itemize{
+  \item This function requires a processed ClustAllObject. Ensure
+    \code{\link{runClustAll}}
+    has been executed before using plotSANKEY.
+  \item When validationData is TRUE, the ClustAllObject must contain validation data
+    (true labels). This can be added using \code{\link{addValidationData}} if not
+    provided during object creation.
+  \item Stratification names can be obtained from the results of
+    \code{\link{resStratification}}
+    or by examining the names in the summary_clusters slot of the ClustAllObject.
+  \item The Sankey diagram may become cluttered if there are many clusters or if the
+    clustering solutions are very different. In such cases, consider focusing on
+    specific subsets of clusters or using additional filtering criteria.
+}
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")

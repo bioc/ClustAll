@@ -14,6 +14,17 @@ data("BreastCancerWisconsinMISSING", package = "ClustAll")
 wdbcNA dataset
 }
 \description{
-We introduced random missing values to the wdbc dataset. \code{\link{wdbc}}
+The "wdbcNA" dataset is a modified version of the Breast Cancer Wisconsin
+(Diagnostic) dataset (\code{\link{wdbc}}), incorporating missing values at
+random. This dataset is designed to demonstrate and evaluate the handling
+of missing data in the context of breast cancer diagnosis.
+}
+\details{
+The dataset retains the same structure as the original "wdbc" dataset, with
+569 patients and 32 variables. However, some values in the numerical features
+have been randomly replaced with missing values (NA).
+
+For a detailed description of the features and the original dataset, please
+refer to the documentation of the "wdbc" dataset (\code{\link{wdbc}}).
 }
 \keyword{datasets}

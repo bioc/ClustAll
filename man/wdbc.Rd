@@ -30,14 +30,18 @@ data("BreastCancerWisconsin", package = "ClustAll")
 wdbc dataset
 }
 \description{
-A dataset containing Features are computed from a digitized image of a fine
-needle aspirate (FNA) of a breast mass.
-They describe the characteristics of the cell nuclei present in the image.
+The Breast Cancer Wisconsin (Diagnostic) dataset, also known as "wdbc", contains
+features computed from digitized images of fine needle aspirates (FNA) of breast
+masses. The features describe characteristics of the cell nuclei present in each image.
 }
 \details{
-The dataset comprises two types of features —categorical and numerical—
-derived from a digitized image of a fine needle aspirate (FNA) of a breast
-mass from 659 patients. Each patient is characterized by 31 features (10x3)
-and belongs to one of two target classes: ‘malignant’ or ‘benign’.
+The dataset includes 569 patients, each characterized by 30 numerical features and one
+categorical feature. The numerical features are computed from ten different measurements
+of the cell nuclei, and each measurement is repeated three times, resulting in a total
+of 30 features per patient (10 features x 3 measurements).
+
+The categorical feature is the diagnosis, which indicates whether the tumor is
+malignant (M) or benign (B). This feature serves as the target class for
+classification tasks.
 }
 \keyword{datasets}

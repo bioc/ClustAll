@@ -38,7 +38,7 @@ presence or absence of heart disease.
 }
 \details{
 This dataset contains various medical and lifestyle attributes of patients,
-along with their heart disease diagnosis status. It's commonly used for
+along with their heart disease diagnosis status. It is commonly used for
 predicting the presence of heart disease in patients.
 
 

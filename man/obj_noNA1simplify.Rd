@@ -14,6 +14,19 @@ data("testData", package = "ClustAll")
 ClustAllObject Object
 }
 \description{
-Processed wdbc as appear in vignette, with simplify TRUE parameter
+The "obj_noNA1simplify" dataset is a processed version of the Breast Cancer Wisconsin
+(Diagnostic) dataset (\code{\link{wdbc}}), prepared for testing purposes and used in
+the ClustAll package vignette. It has been processed using the ClustAll package
+methods with the `simplify` parameter set to TRUE, which reduces the computational
+complexity of the clustering algorithms by considering only a subset of the
+dendrogram depths.
+}
+\details{
+The "obj_noNA1simplify" dataset can be used as a reference for users who want to
+understand the ClustAll package workflow and replicate the simplified analysis
+presented in the vignette.
+
+For more information on the original dataset and the full processed version, please
+refer to the documentation of the "wdbc" (\code{\link{wdbc}}).
 }
 \keyword{datasets}

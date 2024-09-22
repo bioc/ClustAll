@@ -9,8 +9,8 @@ runClustAll(Object, threads = 1, simplify = FALSE)
 }
 \arguments{
 \item{Object}{An unprocessed \code{\link{ClustAllObject-class}} created by
-\code{\link{createClustAll}}. The object should contain the input data and
-any preprocessing, but no stratification results yet.}
+\code{\link{createClustAll}}. The object should contain the original input
+data and any preprocessed versions of it, but no stratification results yet.}
 
 \item{threads}{An integer specifying the number of CPU cores to use for
 parallel computing. Default is 1 (single-core processing).}
@@ -36,26 +36,34 @@ Stratifications (CbS).
 The runClustAll function implements the three main steps of the ClustALL
 framework:
 
-1. Data Complexity Reduction (DCR):
-   - Creates multiple data embeddings to replace highly correlated variable
-     sets with lower-dimension projections derived from Principal Component
-     Analysis (PCA).
-   - Explores all relevant groupings derived from a hierarchical
-     clustering-based dendrogram.
-   - Computes an embedding for each depth in the dendrogram.
+\enumerate{
+  \item Data Complexity Reduction (DCR):
+  \itemize{
+    \item Creates multiple data embeddings to replace highly correlated variable
+      sets with lower-dimension projections derived from Principal Component
+      Analysis (PCA).
+    \item Explores all relevant groupings derived from a hierarchical
+      clustering-based dendrogram.
+    \item Computes an embedding for each depth in the dendrogram.
+  }
 
-2. Stratification Process (SP):
-   - Calculates and preliminarily evaluates stratifications for each embedding.
-   - Computes a stratification for each feasible combination of embedding,
-     dissimilarity metric, and clustering method.
-   - Determines the optimal number of clusters using three internal validation
-     measures: sum-of-squares (WB-ratio), Dunn index, and average silhouette width.
+  \item Stratification Process (SP):
+  \itemize{
+    \item Calculates and preliminarily evaluates stratifications for each embedding.
+    \item Computes a stratification for each feasible combination of embedding,
+      dissimilarity metric, and clustering method.
+    \item Determines the optimal number of clusters using three internal validation
+      measures: sum-of-squares (WB-ratio), Dunn index, and average silhouette width.
+  }
 
-3. Consensus-based Stratifications (CbS):
-   - Filters out non-robust stratifications through bootstrapping.
-   - Excludes stratifications with less than 85% stability.
-   - Selects representatives of very similar outcomes from the remaining
-     stratifications.
+  \item Consensus-based Stratifications (CbS):
+  \itemize{
+    \item Filters out non-robust stratifications through bootstrapping.
+    \item Excludes stratifications with less than 85% stability.
+    \item Selects representatives of very similar outcomes from the remaining
+      stratifications.
+  }
+}
 
 The 'simplify' parameter, when set to TRUE, reduces computation time by
 considering only every fourth depth of the dendrogram in the first and second
@@ -63,10 +71,13 @@ steps. While useful for preliminary results, it's recommended to set it to
 FALSE for more robust and detailed results.
 }
 \note{
-This function modifies the input ClustAllObject in-place, populating it with
-stratification results. The process can be computationally intensive,
-especially for large datasets or when 'simplify' is set to FALSE. Consider
-using multiple threads for improved performance on multi-core systems.
+\itemize{
+  \item This function modifies the input ClustAllObject in-place, populating it with
+    stratification results.
+  \item The process can be computationally intensive,
+    especially for large datasets or when 'simplify' is set to FALSE.
+  \item Consider using multiple threads for improved performance on multi-core systems.
+}
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")

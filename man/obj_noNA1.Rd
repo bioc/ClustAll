@@ -14,6 +14,18 @@ data("testData", package = "ClustAll")
 ClustAllObject Object
 }
 \description{
-Processed wdbc as appear in vignette
+The "obj_noNA1" dataset is a processed version of the Breast Cancer Wisconsin
+(Diagnostic) dataset (\code{\link{wdbc}}), prepared for testing purposes and
+used in the ClustAll package vignette. It has been processed using the ClustAll
+package methods, which include data preprocessing, feature transformation, and
+the application of clustering algorithms.
+}
+\details{
+The "obj_noNA1" dataset can be used as a reference for users who want to
+understand the ClustAll package workflow and replicate the analysis presented
+in the vignette.
+
+For more information on the original dataset, please refer to the
+documentation of the "wdbc" (\code{\link{wdbc}}) dataset.
 }
 \keyword{datasets}

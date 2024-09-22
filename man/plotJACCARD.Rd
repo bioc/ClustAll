@@ -35,34 +35,42 @@ clustering solutions, helping to identify groups of related stratifications.
 The plotJACCARD function visualizes the similarity between robust
 stratifications using a heatmap of Jaccard distances:
 
-- The heatmap color scale represents Jaccard distances, with darker colors
-  indicating higher similarity (lower distance).
-- Stratifications are ordered based on hierarchical clustering of their
-  Jaccard distances.
-- The 'paint' option highlights groups of similar stratifications, making it
-  easier to identify clusters of related solutions.
-- The 'stratification_similarity' parameter allows fine-tuning of what is
-  considered "similar" for the purpose of highlighting.
+\itemize{
+  \item The heatmap color scale represents Jaccard distances, with darker colors
+    indicating higher similarity (lower distance).
+  \item Stratifications are ordered based on hierarchical clustering of their
+    Jaccard distances.
+  \item The 'paint' option highlights groups of similar stratifications, making it
+    easier to identify clusters of related solutions.
+  \item The 'stratification_similarity' parameter allows fine-tuning of what is
+    considered "similar" for the purpose of highlighting.
+}
 
 The function provides annotations for each stratification, including:
-- Distance metric used (e.g., Correlation, Gower)
-- Clustering method employed (e.g., H-Clustering, K-Means, K-Medoids)
-- Depth of the dendrogram cut used in the Data Complexity Reduction step
+\itemize{
+  \item Distance metric used (e.g., Correlation, Gower)
+  \item Clustering method employed (e.g., H-Clustering, K-Means, K-Medoids)
+  \item Depth of the dendrogram cut used in the Data Complexity Reduction step
+}
 
 This visualization is particularly useful for:
-- Identifying groups of similar stratifications
-- Assessing the overall diversity of robust solutions
-- Guiding the selection of representative stratifications for further analysis
+\itemize{
+  \item Identifying groups of similar stratifications
+  \item Assessing the overall diversity of robust solutions
+  \item Guiding the selection of representative stratifications for further analysis
+}
 }
 \note{
-- This function requires a processed ClustAllObject.
-Ensure \code{\link{runClustAll}}
-  has been executed before using plotJACCARD.
-- The 'paint' feature may not be visible if there are no groups of stratifications
-  meeting the similarity threshold.
-- For exploring stratifications, it's recommended to start with a high
-  'stratification_similarity' value and gradually decrease it to examine
-  various levels of stratification grouping.
+\itemize{
+  \item This function requires a processed ClustAllObject.
+    Ensure \code{\link{runClustAll}}
+    has been executed before using plotJACCARD.
+  \item The 'paint' feature may not be visible if there are no groups of stratifications
+    meeting the similarity threshold.
+  \item For exploring stratifications, it's recommended to start with a high
+    'stratification_similarity' value and gradually decrease it to examine
+    various levels of stratification grouping.
+}
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")

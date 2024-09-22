@@ -18,30 +18,36 @@ If no imputation was performed, the method returns NULL.
 \description{
 This method extracts and returns the imputed datasets stored in a ClustAllObject.
 It provides access to the multiple imputed versions of the data generated to
-handle missing values, if imputation was performed during the object creation
-or processing.
+handle missing values, if imputation was conducted and included in the object.
 }
 \details{
 The dataImputed method provides access to the imputed data used in the ClustALL
 analysis pipeline when missing values are present. Key aspects of this data include:
 
-1. Imputation Structure:
-   - Returns a 'mids' object, which contains multiple imputed datasets.
-   - Each imputed dataset is a complete version of the original data with
-     missing values filled in.
-   - The number of imputed datasets corresponds to the 'nImputation' parameter
-     used during object creation.
+\enumerate{
+  \item Imputation Structure:
+  \itemize{
+    \item Returns a 'mids' object, which contains multiple imputed datasets.
+    \item Each imputed dataset is a complete version of the original data with
+          missing values filled in.
+    \item The number of imputed datasets corresponds to the 'nImputation' parameter.
+  }
 
-2. Imputation Method:
-   - Imputation is performed using the mice (Multivariate Imputation by Chained
-     Equations) package.
-   - The specific imputation methods used for each variable can be examined
-     in the returned 'mids' object.
+  \item Imputation Method:
+  \itemize{
+    \item Imputation is performed using the mice (Multivariate Imputation by Chained
+          Equations) package.
+    \item The specific imputation methods used for each variable can be examined
+          in the returned 'mids' object.
+  }
 
-3. Data Consistency:
-   - The imputed datasets maintain the same structure (rows and columns) as
-     the original data.
-   - Only variables with missing values are imputed; complete variables remain unchanged.
+  \item Data Consistency:
+  \itemize{
+    \item The imputed datasets maintain the same structure (rows and columns) as
+          the original data.
+    \item Only variables with missing values are imputed; complete variables remain unchanged.
+  }
+}#'
 }
 \examples{
 data("BreastCancerWisconsinMISSING", package = "ClustAll")

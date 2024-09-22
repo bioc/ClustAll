@@ -26,30 +26,42 @@ quick way to verify if clustering results are available for analysis.
 \details{
 The processed method serves as a crucial indicator in the ClustALL workflow:
 
-1. Processing Status:
-   - Indicates whether the ClustALL algorithm has been applied to the object.
-   - A TRUE value means clustering results are available for analysis.
-   - A FALSE value indicates the object only contains input data and preprocessing.
+\enumerate{
+  \item Processing Status:
+  \itemize{
+    \item Indicates whether the ClustALL algorithm has been applied to the object.
+    \item A TRUE value means clustering results are available for analysis.
+    \item A FALSE value indicates the object only contains input data and preprocessing.
+  }
 
-2. Workflow Implications:
-   - Helps determine which methods and analyses can be performed on the object.
-   - Guides users in the correct sequence of operations in the ClustALL pipeline.
+  \item Workflow Implications:
+  \itemize{
+    \item Helps determine which methods and analyses can be performed on the object.
+    \item Guides users in the correct sequence of operations in the ClustALL pipeline.
+  }
 
-3. Data Availability:
-   - TRUE status implies availability of:
-     * Stratification results (\code{\link{summary_clusters}})
-     * Jaccard distance matrix (\code{\link{JACCARD_DISTANCE_F}})
-     * Other clustering-related outputs
-   - FALSE status means only input and preprocessed data are available.
+  \item Data Availability:
+  \itemize{
+    \item TRUE status implies availability of:
+    \itemize{
+      \item Stratification results (\code{\link{summary_clusters}})
+      \item Jaccard distance matrix (\code{\link{JACCARD_DISTANCE_F}})
+      \item Other clustering-related outputs
+    }
+    \item FALSE status means only input and preprocessed data are available.
+  }
+}
 }
 \note{
-- This method checks the 'processed' slot of the ClustAllObject.
-- The processed status is automatically set to TRUE when \code{\link{runClustAll}}
-  completes successfully.
-- Users should not manually modify this status to ensure consistency between
-  the status and the actual content of the object.
-- A FALSE status does not necessarily indicate an error; it simply means
-  \code{\link{runClustAll}} needs to be executed before accessing clustering results.
+\itemize{
+  \item This method checks the 'processed' slot of the ClustAllObject.
+  \item The processed status is automatically set to TRUE when \code{\link{runClustAll}}
+    completes successfully.
+  \item Users should not manually modify this status to ensure consistency between
+    the status and the actual content of the object.
+  \item A FALSE status does not necessarily indicate an error; it simply means
+    \code{\link{runClustAll}} needs to be executed before accessing clustering results.
+}
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")

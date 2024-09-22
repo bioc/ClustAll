@@ -4,7 +4,7 @@
 #' @aliases listOrNULL-class
 #' @description
 #' This class union allows for flexibility in method signatures and slot
-#' definitions by accepting either a list, NULL, or a missing value. It's
+#' definitions by accepting either a list, NULL, or a missing value. It is
 #' particularly useful when a slot or function parameter might contain a
 #' list of elements but could also be empty or unspecified.
 #'
@@ -32,7 +32,7 @@ setClassUnion("listOrNULL", c("list", "NULL", "missing"))
 #' @description
 #' This class union allows for flexibility in method signatures and slot
 #' definitions by accepting either a numeric value, NULL, or a missing value.
-#' It's particularly useful when a slot or function parameter might contain
+#' It is particularly useful when a slot or function parameter might contain
 #' a numeric value but could also be empty, unspecified, or explicitly set to NULL.
 #'
 #' @details
@@ -60,7 +60,7 @@ setClassUnion("numericOrNA", c("numeric", "missing", "NULL"))
 #' @description
 #' This class union allows for flexibility in method signatures and slot
 #' definitions by accepting either a character value, NULL, or a missing value.
-#' It's particularly useful when a slot or function parameter might contain
+#' It is particularly useful when a slot or function parameter might contain
 #' a character string but could also be empty, unspecified, or explicitly set to NULL.
 #'
 #' @details
@@ -87,7 +87,7 @@ setClassUnion("characterOrNA", c("character", "missing", "NULL"))
 #' @description
 #' This class union allows for flexibility in method signatures and slot
 #' definitions by accepting either a logical value, NULL, or a missing value.
-#' It's particularly useful when a slot or function parameter might contain
+#' It is particularly useful when a slot or function parameter might contain
 #' a boolean flag but could also be empty, unspecified, or explicitly set to NULL.
 #'
 #' @details
@@ -114,7 +114,7 @@ setClassUnion("logicalOrNA", c("logical", "missing", "NULL"))
 #' @aliases matrixOrNULL-class
 #' @description
 #' This class union allows for flexibility in method signatures and slot
-#' definitions by accepting either a matrix or NULL. It's particularly useful
+#' definitions by accepting either a matrix or NULL. It is particularly useful
 #' when a slot or function parameter might contain a matrix of data but could
 #' also be empty or explicitly set to NULL.
 #'
@@ -141,7 +141,7 @@ setClassUnion("matrixOrNULL", c("matrix", "NULL"))
 #' @aliases numericOrCharacter-class
 #' @description
 #' This class union allows for flexibility in method signatures and slot
-#' definitions by accepting either a numeric or character value. It's particularly
+#' definitions by accepting either a numeric or character value. It is particularly
 #' useful when a slot or function parameter might contain either numeric data
 #' or character strings representing numbers or categories.
 #'
@@ -185,8 +185,9 @@ numericOrCharacter <- setClassUnion("numericOrCharacter",
 #' of the original dataset, if provided. These labels are used for validation purposes
 #' and are not used in the stratification process itself. NULL if no validation data
 #' is available.
-#' @slot nImputation An integer indicating the number of imputations performed.
-#' Set to 0 if no imputation was necessary or performed.
+#' @slot nImputation An integer indicating the number of imputations to be
+#' computed. It should be set to 0 if the dataset is already completed, or if it
+#' the dataset has been imputed out of ClustAll framework.
 #' @slot processed A logical flag. TRUE if \code{\link{runClustAll}} has been
 #' executed on the object, FALSE otherwise. Indicates whether the object contains
 #' stratification results.
@@ -304,34 +305,48 @@ setMethod(
 #' @details
 #' The show method for ClustAllObject displays the following information:
 #'
-#' 1. Object Class: Confirms that the object is of class ClustAllObject.
+#' \enumerate{
+#'   \item Object Class: Confirms that the object is of class ClustAllObject.
 #'
-#' 2. Data Dimensions:
-#'    - Number of variables (columns) in the processed data.
-#'    - Number of patients (rows) in the dataset.
+#'   \item Data Dimensions:
+#'   \itemize{
+#'     \item Number of variables (columns) in the processed data.
+#'     \item Number of patients (rows) in the dataset.
+#'   }
 #'
-#' 3. Imputation Status:
-#'    - Indicates whether the data has been imputed.
-#'    - If imputed, shows the number of imputations performed.
+#'   \item Imputation Status:
+#'   \itemize{
+#'     \item Indicates whether the data has been imputed.
+#'     \item If imputed, shows the number of imputations performed.
+#'   }
 #'
-#' 4. Processing Status:
-#'    - Indicates whether the ClustALL algorithm has been run on the object.
+#'   \item Processing Status:
+#'   \itemize{
+#'     \item Indicates whether the ClustALL algorithm has been run on the object.
+#'   }
 #'
-#' 5. Stratification Results:
-#'    - If processed, displays the number of stratifications generated.
-#'    - If not processed, indicates that stratification results are not available.
+#'   \item Stratification Results:
+#'   \itemize{
+#'     \item If processed, displays the number of stratifications generated.
+#'     \item If not processed, indicates that stratification results are not available.
+#'   }
+#' }
 #'
 #' This method is particularly useful for:
-#' - Quick verification of object contents after creation or modification.
-#' - Checking the processing status before running analyses.
-#' - Confirming the number of stratifications generated after running the ClustALL algorithm.
-#' - Easily sharing key object characteristics in reports or discussions.
+#' \itemize{
+#'   \item Quick verification of object contents after creation or modification.
+#'   \item Checking the processing status before running analyses.
+#'   \item Confirming the number of stratifications generated after running the ClustALL algorithm.
+#'   \item Easily sharing key object characteristics in reports or discussions.
+#' }
 #'
 #' @note
-#' - This method is automatically called when the object name is entered at the R console.
-#' - It provides a high-level overview and does not display detailed data or results.
-#' - For more detailed information about specific aspects of the object, use
-#'   dedicated accessor methods or examine individual slots directly.
+#' \itemize{
+#'   \item This method is automatically called when the object name is entered at the R console.
+#'   \item It provides a high-level overview and does not display detailed data or results.
+#'   \item For more detailed information about specific aspects of the object, use
+#'     dedicated accessor methods or examine individual slots directly.
+#' }
 #'
 #' @seealso \code{\link{createClustAll}}, \code{\link{runClustAll}},
 #' \code{\link{ClustAllObject-class}}
@@ -373,19 +388,26 @@ setMethod("show", "ClustAllObject", function(object) {
 #' The showData method provides access to the core dataset used in the ClustALL
 #' analysis pipeline. Key aspects of this data include:
 #'
-#' 1. Preprocessing Applied:
-#'    - Categorical variables have been converted to numeric form via one-hot encoding.
-#'    - The validation column (if specified during object creation) has been removed.
+#' \enumerate{
+#'   \item Preprocessing Applied:
+#'   \itemize{
+#'     \item Categorical variables have been converted to numeric form via one-hot encoding.
+#'     \item The validation column (if specified during object creation) has been removed.
+#'   }
 #'
-#' 2. Data Structure:
-#'    - All columns are numeric, suitable for use in clustering algorithms.
-#'    - Row order corresponds to the original input data.
+#'   \item Data Structure:
+#'   \itemize{
+#'     \item All columns are numeric, suitable for use in clustering algorithms.
+#'     \item Row order corresponds to the original input data.
+#'   }
 #'
-#' 3. Missing Data:
-#'    - The returned data may still contain missing values (NAs) if imputation
-#'      was not performed.
-#'    - For imputed versions of the data, use the \code{\link{dataImputed}} method.
-#'
+#'   \item Missing Data:
+#'   \itemize{
+#'     \item The returned data may still contain missing values (NAs) if imputation
+#'           was not performed.
+#'     \item For imputed versions of the data, use the \code{\link{dataImputed}} method.
+#'   }
+#' }
 #'
 #' @seealso \code{\link{createClustAll}}, \code{\link{dataOriginal}},
 #' \code{\link{dataImputed}}, \code{\link{ClustAllObject-class}}
@@ -428,19 +450,26 @@ setMethod(
 #' The dataOriginal method serves as a reference point for the initial state of
 #' the data in the ClustALL analysis pipeline. Key aspects of this data include:
 #'
-#' 1. Data Integrity:
-#'    - Contains all original variables, including any that may have been removed
-#'      or transformed during preprocessing.
-#'    - Preserves original data types (e.g., factors for categorical variables).
-#'    - Includes the validation column if it was present in the original data.
+#' \enumerate{
+#'   \item Data Integrity:
+#'   \itemize{
+#'     \item Contains all original variables, including any that may have been removed
+#'           or transformed during preprocessing.
+#'     \item Preserves original data types (e.g., factors for categorical variables).
+#'     \item Includes the validation column if it was present in the original data.
+#'   }
 #'
-#' 2. Missing Data:
-#'    - Reflects the original state of missing values (NAs) in the dataset.
+#'   \item Missing Data:
+#'   \itemize{
+#'     \item Reflects the original state of missing values (NAs) in the dataset.
+#'   }
 #'
-#' 3. Data Structure:
-#'    - Maintains the original row and column order of the input data.
-#'    - No transformations or encodings have been applied.
-#'
+#'   \item Data Structure:
+#'   \itemize{
+#'     \item Maintains the original row and column order of the input data.
+#'     \item No transformations or encodings have been applied.
+#'   }
+#' }
 #'
 #' @seealso \code{\link{createClustAll}}, \code{\link{showData}},
 #' \code{\link{dataImputed}}, \code{\link{ClustAllObject-class}}
@@ -468,8 +497,7 @@ setMethod(
 #' @description
 #' This method extracts and returns the imputed datasets stored in a ClustAllObject.
 #' It provides access to the multiple imputed versions of the data generated to
-#' handle missing values, if imputation was performed during the object creation
-#' or processing.
+#' handle missing values, if imputation was conducted and included in the object.
 #'
 #' @usage dataImputed(Object)
 #'
@@ -483,24 +511,30 @@ setMethod(
 #' The dataImputed method provides access to the imputed data used in the ClustALL
 #' analysis pipeline when missing values are present. Key aspects of this data include:
 #'
-#' 1. Imputation Structure:
-#'    - Returns a 'mids' object, which contains multiple imputed datasets.
-#'    - Each imputed dataset is a complete version of the original data with
-#'      missing values filled in.
-#'    - The number of imputed datasets corresponds to the 'nImputation' parameter
-#'      used during object creation.
+#' \enumerate{
+#'   \item Imputation Structure:
+#'   \itemize{
+#'     \item Returns a 'mids' object, which contains multiple imputed datasets.
+#'     \item Each imputed dataset is a complete version of the original data with
+#'           missing values filled in.
+#'     \item The number of imputed datasets corresponds to the 'nImputation' parameter.
+#'   }
 #'
-#' 2. Imputation Method:
-#'    - Imputation is performed using the mice (Multivariate Imputation by Chained
-#'      Equations) package.
-#'    - The specific imputation methods used for each variable can be examined
-#'      in the returned 'mids' object.
+#'   \item Imputation Method:
+#'   \itemize{
+#'     \item Imputation is performed using the mice (Multivariate Imputation by Chained
+#'           Equations) package.
+#'     \item The specific imputation methods used for each variable can be examined
+#'           in the returned 'mids' object.
+#'   }
 #'
-#' 3. Data Consistency:
-#'    - The imputed datasets maintain the same structure (rows and columns) as
-#'      the original data.
-#'    - Only variables with missing values are imputed; complete variables remain unchanged.
-#'
+#'   \item Data Consistency:
+#'   \itemize{
+#'     \item The imputed datasets maintain the same structure (rows and columns) as
+#'           the original data.
+#'     \item Only variables with missing values are imputed; complete variables remain unchanged.
+#'   }
+#' }#'
 #'
 #' @seealso \code{\link{createClustAll}}, \code{\link{showData}},
 #' \code{\link{dataOriginal}}, \code{\link{ClustAllObject-class}},
@@ -546,19 +580,22 @@ setMethod(
 #' used in the ClustALL analysis pipeline:
 #'
 #' This method is particularly useful for:
-#' - Verifying whether imputation was performed on the dataset.
-#' - Understanding the extent of the imputation process.
-#' - Assessing the potential impact of imputation on subsequent analyses.
-#' - Reporting the methodology used in handling missing data.
+#' \itemize{
+#'   \item Verifying whether imputation was performed on the dataset.
+#'   \item Understanding the extent of the imputation process.
+#'   \item Assessing the potential impact of imputation on subsequent analyses.
+#'   \item Reporting the methodology used in handling missing data.
+#' }
 #'
 #' @note
-#' - This method returns the value stored in the 'nImputation' slot of the ClustAllObject.
-#' - A return value of 0 does not necessarily mean the original data had no
-#'   missing values; it could also indicate that imputation was explicitly skipped.
-#' - The number of imputations is typically set during the creation of the
-#'   ClustAllObject with the \code{\link{createClustAll}} function.
-#' - For accessing the actual imputed datasets, use the \code{\link{dataImputed}} method.
-#'
+#' \itemize{
+#'   \item This method returns the value stored in the 'nImputation' slot of the ClustAllObject.
+#'   \item A return value of 0 does not necessarily mean the original data had no
+#'     missing values; it could also indicate that imputation was explicitly skipped.
+#'   \item The number of imputations is typically set during the creation of the
+#'     ClustAllObject with the \code{\link{createClustAll}} function.
+#'   \item For accessing the actual imputed datasets, use the \code{\link{dataImputed}} method.
+#' }#'
 #' @seealso \code{\link{createClustAll}}, \code{\link{dataImputed}},
 #' \code{\link{ClustAllObject-class}}, \code{\link[mice]{mice}}
 #'
@@ -604,34 +641,46 @@ setMethod(
 #' The summary_clusters method provides access to all clustering results generated
 #' during the ClustALL analysis:
 #'
-#' 1. Comprehensive Results:
-#'    - Includes all stratifications generated, regardless of their robustness.
-#'    - Each stratification represents a unique combination of data embedding,
-#'      distance metric, clustering algorithm, and number of clusters.
+#' \enumerate{
+#'   \item Comprehensive Results:
+#'   \itemize{
+#'     \item Includes all stratifications generated, regardless of their robustness.
+#'     \item Each stratification represents a unique combination of data embedding,
+#'           distance metric, clustering algorithm, and number of clusters.
+#'   }
 #'
-#' 2. Stratification Structure:
-#'    - Each element in the returned list is named according to the parameters
-#'      used to generate it (e.g., "cuts_a_1" for the first cut using method 'a').
-#'    - Each stratification is a vector of integers, where each integer represents
-#'      a cluster assignment for a sample.
+#'   \item Stratification Structure:
+#'   \itemize{
+#'     \item Each element in the returned list is named according to the parameters
+#'           used to generate it (e.g., "cuts_a_1" for the first cut using method 'a').
+#'     \item Each stratification is a vector of integers, where each integer represents
+#'           a cluster assignment for a sample.
+#'   }
 #'
-#' 3. Analysis Possibilities:
-#'    - Allows for comparison of different clustering solutions.
-#'    - Enables examination of how different algorithm parameters affect clustering outcomes.
-#'    - Facilitates identification of consistent patterns across multiple stratifications.
+#'   \item Analysis Possibilities:
+#'   \itemize{
+#'     \item Allows for comparison of different clustering solutions.
+#'     \item Enables examination of how different algorithm parameters affect clustering outcomes.
+#'     \item Facilitates identification of consistent patterns across multiple stratifications.
+#'   }
+#' }
 #'
 #' This method is particularly useful for:
-#' - Accessing the full range of clustering solutions for in-depth analysis.
-#' - Comparing robust stratifications (identified by other methods) with the full set of results.
-#' - Extracting specific stratifications for further analysis or visualization.
+#' \itemize{
+#'   \item Accessing the full range of clustering solutions for in-depth analysis.
+#'   \item Comparing robust stratifications (identified by other methods) with the full set of results.
+#'   \item Extracting specific stratifications for further analysis or visualization.
+#' }
 #'
 #' @note
-#' - This method returns the data stored in the 'summary_clusters' slot of the ClustAllObject.
-#' - It will return NULL if \code{\link{runClustAll}} has not been executed on the object.
-#' - The returned list includes all stratifications, not just those deemed robust.
-#'   For accessing only robust stratifications, consider using the \code{\link{resStratification}} function.
-#' - The order and naming of stratifications in the returned list correspond to
-#'   the order in which they were generated during the ClustALL process.
+#' \itemize{
+#'   \item This method returns the data stored in the 'summary_clusters' slot of the ClustAllObject.
+#'   \item It will return NULL if \code{\link{runClustAll}} has not been executed on the object.
+#'   \item The returned list includes all stratifications, not just those deemed robust.
+#'     For accessing only robust stratifications, consider using the \code{\link{resStratification}} function.
+#'   \item The order and naming of stratifications in the returned list correspond to
+#'     the order in which they were generated during the ClustALL process.
+#' }
 #'
 #' @seealso \code{\link{runClustAll}}, \code{\link{resStratification}},
 #' \code{\link{JACCARD_DISTANCE_F}}, \code{\link{ClustAllObject-class}}
@@ -679,34 +728,46 @@ setMethod(
 #' The JACCARD_DISTANCE_F method provides crucial information about the similarity
 #' structure of robust clustering solutions:
 #'
-#' 1. Jaccard Distance:
-#'    - A measure of dissimilarity between sample sets, calculated as 1 minus the Jaccard coefficient.
-#'    - Ranges from 0 (identical stratifications) to 1 (completely different stratifications).
-#'    - Lower values indicate higher similarity between stratifications.
+#' \enumerate{
+#'   \item Jaccard Distance:
+#'   \itemize{
+#'     \item A measure of dissimilarity between sample sets, calculated as 1 minus the Jaccard coefficient.
+#'     \item Ranges from 0 (identical stratifications) to 1 (completely different stratifications).
+#'     \item Lower values indicate higher similarity between stratifications.
+#'   }
 #'
-#' 2. Matrix Structure:
-#'    - Symmetric matrix with stratification names as row and column labels.
-#'    - Diagonal elements are always 0 (each stratification is identical to itself).
-#'    - Off-diagonal elements represent pairwise Jaccard distances.
+#'   \item Matrix Structure:
+#'   \itemize{
+#'     \item Symmetric matrix with stratification names as row and column labels.
+#'     \item Diagonal elements are always 0 (each stratification is identical to itself).
+#'     \item Off-diagonal elements represent pairwise Jaccard distances.
+#'   }
 #'
-#' 3. Robust Stratifications:
-#'    - Only includes stratifications that passed the bootstrapping process.
-#'    - Represents the most stable and reliable clustering solutions.
+#'   \item Robust Stratifications:
+#'   \itemize{
+#'     \item Only includes stratifications that passed the bootstrapping process.
+#'     \item Represents the most stable and reliable clustering solutions.
+#'   }
+#' }
 #'
 #' This method is particularly useful for:
-#' - Identifying groups of similar stratifications.
-#' - Assessing the diversity of robust clustering solutions.
-#' - Selecting representative stratifications for further analysis.
-#' - Visualizing the relationships between different clustering outcomes.
-#' - Input for further clustering or dimensionality reduction of stratifications.
+#' \itemize{
+#'   \item Identifying groups of similar stratifications.
+#'   \item Assessing the diversity of robust clustering solutions.
+#'   \item Selecting representative stratifications for further analysis.
+#'   \item Visualizing the relationships between different clustering outcomes.
+#'   \item Input for further clustering or dimensionality reduction of stratifications.
+#' }
 #'
 #' @note
-#' - This method returns the data stored in the 'JACCARD_DISTANCE_F' slot of the ClustAllObject.
-#' - It will return NULL if \code{\link{runClustAll}} has not been executed on the object.
-#' - The Jaccard distance is calculated based on the co-occurrence of samples in clusters,
-#'   not on the specific cluster labels.
-#' - This matrix is often used as input for the \code{\link{plotJACCARD}} function
-#'   to visualize the similarity structure of stratifications.
+#' \itemize{
+#'   \item This method returns the data stored in the 'JACCARD_DISTANCE_F' slot of the ClustAllObject.
+#'   \item It will return NULL if \code{\link{runClustAll}} has not been executed on the object.
+#'   \item The Jaccard distance is calculated based on the co-occurrence of samples in clusters,
+#'     not on the specific cluster labels.
+#'   \item This matrix is often used as input for the \code{\link{plotJACCARD}} function
+#'     to visualize the similarity structure of stratifications.
+#' }
 #'
 #' @seealso \code{\link{runClustAll}}, \code{\link{plotJACCARD}},
 #' \code{\link{resStratification}}, \code{\link{ClustAllObject-class}}
@@ -753,31 +814,42 @@ setMethod(
 #' @details
 #' The processed method serves as a crucial indicator in the ClustALL workflow:
 #'
-#' 1. Processing Status:
-#'    - Indicates whether the ClustALL algorithm has been applied to the object.
-#'    - A TRUE value means clustering results are available for analysis.
-#'    - A FALSE value indicates the object only contains input data and preprocessing.
+#' \enumerate{
+#'   \item Processing Status:
+#'   \itemize{
+#'     \item Indicates whether the ClustALL algorithm has been applied to the object.
+#'     \item A TRUE value means clustering results are available for analysis.
+#'     \item A FALSE value indicates the object only contains input data and preprocessing.
+#'   }
 #'
-#' 2. Workflow Implications:
-#'    - Helps determine which methods and analyses can be performed on the object.
-#'    - Guides users in the correct sequence of operations in the ClustALL pipeline.
+#'   \item Workflow Implications:
+#'   \itemize{
+#'     \item Helps determine which methods and analyses can be performed on the object.
+#'     \item Guides users in the correct sequence of operations in the ClustALL pipeline.
+#'   }
 #'
-#' 3. Data Availability:
-#'    - TRUE status implies availability of:
-#'      * Stratification results (\code{\link{summary_clusters}})
-#'      * Jaccard distance matrix (\code{\link{JACCARD_DISTANCE_F}})
-#'      * Other clustering-related outputs
-#'    - FALSE status means only input and preprocessed data are available.
-#'
+#'   \item Data Availability:
+#'   \itemize{
+#'     \item TRUE status implies availability of:
+#'     \itemize{
+#'       \item Stratification results (\code{\link{summary_clusters}})
+#'       \item Jaccard distance matrix (\code{\link{JACCARD_DISTANCE_F}})
+#'       \item Other clustering-related outputs
+#'     }
+#'     \item FALSE status means only input and preprocessed data are available.
+#'   }
+#' }
 #'
 #' @note
-#' - This method checks the 'processed' slot of the ClustAllObject.
-#' - The processed status is automatically set to TRUE when \code{\link{runClustAll}}
-#'   completes successfully.
-#' - Users should not manually modify this status to ensure consistency between
-#'   the status and the actual content of the object.
-#' - A FALSE status does not necessarily indicate an error; it simply means
-#'   \code{\link{runClustAll}} needs to be executed before accessing clustering results.
+#' \itemize{
+#'   \item This method checks the 'processed' slot of the ClustAllObject.
+#'   \item The processed status is automatically set to TRUE when \code{\link{runClustAll}}
+#'     completes successfully.
+#'   \item Users should not manually modify this status to ensure consistency between
+#'     the status and the actual content of the object.
+#'   \item A FALSE status does not necessarily indicate an error; it simply means
+#'     \code{\link{runClustAll}} needs to be executed before accessing clustering results.
+#' }
 #'
 #' @seealso \code{\link{runClustAll}}, \code{\link{createClustAll}},
 #' \code{\link{ClustAllObject-class}}, \code{\link{summary_clusters}},
@@ -825,27 +897,37 @@ setMethod(
 #' The dataValidation method provides access to the ground truth or reference
 #' classifications for the samples in the dataset:
 #'
-#' 1. Validation Data Content:
-#'    - Contains known classifications or groupings of samples.
-#'    - Typically represents biological, clinical, or other meaningful categorizations.
-#'    - Used as a benchmark for evaluating clustering performance.
+#' \enumerate{
+#'   \item Validation Data Content:
+#'   \itemize{
+#'     \item Contains known classifications or groupings of samples.
+#'     \item Typically represents biological, clinical, or other meaningful categorizations.
+#'     \item Used as benchmarking to evaluate clustering performance.
+#'   }
 #'
-#' 2. Data Characteristics:
-#'    - Returned as a numeric vector.
-#'    - Length matches the number of samples in the original dataset.
-#'    - Each element corresponds to a sample's true label or classification.
+#'   \item Data Characteristics:
+#'   \itemize{
+#'     \item Returned as a numeric vector.
+#'     \item Length matches the number of samples in the original dataset.
+#'     \item Each element corresponds to a sample's true label or classification.
+#'   }
 #'
-#' 3. Availability and Source:
-#'    - May be added during object creation via the colValidation parameter in \code{\link{createClustAll}}.
-#'    - Can be added later using the \code{\link{addValidationData}} function.
-#'    - If not available, the method returns NULL.
+#'   \item Availability and Source:
+#'   \itemize{
+#'     \item May be added during object creation via the colValidation parameter in \code{\link{createClustAll}}.
+#'     \item Can be added later using the \code{\link{addValidationData}} function.
+#'     \item If not available, the method returns NULL.
+#'   }
+#' }
 #'
 #' @note
-#' - This method returns the data stored in the 'dataValidation' slot of the ClustAllObject.
-#' - The validation data is not used in the clustering process itself; it's solely for evaluation purposes.
-#' - If validation data was not provided during object creation or added later, this method will return NULL.
-#' - Always check for NULL before using the returned data in calculations or visualizations.
-#' - The interpretation and use of validation data depend on the specific context of your study.
+#' \itemize{
+#'   \item This method returns the data stored in the 'dataValidation' slot of the ClustAllObject.
+#'   \item The validation data is not used in the clustering process itself; it is solely for evaluation purposes.
+#'   \item If validation data was not provided during object creation or added later, this method will return NULL.
+#'   \item Always check for NULL before using the returned data in calculations or visualizations.
+#'   \item The interpretation and use of validation data depend on the specific context of your study.
+#' }
 #'
 #' @seealso \code{\link{createClustAll}}, \code{\link{addValidationData}},
 #' \code{\link{validateStratification}}, \code{\link{ClustAllObject-class}}
@@ -1109,14 +1191,19 @@ setMethod(
 # Cocumenting DataSets ---------------------------------------------------------
 #' wdbc: Diagnostic Wisconsin Breast Cancer Database.
 #'
-#' A dataset containing Features are computed from a digitized image of a fine
-#' needle aspirate (FNA) of a breast mass.
-#' They describe the characteristics of the cell nuclei present in the image.
+#' The Breast Cancer Wisconsin (Diagnostic) dataset, also known as "wdbc", contains
+#' features computed from digitized images of fine needle aspirates (FNA) of breast
+#' masses. The features describe characteristics of the cell nuclei present in each image.
 #'
-#' The dataset comprises two types of features —categorical and numerical—
-#' derived from a digitized image of a fine needle aspirate (FNA) of a breast
-#' mass from 659 patients. Each patient is characterized by 31 features (10x3)
-#' and belongs to one of two target classes: ‘malignant’ or ‘benign’.
+#' The dataset includes 569 patients, each characterized by 30 numerical features and one
+#' categorical feature. The numerical features are computed from ten different measurements
+#' of the cell nuclei, and each measurement is repeated three times, resulting in a total
+#' of 30 features per patient (10 features x 3 measurements).
+#'
+#' The categorical feature is the diagnosis, which indicates whether the tumor is
+#' malignant (M) or benign (B). This feature serves as the target class for
+#' classification tasks.
+#'
 #' @source <https://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic>
 #'
 #' \itemize{
@@ -1142,7 +1229,17 @@ NULL
 
 #' wdbcNA: Diagnostic Wisconsin Breast Cancer Database with missing values
 #'
-#' We introduced random missing values to the wdbc dataset. \code{\link{wdbc}}
+#' The "wdbcNA" dataset is a modified version of the Breast Cancer Wisconsin
+#' (Diagnostic) dataset (\code{\link{wdbc}}), incorporating missing values at
+#' random. This dataset is designed to demonstrate and evaluate the handling
+#' of missing data in the context of breast cancer diagnosis.
+#'
+#' The dataset retains the same structure as the original "wdbc" dataset, with
+#' 569 patients and 32 variables. However, some values in the numerical features
+#' have been randomly replaced with missing values (NA).
+#'
+#' For a detailed description of the features and the original dataset, please
+#' refer to the documentation of the "wdbc" dataset (\code{\link{wdbc}}).
 #'
 #' @docType data
 #' @keywords datasets
@@ -1154,8 +1251,14 @@ NULL
 
 #' wdbcMIDS: Diagnostic Wisconsin Breast Cancer Database with imputed values
 #'
-#' We introduced imputed random values to the wdbcNA dataset.
-#' Using Mice. It is a mids object. \code{\link{wdbc}}
+#' The "wdbcMIDS" dataset is an imputed version of the "wdbcNA" dataset, which is
+#' a modified version of the Breast Cancer Wisconsin (Diagnostic) dataset
+#' (\code{\link{wdbc}}) with missing values introduced at random. The missing values
+#' have been imputed using the Multiple Imputation by Chained Equations (MICE)
+#' algorithm, resulting in a "mids" object manually.
+#'
+#' For more information on the original dataset and the version with missing values,
+#' please refer to the documentation of the "wdbc" (\code{\link{wdbc}}).
 #'
 #' @docType data
 #' @keywords datasets
@@ -1167,7 +1270,19 @@ NULL
 
 #' obj_noNA1: Processed wdbc dataset for testing purposed
 #'
-#' Processed wdbc as appear in vignette
+#' The "obj_noNA1" dataset is a processed version of the Breast Cancer Wisconsin
+#' (Diagnostic) dataset (\code{\link{wdbc}}), prepared for testing purposes and
+#' used in the ClustAll package vignette. It has been processed using the ClustAll
+#' package methods, which include data preprocessing, feature transformation, and
+#' the application of clustering algorithms.
+#'
+#' The "obj_noNA1" dataset can be used as a reference for users who want to
+#' understand the ClustAll package workflow and replicate the analysis presented
+#' in the vignette.
+#'
+#' For more information on the original dataset, please refer to the
+#' documentation of the "wdbc" (\code{\link{wdbc}}) dataset.
+#'
 #'
 #' @docType data
 #' @keywords datasets
@@ -1179,7 +1294,19 @@ NULL
 
 #' obj_noNA1simplify: Processed wdbc dataset for testing purposed
 #'
-#' Processed wdbc as appear in vignette, with simplify TRUE parameter
+#' The "obj_noNA1simplify" dataset is a processed version of the Breast Cancer Wisconsin
+#' (Diagnostic) dataset (\code{\link{wdbc}}), prepared for testing purposes and used in
+#' the ClustAll package vignette. It has been processed using the ClustAll package
+#' methods with the `simplify` parameter set to TRUE, which reduces the computational
+#' complexity of the clustering algorithms by considering only a subset of the
+#' dendrogram depths.
+#'
+#' The "obj_noNA1simplify" dataset can be used as a reference for users who want to
+#' understand the ClustAll package workflow and replicate the simplified analysis
+#' presented in the vignette.
+#'
+#' For more information on the original dataset and the full processed version, please
+#' refer to the documentation of the "wdbc" (\code{\link{wdbc}}).
 #'
 #' @docType data
 #' @keywords datasets
@@ -1191,7 +1318,19 @@ NULL
 
 #' obj_noNAno1Validation: Processed wdbc dataset for testing purposed
 #'
-#' Processed wdbc as appear in vignette, with no validation data
+#' The "obj_noNAno1Validation" dataset is a processed version of the Breast
+#' Cancer Wisconsin (Diagnostic) dataset (\code{\link{wdbc}}), prepared for
+#' testing purposes and used in the ClustAll package vignette. It has been
+#' processed using the ClustAll package methods, but with the validation data
+#' removed.
+#'
+#' The "obj_noNAno1Validation" dataset can be used as a reference for users who want
+#' to understand the ClustAll package workflow and replicate the analysis presented
+#' in the vignette, focusing on unsupervised learning aspects.
+#'
+#' For more information on the original dataset and the processed version with
+#' validation data, please refer to the documentation of the "wdbc"
+#' (\code{\link{wdbc}}).
 #'
 #' @docType data
 #' @keywords datasets
@@ -1204,7 +1343,7 @@ NULL
 #' Heart Disease Dataset
 #'
 #' This dataset contains various medical and lifestyle attributes of patients,
-#' along with their heart disease diagnosis status. It's commonly used for
+#' along with their heart disease diagnosis status. It is commonly used for
 #' predicting the presence of heart disease in patients.
 #'
 #' @description

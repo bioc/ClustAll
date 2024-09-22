@@ -7,7 +7,7 @@
 \description{
 This class union allows for flexibility in method signatures and slot
 definitions by accepting either a character value, NULL, or a missing value.
-It's particularly useful when a slot or function parameter might contain
+It is particularly useful when a slot or function parameter might contain
 a character string but could also be empty, unspecified, or explicitly set to NULL.
 }
 \details{

@@ -27,10 +27,12 @@ Default is 0.7. Higher values result in more stringent similarity criteria.}
 \value{
 A list of representative stratifications and their associated clusters.
 The structure of the return value depends on the 'all' parameter:
-- If all = FALSE: A named list where each element represents the centroid
-  stratification for a group of similar stratifications.
-- If all = TRUE: A nested list where each top-level element represents a group
-  of similar stratifications, and contains all stratifications in that group.
+\itemize{
+  \item If all = FALSE: A named list where each element represents the centroid
+    stratification for a group of similar stratifications.
+  \item If all = TRUE: A nested list where each top-level element represents a group
+    of similar stratifications, and contains all stratifications in that group.
+}
 Each stratification is represented by a table showing the distribution of
 patients across clusters.
 }
@@ -43,32 +45,40 @@ on population size criteria and stratification similarity.
 \details{
 The resStratification function performs several key steps:
 
-1. Filters stratifications based on the 'population' parameter, ensuring that
-   each cluster in a stratification contains at least the specified proportion
-   of the total population.
-2. Groups similar stratifications based on their Jaccard distances, using the
-   'stratification_similarity' threshold.
-3. For each group of similar stratifications:
-   - If all = FALSE, selects the centroid (most representative) stratification.
-   - If all = TRUE, includes all stratifications in the group.
+\enumerate{
+  \item Filters stratifications based on the 'population' parameter, ensuring that
+    each cluster in a stratification contains at least the specified proportion
+    of the total population.
+  \item Groups similar stratifications based on their Jaccard distances, using the
+    'stratification_similarity' threshold.
+  \item For each group of similar stratifications:
+  \itemize{
+    \item If all = FALSE, selects the centroid (most representative) stratification.
+    \item If all = TRUE, includes all stratifications in the group.
+  }
+}
 
 This function is particularly useful for:
-- Identifying the most robust and significant clustering solutions.
-- Reducing the number of stratifications to a manageable set for further analysis.
-- Exploring how different similarity thresholds affect the grouping of stratifications.
-- Comparing multiple similar stratifications within each group (when all = TRUE).
+\itemize{
+  \item Identifying the most robust and significant clustering solutions.
+  \item Reducing the number of stratifications to a manageable set for further analysis.
+  \item Exploring how different similarity thresholds affect the grouping of stratifications.
+  \item Comparing multiple similar stratifications within each group (when all = TRUE).
+}
 }
 \note{
-- This function requires a processed ClustAllObject. Ensure
-\code{\link{runClustAll}}
-  has been executed before using resStratification.
-- The 'population' parameter helps filter out stratifications with very small,
-  potentially insignificant clusters.
-- The 'stratification_similarity' parameter allows for fine-tuning the balance
-  between diversity and similarity in the returned stratifications.
-- When exploring results, it's often useful to try different combinations of
-  'population' and 'stratification_similarity' values to understand the
-  characteristics of your clustering solutions.
+\itemize{
+  \item This function requires a processed ClustAllObject. Ensure
+    \code{\link{runClustAll}}
+    has been executed before using resStratification.
+  \item The 'population' parameter helps filter out stratifications with very small,
+    potentially insignificant clusters.
+  \item The 'stratification_similarity' parameter allows for fine-tuning the balance
+    between diversity and similarity in the returned stratifications.
+  \item When exploring results, it's often useful to try different combinations of
+    'population' and 'stratification_similarity' values to understand the
+    characteristics of your clustering solutions.
+}
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")

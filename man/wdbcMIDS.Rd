@@ -14,7 +14,14 @@ data("BreastCancerWisconsinMISSING", package = "ClustAll")
 wdbcMIDS dataset
 }
 \description{
-We introduced imputed random values to the wdbcNA dataset.
-Using Mice. It is a mids object. \code{\link{wdbc}}
+The "wdbcMIDS" dataset is an imputed version of the "wdbcNA" dataset, which is
+a modified version of the Breast Cancer Wisconsin (Diagnostic) dataset
+(\code{\link{wdbc}}) with missing values introduced at random. The missing values
+have been imputed using the Multiple Imputation by Chained Equations (MICE)
+algorithm, resulting in a "mids" object manually.
+}
+\details{
+For more information on the original dataset and the version with missing values,
+please refer to the documentation of the "wdbc" (\code{\link{wdbc}}).
 }
 \keyword{datasets}

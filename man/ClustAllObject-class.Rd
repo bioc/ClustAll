@@ -48,8 +48,9 @@ of the original dataset, if provided. These labels are used for validation purpo
 and are not used in the stratification process itself. NULL if no validation data
 is available.}
 
-\item{\code{nImputation}}{An integer indicating the number of imputations performed.
-Set to 0 if no imputation was necessary or performed.}
+\item{\code{nImputation}}{An integer indicating the number of imputations to be
+computed. It should be set to 0 if the dataset is already completed, or if it
+the dataset has been imputed out of ClustAll framework.}
 
 \item{\code{processed}}{A logical flag. TRUE if \code{\link{runClustAll}} has been
 executed on the object, FALSE otherwise. Indicates whether the object contains

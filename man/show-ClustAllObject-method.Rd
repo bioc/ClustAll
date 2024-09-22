@@ -21,34 +21,48 @@ individual slots.
 \details{
 The show method for ClustAllObject displays the following information:
 
-1. Object Class: Confirms that the object is of class ClustAllObject.
+\enumerate{
+  \item Object Class: Confirms that the object is of class ClustAllObject.
 
-2. Data Dimensions:
-   - Number of variables (columns) in the processed data.
-   - Number of patients (rows) in the dataset.
+  \item Data Dimensions:
+  \itemize{
+    \item Number of variables (columns) in the processed data.
+    \item Number of patients (rows) in the dataset.
+  }
 
-3. Imputation Status:
-   - Indicates whether the data has been imputed.
-   - If imputed, shows the number of imputations performed.
+  \item Imputation Status:
+  \itemize{
+    \item Indicates whether the data has been imputed.
+    \item If imputed, shows the number of imputations performed.
+  }
 
-4. Processing Status:
-   - Indicates whether the ClustALL algorithm has been run on the object.
+  \item Processing Status:
+  \itemize{
+    \item Indicates whether the ClustALL algorithm has been run on the object.
+  }
 
-5. Stratification Results:
-   - If processed, displays the number of stratifications generated.
-   - If not processed, indicates that stratification results are not available.
+  \item Stratification Results:
+  \itemize{
+    \item If processed, displays the number of stratifications generated.
+    \item If not processed, indicates that stratification results are not available.
+  }
+}
 
 This method is particularly useful for:
-- Quick verification of object contents after creation or modification.
-- Checking the processing status before running analyses.
-- Confirming the number of stratifications generated after running the ClustALL algorithm.
-- Easily sharing key object characteristics in reports or discussions.
+\itemize{
+  \item Quick verification of object contents after creation or modification.
+  \item Checking the processing status before running analyses.
+  \item Confirming the number of stratifications generated after running the ClustALL algorithm.
+  \item Easily sharing key object characteristics in reports or discussions.
+}
 }
 \note{
-- This method is automatically called when the object name is entered at the R console.
-- It provides a high-level overview and does not display detailed data or results.
-- For more detailed information about specific aspects of the object, use
-  dedicated accessor methods or examine individual slots directly.
+\itemize{
+  \item This method is automatically called when the object name is entered at the R console.
+  \item It provides a high-level overview and does not display detailed data or results.
+  \item For more detailed information about specific aspects of the object, use
+    dedicated accessor methods or examine individual slots directly.
+}
 }
 \seealso{
 \code{\link{createClustAll}}, \code{\link{runClustAll}},

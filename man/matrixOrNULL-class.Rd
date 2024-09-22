@@ -6,7 +6,7 @@
 \title{Class Union: matrixOrNULL}
 \description{
 This class union allows for flexibility in method signatures and slot
-definitions by accepting either a matrix or NULL. It's particularly useful
+definitions by accepting either a matrix or NULL. It is particularly useful
 when a slot or function parameter might contain a matrix of data but could
 also be empty or explicitly set to NULL.
 }

@@ -24,27 +24,37 @@ of samples, which can be used to assess the performance of clustering results.
 The dataValidation method provides access to the ground truth or reference
 classifications for the samples in the dataset:
 
-1. Validation Data Content:
-   - Contains known classifications or groupings of samples.
-   - Typically represents biological, clinical, or other meaningful categorizations.
-   - Used as a benchmark for evaluating clustering performance.
+\enumerate{
+  \item Validation Data Content:
+  \itemize{
+    \item Contains known classifications or groupings of samples.
+    \item Typically represents biological, clinical, or other meaningful categorizations.
+    \item Used as benchmarking to evaluate clustering performance.
+  }
 
-2. Data Characteristics:
-   - Returned as a numeric vector.
-   - Length matches the number of samples in the original dataset.
-   - Each element corresponds to a sample's true label or classification.
+  \item Data Characteristics:
+  \itemize{
+    \item Returned as a numeric vector.
+    \item Length matches the number of samples in the original dataset.
+    \item Each element corresponds to a sample's true label or classification.
+  }
 
-3. Availability and Source:
-   - May be added during object creation via the colValidation parameter in \code{\link{createClustAll}}.
-   - Can be added later using the \code{\link{addValidationData}} function.
-   - If not available, the method returns NULL.
+  \item Availability and Source:
+  \itemize{
+    \item May be added during object creation via the colValidation parameter in \code{\link{createClustAll}}.
+    \item Can be added later using the \code{\link{addValidationData}} function.
+    \item If not available, the method returns NULL.
+  }
+}
 }
 \note{
-- This method returns the data stored in the 'dataValidation' slot of the ClustAllObject.
-- The validation data is not used in the clustering process itself; it's solely for evaluation purposes.
-- If validation data was not provided during object creation or added later, this method will return NULL.
-- Always check for NULL before using the returned data in calculations or visualizations.
-- The interpretation and use of validation data depend on the specific context of your study.
+\itemize{
+  \item This method returns the data stored in the 'dataValidation' slot of the ClustAllObject.
+  \item The validation data is not used in the clustering process itself; it is solely for evaluation purposes.
+  \item If validation data was not provided during object creation or added later, this method will return NULL.
+  \item Always check for NULL before using the returned data in calculations or visualizations.
+  \item The interpretation and use of validation data depend on the specific context of your study.
+}
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")

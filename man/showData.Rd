@@ -26,18 +26,26 @@ removal of the validation column (if present).
 The showData method provides access to the core dataset used in the ClustALL
 analysis pipeline. Key aspects of this data include:
 
-1. Preprocessing Applied:
-   - Categorical variables have been converted to numeric form via one-hot encoding.
-   - The validation column (if specified during object creation) has been removed.
+\enumerate{
+  \item Preprocessing Applied:
+  \itemize{
+    \item Categorical variables have been converted to numeric form via one-hot encoding.
+    \item The validation column (if specified during object creation) has been removed.
+  }
 
-2. Data Structure:
-   - All columns are numeric, suitable for use in clustering algorithms.
-   - Row order corresponds to the original input data.
+  \item Data Structure:
+  \itemize{
+    \item All columns are numeric, suitable for use in clustering algorithms.
+    \item Row order corresponds to the original input data.
+  }
 
-3. Missing Data:
-   - The returned data may still contain missing values (NAs) if imputation
-     was not performed.
-   - For imputed versions of the data, use the \code{\link{dataImputed}} method.
+  \item Missing Data:
+  \itemize{
+    \item The returned data may still contain missing values (NAs) if imputation
+          was not performed.
+    \item For imputed versions of the data, use the \code{\link{dataImputed}} method.
+  }
+}
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")

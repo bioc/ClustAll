@@ -33,43 +33,57 @@ the clustering aligns with known classifications.
 The validateStratification function provides a crucial step in assessing the
 biological or clinical relevance of clustering results:
 
-1. Comparison Mechanism:
-   - The function compares the cluster assignments of the selected stratification
-     with the true labels provided in the validation data.
-   - It treats the problem as a binary classification task, considering one
-     class as the "positive" class and all others as "negative".
+\enumerate{
+  \item Comparison Mechanism:
+  \itemize{
+    \item The function compares the cluster assignments of the selected stratification
+      with the true labels provided in the validation data.
+    \item It treats the problem as a binary classification task, considering one
+      class as the "positive" class and all others as "negative".
+  }
 
-2. Sensitivity (True Positive Rate):
-   - Measures the proportion of actual positive cases that were correctly identified.
-   - Calculated as: (True Positives) / (True Positives + False Negatives)
+  \item Sensitivity (True Positive Rate):
+  \itemize{
+    \item Measures the proportion of actual positive cases that were correctly identified.
+    \item Calculated as: (True Positives) / (True Positives + False Negatives)
+  }
 
-3. Specificity (True Negative Rate):
-   - Measures the proportion of actual negative cases that were correctly identified.
-   - Calculated as: (True Negatives) / (True Negatives + False Positives)
+  \item Specificity (True Negative Rate):
+  \itemize{
+    \item Measures the proportion of actual negative cases that were correctly identified.
+    \item Calculated as: (True Negatives) / (True Negatives + False Positives)
+  }
 
-4. Interpretation:
-   - Higher sensitivity indicates better identification of the positive class.
-   - Higher specificity indicates better identification of the negative classes.
-   - The function automatically adjusts calculations if necessary to ensure
-     sensitivity and specificity are always ≥ 0.5.
+  \item Interpretation:
+  \itemize{
+    \item Higher sensitivity indicates better identification of the positive class.
+    \item Higher specificity indicates better identification of the negative classes.
+    \item The function automatically adjusts calculations if necessary to ensure
+      sensitivity and specificity are always ≥ 0.5.
+  }
+}
 
 This function is particularly useful for:
-- Evaluating the clinical or biological relevance of clustering solutions
-- Comparing different stratifications based on their alignment with known classifications
-- Identifying stratifications that best capture known groupings in the data
-- Providing quantitative metrics to support the selection of optimal clustering solutions
+\itemize{
+  \item Evaluating the clinical or biological relevance of clustering solutions
+  \item Comparing different stratifications based on their alignment with known classifications
+  \item Identifying stratifications that best capture known groupings in the data
+  \item Providing quantitative metrics to support the selection of optimal clustering solutions
+}
 }
 \note{
-- This function requires a processed ClustAllObject with validation data.
-  Ensure \code{\link{runClustAll}} has been executed and validation data
-  has been added using \code{\link{addValidationData}} if not provided during
-  object creation.
-- The function assumes binary classification. For multi-class problems, it
-  effectively treats one class as "positive" and all others as "negative".
-- Stratification names can be obtained from the results of \code{\link{resStratification}}
-  or by examining the names in the summary_clusters slot of the ClustAllObject.
-- The function will stop with an error if the ClustAllObject does not contain
-  validation data or if the specified stratification name is not found.
+\itemize{
+  \item This function requires a processed ClustAllObject with validation data.
+    Ensure \code{\link{runClustAll}} has been executed and validation data
+    has been added using \code{\link{addValidationData}} if not provided during
+    object creation.
+  \item The function assumes binary classification. For multi-class problems, it
+    effectively treats one class as "positive" and all others as "negative".
+  \item Stratification names can be obtained from the results of \code{\link{resStratification}}
+    or by examining the names in the summary_clusters slot of the ClustAllObject.
+  \item The function will stop with an error if the ClustAllObject does not contain
+    validation data or if the specified stratification name is not found.
+}
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")

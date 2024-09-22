@@ -39,21 +39,25 @@ The cluster2data function serves some important purposes in the ClustALL workflo
    exported for use in other analytical tools or visualization software.
 
 The function is particularly useful for:
-- Identifying features that distinguish different clusters
-- Comparing how samples are grouped across different stratifications
-- Preparing data for cluster-specific statistical analyses
-- Creating visualizations that incorporate both cluster assignments and original features
+\itemize{
+  \item Identifying features that distinguish different clusters
+  \item Comparing how samples are grouped across different stratifications
+  \item Preparing data for cluster-specific statistical analyses
+  \item Creating visualizations that incorporate both cluster assignments and original features
+}
 }
 \note{
-- This function requires a processed ClustAllObject. Ensure \code{\link{runClustAll}}
-  has been executed before using cluster2data.
-- The stratificationName parameter accepts multiple stratification names, allowing
-  for simultaneous export of multiple clustering solutions.
-- Stratification names can be obtained from the results of \code{\link{resStratification}}
-  or by examining the names in the summary_clusters slot of the ClustAllObject.
-- The original data in the returned data frame includes all preprocessing steps
-  applied during the creation of the ClustAllObject, such as one-hot encoding
-  of categorical variables.
+\itemize{
+  \item This function requires a processed ClustAllObject. Ensure \code{\link{runClustAll}}
+    has been executed before using cluster2data.
+  \item The stratificationName parameter accepts multiple stratification names, allowing
+    for simultaneous export of multiple clustering solutions.
+  \item Stratification names can be obtained from the results of \code{\link{resStratification}}
+    or by examining the names in the summary_clusters slot of the ClustAllObject.
+  \item The original data in the returned data frame includes all preprocessing steps
+    applied during the creation of the ClustAllObject, such as one-hot encoding
+    of categorical variables.
+}
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")

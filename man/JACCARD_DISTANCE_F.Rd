@@ -27,34 +27,46 @@ that have passed the bootstrapping process for population-based robustness.
 The JACCARD_DISTANCE_F method provides crucial information about the similarity
 structure of robust clustering solutions:
 
-1. Jaccard Distance:
-   - A measure of dissimilarity between sample sets, calculated as 1 minus the Jaccard coefficient.
-   - Ranges from 0 (identical stratifications) to 1 (completely different stratifications).
-   - Lower values indicate higher similarity between stratifications.
+\enumerate{
+  \item Jaccard Distance:
+  \itemize{
+    \item A measure of dissimilarity between sample sets, calculated as 1 minus the Jaccard coefficient.
+    \item Ranges from 0 (identical stratifications) to 1 (completely different stratifications).
+    \item Lower values indicate higher similarity between stratifications.
+  }
 
-2. Matrix Structure:
-   - Symmetric matrix with stratification names as row and column labels.
-   - Diagonal elements are always 0 (each stratification is identical to itself).
-   - Off-diagonal elements represent pairwise Jaccard distances.
+  \item Matrix Structure:
+  \itemize{
+    \item Symmetric matrix with stratification names as row and column labels.
+    \item Diagonal elements are always 0 (each stratification is identical to itself).
+    \item Off-diagonal elements represent pairwise Jaccard distances.
+  }
 
-3. Robust Stratifications:
-   - Only includes stratifications that passed the bootstrapping process.
-   - Represents the most stable and reliable clustering solutions.
+  \item Robust Stratifications:
+  \itemize{
+    \item Only includes stratifications that passed the bootstrapping process.
+    \item Represents the most stable and reliable clustering solutions.
+  }
+}
 
 This method is particularly useful for:
-- Identifying groups of similar stratifications.
-- Assessing the diversity of robust clustering solutions.
-- Selecting representative stratifications for further analysis.
-- Visualizing the relationships between different clustering outcomes.
-- Input for further clustering or dimensionality reduction of stratifications.
+\itemize{
+  \item Identifying groups of similar stratifications.
+  \item Assessing the diversity of robust clustering solutions.
+  \item Selecting representative stratifications for further analysis.
+  \item Visualizing the relationships between different clustering outcomes.
+  \item Input for further clustering or dimensionality reduction of stratifications.
+}
 }
 \note{
-- This method returns the data stored in the 'JACCARD_DISTANCE_F' slot of the ClustAllObject.
-- It will return NULL if \code{\link{runClustAll}} has not been executed on the object.
-- The Jaccard distance is calculated based on the co-occurrence of samples in clusters,
-  not on the specific cluster labels.
-- This matrix is often used as input for the \code{\link{plotJACCARD}} function
-  to visualize the similarity structure of stratifications.
+\itemize{
+  \item This method returns the data stored in the 'JACCARD_DISTANCE_F' slot of the ClustAllObject.
+  \item It will return NULL if \code{\link{runClustAll}} has not been executed on the object.
+  \item The Jaccard distance is calculated based on the co-occurrence of samples in clusters,
+    not on the specific cluster labels.
+  \item This matrix is often used as input for the \code{\link{plotJACCARD}} function
+    to visualize the similarity structure of stratifications.
+}
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")

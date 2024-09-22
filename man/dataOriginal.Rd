@@ -25,18 +25,26 @@ column removal, or imputation.
 The dataOriginal method serves as a reference point for the initial state of
 the data in the ClustALL analysis pipeline. Key aspects of this data include:
 
-1. Data Integrity:
-   - Contains all original variables, including any that may have been removed
-     or transformed during preprocessing.
-   - Preserves original data types (e.g., factors for categorical variables).
-   - Includes the validation column if it was present in the original data.
+\enumerate{
+  \item Data Integrity:
+  \itemize{
+    \item Contains all original variables, including any that may have been removed
+          or transformed during preprocessing.
+    \item Preserves original data types (e.g., factors for categorical variables).
+    \item Includes the validation column if it was present in the original data.
+  }
 
-2. Missing Data:
-   - Reflects the original state of missing values (NAs) in the dataset.
+  \item Missing Data:
+  \itemize{
+    \item Reflects the original state of missing values (NAs) in the dataset.
+  }
 
-3. Data Structure:
-   - Maintains the original row and column order of the input data.
-   - No transformations or encodings have been applied.
+  \item Data Structure:
+  \itemize{
+    \item Maintains the original row and column order of the input data.
+    \item No transformations or encodings have been applied.
+  }
+}
 }
 \examples{
 data("BreastCancerWisconsin", package = "ClustAll")

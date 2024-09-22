@@ -110,7 +110,7 @@ dim(data_use)
 
 ## Create the ClustAll object
 
-First, the ClustAllObject is created and stored. In this step, we indicate if there is a feature that contains the ground truth in the argument `colValidation`. This feature is not consider to compute the stratification. In this specific case, it corresponds to "Diagnosis".
+First, the ClustAllObject is created and stored. In this step, we indicate if there is a feature that contains the ground truth (true labels) in the argument `colValidation`. This feature is not consider to compute the stratification. In this specific case, it corresponds to "Diagnosis".
 
 ```{r create ClustAllObject}
 obj_noNA <- createClustAll(data = data_use, nImputation = NULL, 

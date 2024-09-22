@@ -38,34 +38,46 @@ subsequent clustering analysis.
 The createClustAll function performs several key steps in preparing data for
 the ClustAll analysis pipeline:
 
-1. Data Preprocessing:
-   - Applies one-hot encoding to categorical variables, converting them to
-     a format suitable for clustering algorithms.
-   - Extracts the validation column (if specified) and stores it separately.
+\enumerate{
+  \item Data Preprocessing:
+  \itemize{
+    \item Applies one-hot encoding to categorical variables, converting them to
+          a format suitable for clustering algorithms.
+    \item Extracts the validation column (if specified) and stores it separately.
+  }
 
-2. Missing Data Handling:
-   - If the data contains missing values and no imputed data is provided,
-     it performs multiple imputation using the mice package.
-   - The number of imputations is determined by the 'nImputation' parameter
-     or set to a default if not specified.
+  \item Missing Data Handling:
+  \itemize{
+    \item If the data contains missing values and no imputed data is provided,
+          it performs multiple imputation using the mice package.
+    \item The number of imputations is determined by the 'nImputation' parameter
+          or set to a default if not specified.
+  }
 
-3. Object Initialization:
-   - Creates a new ClustAllObject with slots for original data, processed data,
-     imputed data (if applicable), and validation data (if provided).
+  \item Object Initialization:
+  \itemize{
+    \item Creates a new ClustAllObject with slots for original data, processed data,
+          imputed data (if applicable), and validation data (if provided).
+  }
+}
 
 The function accommodates three main scenarios:
-a) Data without missing values: Preprocessing is applied, no imputation needed.
-b) Data with missing values, no pre-computed imputations: Automatic imputation is performed.
-c) Data with missing values and pre-computed imputations: The provided imputations are used.
+\itemize{
+  \item Data without missing values: Preprocessing is applied, no imputation needed.
+  \item Data with missing values, no pre-computed imputations: Automatic imputation is performed.
+  \item Data with missing values and pre-computed imputations: The provided imputations are used.
+}
 }
 \note{
-- Categorical variables in the input data should be coded as factors.
-- If 'dataImputed' is provided, it must correspond exactly to the input data
-  in terms of dimensions and variable names.
-- The 'colValidation' parameter allows for the incorporation of known
-  classifications, which can be used later for validating clustering results.
-- After creating the ClustAllObject, use \code{\link{runClustAll}} to perform
-  the actual clustering analysis.
+\itemize{
+  \item Categorical variables in the input data should be coded as factors.
+  \item If 'dataImputed' is provided, it must correspond exactly to the input data
+        in terms of dimensions and variable names.
+  \item The 'colValidation' parameter allows for the incorporation of known
+        classifications, which can be used later for validating clustering results.
+  \item After creating the ClustAllObject, use \code{\link{runClustAll}} to perform
+        the actual clustering analysis.
+}
 }
 \examples{
 # Scenario 1: data does not contain missing values

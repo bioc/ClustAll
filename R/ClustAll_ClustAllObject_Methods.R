@@ -33,34 +33,42 @@
 #' The plotJACCARD function visualizes the similarity between robust
 #' stratifications using a heatmap of Jaccard distances:
 #'
-#' - The heatmap color scale represents Jaccard distances, with darker colors
-#'   indicating higher similarity (lower distance).
-#' - Stratifications are ordered based on hierarchical clustering of their
-#'   Jaccard distances.
-#' - The 'paint' option highlights groups of similar stratifications, making it
-#'   easier to identify clusters of related solutions.
-#' - The 'stratification_similarity' parameter allows fine-tuning of what is
-#'   considered "similar" for the purpose of highlighting.
+#' \itemize{
+#'   \item The heatmap color scale represents Jaccard distances, with darker colors
+#'     indicating higher similarity (lower distance).
+#'   \item Stratifications are ordered based on hierarchical clustering of their
+#'     Jaccard distances.
+#'   \item The 'paint' option highlights groups of similar stratifications, making it
+#'     easier to identify clusters of related solutions.
+#'   \item The 'stratification_similarity' parameter allows fine-tuning of what is
+#'     considered "similar" for the purpose of highlighting.
+#' }
 #'
 #' The function provides annotations for each stratification, including:
-#' - Distance metric used (e.g., Correlation, Gower)
-#' - Clustering method employed (e.g., H-Clustering, K-Means, K-Medoids)
-#' - Depth of the dendrogram cut used in the Data Complexity Reduction step
+#' \itemize{
+#'   \item Distance metric used (e.g., Correlation, Gower)
+#'   \item Clustering method employed (e.g., H-Clustering, K-Means, K-Medoids)
+#'   \item Depth of the dendrogram cut used in the Data Complexity Reduction step
+#' }
 #'
 #' This visualization is particularly useful for:
-#' - Identifying groups of similar stratifications
-#' - Assessing the overall diversity of robust solutions
-#' - Guiding the selection of representative stratifications for further analysis
+#' \itemize{
+#'   \item Identifying groups of similar stratifications
+#'   \item Assessing the overall diversity of robust solutions
+#'   \item Guiding the selection of representative stratifications for further analysis
+#' }
 #'
 #' @note
-#' - This function requires a processed ClustAllObject.
-#' Ensure \code{\link{runClustAll}}
-#'   has been executed before using plotJACCARD.
-#' - The 'paint' feature may not be visible if there are no groups of stratifications
-#'   meeting the similarity threshold.
-#' - For exploring stratifications, it's recommended to start with a high
-#'   'stratification_similarity' value and gradually decrease it to examine
-#'   various levels of stratification grouping.
+#' \itemize{
+#'   \item This function requires a processed ClustAllObject.
+#'     Ensure \code{\link{runClustAll}}
+#'     has been executed before using plotJACCARD.
+#'   \item The 'paint' feature may not be visible if there are no groups of stratifications
+#'     meeting the similarity threshold.
+#'   \item For exploring stratifications, it's recommended to start with a high
+#'     'stratification_similarity' value and gradually decrease it to examine
+#'     various levels of stratification grouping.
+#' }
 #'
 #' @seealso \code{\link{runClustAll}}, \code{\link{resStratification}},
 #' \code{\link{ClustAllObject-class}}, \code{\link{JACCARD_DISTANCE_F}}
@@ -197,42 +205,52 @@ setMethod(
 #'
 #' @return A list of representative stratifications and their associated clusters.
 #' The structure of the return value depends on the 'all' parameter:
-#' - If all = FALSE: A named list where each element represents the centroid
-#'   stratification for a group of similar stratifications.
-#' - If all = TRUE: A nested list where each top-level element represents a group
-#'   of similar stratifications, and contains all stratifications in that group.
+#' \itemize{
+#'   \item If all = FALSE: A named list where each element represents the centroid
+#'     stratification for a group of similar stratifications.
+#'   \item If all = TRUE: A nested list where each top-level element represents a group
+#'     of similar stratifications, and contains all stratifications in that group.
+#' }
 #' Each stratification is represented by a table showing the distribution of
 #' patients across clusters.
 #'
 #' @details
 #' The resStratification function performs several key steps:
 #'
-#' 1. Filters stratifications based on the 'population' parameter, ensuring that
-#'    each cluster in a stratification contains at least the specified proportion
-#'    of the total population.
-#' 2. Groups similar stratifications based on their Jaccard distances, using the
-#'    'stratification_similarity' threshold.
-#' 3. For each group of similar stratifications:
-#'    - If all = FALSE, selects the centroid (most representative) stratification.
-#'    - If all = TRUE, includes all stratifications in the group.
+#' \enumerate{
+#'   \item Filters stratifications based on the 'population' parameter, ensuring that
+#'     each cluster in a stratification contains at least the specified proportion
+#'     of the total population.
+#'   \item Groups similar stratifications based on their Jaccard distances, using the
+#'     'stratification_similarity' threshold.
+#'   \item For each group of similar stratifications:
+#'   \itemize{
+#'     \item If all = FALSE, selects the centroid (most representative) stratification.
+#'     \item If all = TRUE, includes all stratifications in the group.
+#'   }
+#' }
 #'
 #' This function is particularly useful for:
-#' - Identifying the most robust and significant clustering solutions.
-#' - Reducing the number of stratifications to a manageable set for further analysis.
-#' - Exploring how different similarity thresholds affect the grouping of stratifications.
-#' - Comparing multiple similar stratifications within each group (when all = TRUE).
+#' \itemize{
+#'   \item Identifying the most robust and significant clustering solutions.
+#'   \item Reducing the number of stratifications to a manageable set for further analysis.
+#'   \item Exploring how different similarity thresholds affect the grouping of stratifications.
+#'   \item Comparing multiple similar stratifications within each group (when all = TRUE).
+#' }
 #'
 #' @note
-#' - This function requires a processed ClustAllObject. Ensure
-#' \code{\link{runClustAll}}
-#'   has been executed before using resStratification.
-#' - The 'population' parameter helps filter out stratifications with very small,
-#'   potentially insignificant clusters.
-#' - The 'stratification_similarity' parameter allows for fine-tuning the balance
-#'   between diversity and similarity in the returned stratifications.
-#' - When exploring results, it's often useful to try different combinations of
-#'   'population' and 'stratification_similarity' values to understand the
-#'   characteristics of your clustering solutions.
+#' \itemize{
+#'   \item This function requires a processed ClustAllObject. Ensure
+#'     \code{\link{runClustAll}}
+#'     has been executed before using resStratification.
+#'   \item The 'population' parameter helps filter out stratifications with very small,
+#'     potentially insignificant clusters.
+#'   \item The 'stratification_similarity' parameter allows for fine-tuning the balance
+#'     between diversity and similarity in the returned stratifications.
+#'   \item When exploring results, it's often useful to try different combinations of
+#'     'population' and 'stratification_similarity' values to understand the
+#'     characteristics of your clustering solutions.
+#' }
 #'
 #' @seealso \code{\link{runClustAll}}, \code{\link{plotJACCARD}},
 #' \code{\link{cluster2data}}, \code{\link{ClustAllObject-class}}
@@ -349,21 +367,25 @@ setMethod(
 #'    exported for use in other analytical tools or visualization software.
 #'
 #' The function is particularly useful for:
-#' - Identifying features that distinguish different clusters
-#' - Comparing how samples are grouped across different stratifications
-#' - Preparing data for cluster-specific statistical analyses
-#' - Creating visualizations that incorporate both cluster assignments and original features
+#' \itemize{
+#'   \item Identifying features that distinguish different clusters
+#'   \item Comparing how samples are grouped across different stratifications
+#'   \item Preparing data for cluster-specific statistical analyses
+#'   \item Creating visualizations that incorporate both cluster assignments and original features
+#' }
 #'
 #' @note
-#' - This function requires a processed ClustAllObject. Ensure \code{\link{runClustAll}}
-#'   has been executed before using cluster2data.
-#' - The stratificationName parameter accepts multiple stratification names, allowing
-#'   for simultaneous export of multiple clustering solutions.
-#' - Stratification names can be obtained from the results of \code{\link{resStratification}}
-#'   or by examining the names in the summary_clusters slot of the ClustAllObject.
-#' - The original data in the returned data frame includes all preprocessing steps
-#'   applied during the creation of the ClustAllObject, such as one-hot encoding
-#'   of categorical variables.
+#' \itemize{
+#'   \item This function requires a processed ClustAllObject. Ensure \code{\link{runClustAll}}
+#'     has been executed before using cluster2data.
+#'   \item The stratificationName parameter accepts multiple stratification names, allowing
+#'     for simultaneous export of multiple clustering solutions.
+#'   \item Stratification names can be obtained from the results of \code{\link{resStratification}}
+#'     or by examining the names in the summary_clusters slot of the ClustAllObject.
+#'   \item The original data in the returned data frame includes all preprocessing steps
+#'     applied during the creation of the ClustAllObject, such as one-hot encoding
+#'     of categorical variables.
+#' }
 #'
 #' @seealso \code{\link{runClustAll}}, \code{\link{resStratification}},
 #' \code{\link{ClustAllObject-class}}, \code{\link{createClustAll}}
@@ -440,40 +462,52 @@ setMethod(
 #' the relationships between different clustering solutions or between a clustering
 #' solution and known classifications:
 #'
-#' 1. Stratification Comparison (validationData = FALSE):
-#'    - Visualizes how samples are distributed across clusters in two different stratifications.
-#'    - Helps identify similarities and differences between clustering solutions.
-#'    - Useful for understanding how changes in clustering parameters affect sample groupings.
+#' \enumerate{
+#'   \item Stratification Comparison (validationData = FALSE):
+#'   \itemize{
+#'     \item Visualizes how samples are distributed across clusters in two different stratifications.
+#'     \item Helps identify similarities and differences between clustering solutions.
+#'     \item Useful for understanding how changes in clustering parameters affect sample groupings.
+#'   }
 #'
-#' 2. Validation Comparison (validationData = TRUE):
-#'    - Compares a single stratification with true labels (if available).
-#'    - Helps assess how well the clustering aligns with known stratifications.
-#'    - Useful for evaluating the biological or clinical relevance of a clustering solution.
+#'   \item Validation Comparison (validationData = TRUE):
+#'   \itemize{
+#'     \item Compares a single stratification with true labels (if available).
+#'     \item Helps assess how well the clustering aligns with known stratifications.
+#'     \item Useful for evaluating the biological or clinical relevance of a clustering solution.
+#'   }
+#' }
 #'
 #' The Sankey diagram represents:
-#' - Clusters (or true labels) as nodes on the left and right sides of the diagram.
-#' - Flows between nodes indicating how samples are distributed.
-#' - The width of each flow is proportional to the number of samples it represents.
+#' \itemize{
+#'   \item Clusters (or true labels) as nodes on the left and right sides of the diagram.
+#'   \item Flows between nodes indicating how samples are distributed.
+#'   \item The width of each flow is proportional to the number of samples it represents.
+#' }
 #'
 #' This visualization is particularly useful for:
-#' - Identifying stable sample groupings across different stratifications.
-#' - Detecting major shifts in cluster assignments between solutions.
-#' - Evaluating the concordance between clustering results and known stratifications.
-#' - Understanding the impact of different clustering approaches on sample groupings.
+#' \itemize{
+#'   \item Identifying stable sample groupings across different stratifications.
+#'   \item Detecting major shifts in cluster assignments between solutions.
+#'   \item Evaluating the concordance between clustering results and known stratifications.
+#'   \item Understanding the impact of different clustering approaches on sample groupings.
+#' }
 #'
 #' @note
-#' - This function requires a processed ClustAllObject. Ensure
-#' \code{\link{runClustAll}}
-#'   has been executed before using plotSANKEY.
-#' - When validationData is TRUE, the ClustAllObject must contain validation data
-#'   (true labels). This can be added using \code{\link{addValidationData}} if not
-#'   provided during object creation.
-#' - Stratification names can be obtained from the results of
-#' \code{\link{resStratification}}
-#'   or by examining the names in the summary_clusters slot of the ClustAllObject.
-#' - The Sankey diagram may become cluttered if there are many clusters or if the
-#'   clustering solutions are very different. In such cases, consider focusing on
-#'   specific subsets of clusters or using additional filtering criteria.
+#' \itemize{
+#'   \item This function requires a processed ClustAllObject. Ensure
+#'     \code{\link{runClustAll}}
+#'     has been executed before using plotSANKEY.
+#'   \item When validationData is TRUE, the ClustAllObject must contain validation data
+#'     (true labels). This can be added using \code{\link{addValidationData}} if not
+#'     provided during object creation.
+#'   \item Stratification names can be obtained from the results of
+#'     \code{\link{resStratification}}
+#'     or by examining the names in the summary_clusters slot of the ClustAllObject.
+#'   \item The Sankey diagram may become cluttered if there are many clusters or if the
+#'     clustering solutions are very different. In such cases, consider focusing on
+#'     specific subsets of clusters or using additional filtering criteria.
+#' }
 #'
 #' @seealso \code{\link{runClustAll}}, \code{\link{resStratification}},
 #' \code{\link{addValidationData}}, \code{\link{ClustAllObject-class}}
@@ -606,43 +640,57 @@ setMethod(
 #' The validateStratification function provides a crucial step in assessing the
 #' biological or clinical relevance of clustering results:
 #'
-#' 1. Comparison Mechanism:
-#'    - The function compares the cluster assignments of the selected stratification
-#'      with the true labels provided in the validation data.
-#'    - It treats the problem as a binary classification task, considering one
-#'      class as the "positive" class and all others as "negative".
+#' \enumerate{
+#'   \item Comparison Mechanism:
+#'   \itemize{
+#'     \item The function compares the cluster assignments of the selected stratification
+#'       with the true labels provided in the validation data.
+#'     \item It treats the problem as a binary classification task, considering one
+#'       class as the "positive" class and all others as "negative".
+#'   }
 #'
-#' 2. Sensitivity (True Positive Rate):
-#'    - Measures the proportion of actual positive cases that were correctly identified.
-#'    - Calculated as: (True Positives) / (True Positives + False Negatives)
+#'   \item Sensitivity (True Positive Rate):
+#'   \itemize{
+#'     \item Measures the proportion of actual positive cases that were correctly identified.
+#'     \item Calculated as: (True Positives) / (True Positives + False Negatives)
+#'   }
 #'
-#' 3. Specificity (True Negative Rate):
-#'    - Measures the proportion of actual negative cases that were correctly identified.
-#'    - Calculated as: (True Negatives) / (True Negatives + False Positives)
+#'   \item Specificity (True Negative Rate):
+#'   \itemize{
+#'     \item Measures the proportion of actual negative cases that were correctly identified.
+#'     \item Calculated as: (True Negatives) / (True Negatives + False Positives)
+#'   }
 #'
-#' 4. Interpretation:
-#'    - Higher sensitivity indicates better identification of the positive class.
-#'    - Higher specificity indicates better identification of the negative classes.
-#'    - The function automatically adjusts calculations if necessary to ensure
-#'      sensitivity and specificity are always ≥ 0.5.
+#'   \item Interpretation:
+#'   \itemize{
+#'     \item Higher sensitivity indicates better identification of the positive class.
+#'     \item Higher specificity indicates better identification of the negative classes.
+#'     \item The function automatically adjusts calculations if necessary to ensure
+#'       sensitivity and specificity are always ≥ 0.5.
+#'   }
+#' }
 #'
 #' This function is particularly useful for:
-#' - Evaluating the clinical or biological relevance of clustering solutions
-#' - Comparing different stratifications based on their alignment with known classifications
-#' - Identifying stratifications that best capture known groupings in the data
-#' - Providing quantitative metrics to support the selection of optimal clustering solutions
+#' \itemize{
+#'   \item Evaluating the clinical or biological relevance of clustering solutions
+#'   \item Comparing different stratifications based on their alignment with known classifications
+#'   \item Identifying stratifications that best capture known groupings in the data
+#'   \item Providing quantitative metrics to support the selection of optimal clustering solutions
+#' }
 #'
 #' @note
-#' - This function requires a processed ClustAllObject with validation data.
-#'   Ensure \code{\link{runClustAll}} has been executed and validation data
-#'   has been added using \code{\link{addValidationData}} if not provided during
-#'   object creation.
-#' - The function assumes binary classification. For multi-class problems, it
-#'   effectively treats one class as "positive" and all others as "negative".
-#' - Stratification names can be obtained from the results of \code{\link{resStratification}}
-#'   or by examining the names in the summary_clusters slot of the ClustAllObject.
-#' - The function will stop with an error if the ClustAllObject does not contain
-#'   validation data or if the specified stratification name is not found.
+#' \itemize{
+#'   \item This function requires a processed ClustAllObject with validation data.
+#'     Ensure \code{\link{runClustAll}} has been executed and validation data
+#'     has been added using \code{\link{addValidationData}} if not provided during
+#'     object creation.
+#'   \item The function assumes binary classification. For multi-class problems, it
+#'     effectively treats one class as "positive" and all others as "negative".
+#'   \item Stratification names can be obtained from the results of \code{\link{resStratification}}
+#'     or by examining the names in the summary_clusters slot of the ClustAllObject.
+#'   \item The function will stop with an error if the ClustAllObject does not contain
+#'     validation data or if the specified stratification name is not found.
+#' }
 #'
 #' @seealso \code{\link{runClustAll}}, \code{\link{resStratification}},
 #' \code{\link{addValidationData}}, \code{\link{plotSANKEY}},

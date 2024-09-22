@@ -25,18 +25,22 @@ The nImputation method provides insight into the multiple imputation strategy
 used in the ClustALL analysis pipeline:
 
 This method is particularly useful for:
-- Verifying whether imputation was performed on the dataset.
-- Understanding the extent of the imputation process.
-- Assessing the potential impact of imputation on subsequent analyses.
-- Reporting the methodology used in handling missing data.
+\itemize{
+  \item Verifying whether imputation was performed on the dataset.
+  \item Understanding the extent of the imputation process.
+  \item Assessing the potential impact of imputation on subsequent analyses.
+  \item Reporting the methodology used in handling missing data.
+}
 }
 \note{
-- This method returns the value stored in the 'nImputation' slot of the ClustAllObject.
-- A return value of 0 does not necessarily mean the original data had no
-  missing values; it could also indicate that imputation was explicitly skipped.
-- The number of imputations is typically set during the creation of the
-  ClustAllObject with the \code{\link{createClustAll}} function.
-- For accessing the actual imputed datasets, use the \code{\link{dataImputed}} method.
+\itemize{
+  \item This method returns the value stored in the 'nImputation' slot of the ClustAllObject.
+  \item A return value of 0 does not necessarily mean the original data had no
+    missing values; it could also indicate that imputation was explicitly skipped.
+  \item The number of imputations is typically set during the creation of the
+    ClustAllObject with the \code{\link{createClustAll}} function.
+  \item For accessing the actual imputed datasets, use the \code{\link{dataImputed}} method.
+}#'
 }
 \examples{
 data("BreastCancerWisconsinMISSING", package = "ClustAll")
