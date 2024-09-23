@@ -16,9 +16,11 @@ must have been processed by \code{\link{runClustAll}} before using this function
 proportion of the total population that a cluster within a stratification must
 contain to be considered valid. Default is 0.05.}
 
-\item{all}{Logical. If TRUE, returns all stratifications meeting the criteria
-for each group of similar stratifications. If FALSE (default), returns only
-the centroid (most representative) stratification for each group.}
+\item{all}{A logical value. If set to TRUE, the function will return all
+stratification representatives that meet the robustness criteria of each
+group of similar stratifications. If set to FALSE, only the centroid
+stratification (the central that serves as the representative stratification)
+for each group of similar stratifications will be returned.}
 
 \item{stratification_similarity}{Numeric value between 0 and 1. Sets the
 threshold Jaccard distance for considering two stratifications as similar.
