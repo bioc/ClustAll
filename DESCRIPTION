@@ -2,7 +2,7 @@ Package: ClustAll
 Type: Package
 Title: ClustAll: Data driven strategy to robustly identify stratification of 
         patients within complex diseases
-Version: 1.2.0
+Version: 1.3.0
 Authors@R: c(person("Asier", "Ortega-Legarreta", role = c("aut","cre"),  
            email = "aortegal@navarra.es", 
            comment = c(ORCID = "0009-0000-3563-5362")),
